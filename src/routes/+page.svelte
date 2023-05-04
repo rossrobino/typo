@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { micromark } from "micromark";
+	import { text } from "svelte/internal";
 
 	let content = "";
 	let file: File;
 	let fileHandle: FileSystemFileHandle;
+	let textArea: HTMLTextAreaElement;
 
 	const options: FilePickerOptions = {
 		types: [
@@ -41,6 +43,10 @@
 			saveAs();
 		}
 	};
+
+	const onInput = () => {
+		textArea.style.height = `${textArea.scrollHeight}px`;
+	};
 </script>
 
 <div class="mb-4 flex items-center justify-between gap-4">
@@ -50,14 +56,16 @@
 		<button class="bg-blue-500 p-2 text-white" on:click={saveAs}>Save As</button
 		>
 	</div>
-	<h1>{file?.name ? file.name : "md.robino.dev"}</h1>
+	<h1 class="font-bold">{file?.name ? file.name : "md.robino.dev"}</h1>
 </div>
 
 <div class="grid gap-4 sm:grid-cols-2">
 	<textarea
-		class="prose h-full min-h-[100dvh] w-full bg-blue-50 p-2"
+		class="prose h-48 bg-blue-50 p-2"
 		placeholder="# Title"
 		bind:value={content}
+		bind:this={textArea}
+		on:input={onInput}
 	/>
-	<div class="prose min-h-[100dvh] p-2">{@html micromark(content)}</div>
+	<div class="prose p-2">{@html micromark(content)}</div>
 </div>
