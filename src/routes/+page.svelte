@@ -39,33 +39,40 @@
 			const writable = await fileHandle.createWritable();
 			await writable.write(content);
 			await writable.close();
-		} else {
-			saveAs();
 		}
 	};
 
 	const onInput = () => {
 		textArea.style.height = `${textArea.scrollHeight}px`;
+		save();
 	};
 </script>
 
 <div class="mb-4 flex items-center justify-between gap-4">
 	<div class="flex gap-4">
-		<button class="bg-blue-500 p-2 text-white" on:click={open}>Open</button>
-		<button class="bg-blue-500 p-2 text-white" on:click={save}>Save</button>
-		<button class="bg-blue-500 p-2 text-white" on:click={saveAs}>Save As</button
+		<button
+			class="rounded-xl bg-stone-950 px-4 py-2 text-white"
+			on:click={open}
 		>
+			Open
+		</button>
+		<button
+			class="rounded-xl bg-stone-950 px-4 py-2 text-white"
+			on:click={saveAs}
+		>
+			Save As
+		</button>
 	</div>
 	<h1 class="font-bold">{file?.name ? file.name : "md.robino.dev"}</h1>
 </div>
 
 <div class="grid gap-4 sm:grid-cols-2">
 	<textarea
-		class="prose h-48 bg-blue-50 p-2"
+		class="prose prose-stone h-48 w-full appearance-none rounded-xl bg-stone-100 p-2 focus:outline-stone-950"
 		placeholder="# Title"
 		bind:value={content}
 		bind:this={textArea}
 		on:input={onInput}
 	/>
-	<div class="prose p-2">{@html micromark(content)}</div>
+	<div class="prose prose-stone w-full p-2">{@html micromark(content)}</div>
 </div>
