@@ -1,21 +1,21 @@
 <script lang="ts">
-	// import { browser } from "$app/environment";
+	import { browser } from "$app/environment";
 	import { micromark } from "micromark";
 
 	let content = "";
 	let file: File;
 	let fileHandle: FileSystemFileHandle;
 	let textArea: HTMLTextAreaElement;
-	// let supported = false;
 
-	// if (browser) supported = Boolean(window.showOpenFilePicker);
+	let supported = false;
+	if (browser) supported = Boolean(window.showOpenFilePicker);
 
 	const options: FilePickerOptions = {
 		types: [
 			{
 				description: "markdown",
 				accept: {
-					"markdown/md": [".md", ".mdx"],
+					"text/markdown": [".md", ".mdx", ".mdoc", ".markdoc"],
 				},
 			},
 		],
@@ -53,8 +53,14 @@
 
 <div class="mb-4 flex items-center justify-between gap-4">
 	<div class="flex gap-4">
-		<button class="btn" on:click={open}> Open </button>
-		<button class="btn" on:click={saveAs}> Save&nbsp;As </button>
+		{#if supported}
+			<button class="btn" on:click={open}>Open</button>
+			<button class="btn" on:click={saveAs}>Save&nbsp;As</button>
+		{:else}
+			<a href="data:text/plain,{content}" download="Untitled.md" class="btn">
+				Download
+			</a>
+		{/if}
 	</div>
 	<h1 class="font-bold">{file?.name ? file.name : "md.robino.dev"}</h1>
 </div>
