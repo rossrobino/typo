@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { micromark } from "micromark";
-	import { text } from "svelte/internal";
 
 	let content = "";
 	let file: File;
@@ -51,16 +50,16 @@
 <div class="mb-4 flex items-center justify-between gap-4">
 	<div class="flex gap-4">
 		<button
-			class="rounded-xl bg-stone-950 px-4 py-2 text-white"
+			class="rounded-xl bg-stone-800 px-4 py-2 text-white shadow transition hover:bg-stone-900 hover:shadow-lg active:bg-stone-950 active:shadow-none"
 			on:click={open}
 		>
 			Open
 		</button>
 		<button
-			class="rounded-xl bg-stone-950 px-4 py-2 text-white"
+			class="rounded-xl bg-stone-800 px-4 py-2 text-white shadow transition hover:bg-stone-900 hover:shadow-lg active:bg-stone-950 active:shadow-none"
 			on:click={saveAs}
 		>
-			Save As
+			Save&nbsp;As
 		</button>
 	</div>
 	<h1 class="font-bold">{file?.name ? file.name : "md.robino.dev"}</h1>
@@ -68,7 +67,7 @@
 
 <div class="grid gap-4 sm:grid-cols-2">
 	<textarea
-		class="prose prose-stone h-48 w-full appearance-none rounded-xl bg-stone-100 p-2 focus:outline-stone-950"
+		class="prose prose-stone h-48 w-full appearance-none rounded-xl bg-stone-200 p-2 shadow transition focus:shadow-lg focus:outline-none"
 		placeholder="# Title"
 		bind:value={content}
 		bind:this={textArea}
