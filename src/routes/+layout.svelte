@@ -6,4 +6,4 @@
 	inject({ mode: dev ? "development" : "production" });
 </script>
 
-<main class="p-4"><slot /></main>
+<main class="p-4 selection:bg-stone-800 selection:text-stone-50"><slot /></main>

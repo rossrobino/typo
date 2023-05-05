@@ -78,6 +78,6 @@
 
 <style lang="postcss">
 	.btn {
-		@apply rounded-xl bg-stone-800 px-4 py-2 text-white shadow transition hover:bg-stone-900 hover:shadow-lg active:bg-stone-950 active:shadow-none;
+		@apply rounded-xl bg-stone-800 px-4 py-2 text-stone-50 shadow transition hover:bg-stone-900 hover:shadow-lg active:bg-stone-950 active:shadow-none;
 	}
 </style>
