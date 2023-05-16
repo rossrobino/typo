@@ -90,8 +90,8 @@
 		textArea.setSelectionRange(inline ? carPos : newCarPos, newCarPos);
 	};
 
-	const getWordCount = (text: string) => {
-		return text
+	const getWordCount = (s: string) => {
+		return s
 			.trim()
 			.split(/\W+/)
 			.filter((n) => n != "").length;
@@ -242,6 +242,10 @@
 </main>
 
 <footer class="flex flex-wrap gap-4 bg-stone-800 p-4 text-stone-50">
+	<div>
+		{content.length}
+		{content.length === 1 ? "character" : "characters"}
+	</div>
 	<div>
 		{wordCount}
 		{wordCount === 1 ? "word" : "words"}
