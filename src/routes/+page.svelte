@@ -100,7 +100,7 @@
 	const getReadingTime = (wordCount: number) => {
 		const wordsPerMinute = 200;
 		const minutes = Math.ceil(wordCount / wordsPerMinute);
-		return `${minutes} min`;
+		return `${minutes} minute${minutes !== 1 ? "s" : ""}`;
 	};
 </script>
 
