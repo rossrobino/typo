@@ -5,6 +5,7 @@
 	"printWidth": 80,
 	"plugins": ["prettier-plugin-svelte", "prettier-plugin-tailwindcss"],
 	"pluginSearchDirs": ["."],
+	"htmlWhitespaceSensitivity": "ignore",
 	"overrides": [
 		{
 			"files": "*.svelte",

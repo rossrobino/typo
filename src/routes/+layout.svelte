@@ -6,4 +6,8 @@
 	inject({ mode: dev ? "development" : "production" });
 </script>
 
-<main class="p-4 selection:bg-stone-800 selection:text-stone-50"><slot /></main>
+<div
+	class="flex h-screen flex-col selection:bg-stone-950 selection:text-stone-50"
+>
+	<slot />
+</div>

@@ -1,6 +1,6 @@
 {
 	"name": "md",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"private": true,
 	"scripts": {
 		"dev": "vite dev",
@@ -14,29 +14,29 @@
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^2.0.1",
 		"@sveltejs/adapter-vercel": "^2.4.3",
-		"@sveltejs/kit": "^1.15.10",
+		"@sveltejs/kit": "^1.16.3",
 		"@tailwindcss/typography": "^0.5.9",
 		"@types/wicg-file-system-access": "^2020.9.6",
-		"@typescript-eslint/eslint-plugin": "^5.59.2",
-		"@typescript-eslint/parser": "^5.59.2",
+		"@typescript-eslint/eslint-plugin": "^5.59.6",
+		"@typescript-eslint/parser": "^5.59.6",
 		"autoprefixer": "^10.4.14",
-		"eslint": "^8.39.0",
+		"eslint": "^8.40.0",
 		"eslint-config-prettier": "^8.8.0",
 		"eslint-plugin-svelte3": "^4.0.0",
 		"postcss": "^8.4.23",
 		"prettier": "^2.8.8",
 		"prettier-plugin-svelte": "^2.10.0",
-		"prettier-plugin-tailwindcss": "^0.2.8",
-		"svelte": "^3.58.0",
-		"svelte-check": "^3.2.0",
+		"prettier-plugin-tailwindcss": "^0.3.0",
+		"svelte": "^3.59.1",
+		"svelte-check": "^3.3.2",
 		"tailwindcss": "^3.3.2",
 		"tslib": "^2.5.0",
 		"typescript": "^5.0.4",
-		"vite": "^4.3.4"
+		"vite": "^4.3.6"
 	},
 	"type": "module",
 	"dependencies": {
-		"@vercel/analytics": "^1.0.1",
-		"micromark": "^3.1.0"
+		"@markdoc/markdoc": "^0.2.2",
+		"@vercel/analytics": "^1.0.1"
 	}
 }
