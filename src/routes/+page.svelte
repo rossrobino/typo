@@ -224,7 +224,7 @@
 		</div>
 	</nav>
 	<h1 class="px-4 py-2 font-bold text-stone-50">
-		{file?.name ? file.name : "md.robino.dev"}
+		{file?.name ? file.name : "md"}
 	</h1>
 </header>
 
@@ -236,7 +236,7 @@
 		bind:this={textArea}
 		on:input={onInput}
 	/>
-	<div class="prose prose-stone max-w-none overflow-y-auto p-4">
+	<div class="prose prose-stone hidden max-w-none overflow-y-auto p-4 sm:block">
 		{@html mdToHtml(content)}
 	</div>
 </main>
