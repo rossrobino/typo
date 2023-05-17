@@ -107,7 +107,7 @@
 <svelte:window bind:scrollY />
 
 <header
-	class="flex flex-col-reverse justify-between bg-teal-800 p-4 sm:flex-row sm:items-center"
+	class="flex flex-col-reverse justify-between bg-neutral-800 p-4 sm:flex-row sm:items-center"
 >
 	<nav class="flex flex-wrap">
 		{#if supported}
@@ -122,7 +122,7 @@
 			<div class="group">
 				<button class="btn">H</button>
 				<div
-					class="fixed hidden flex-col rounded-xl bg-teal-700 p-2 transition group-hover:flex"
+					class="fixed hidden flex-col rounded-xl bg-neutral-700 p-2 transition group-hover:flex"
 				>
 					<button class="btn" on:click={() => addContent("# ", false)}>
 						H1
@@ -223,27 +223,27 @@
 			</button>
 		</div>
 	</nav>
-	<h1 class="px-4 py-2 font-bold text-teal-50">
+	<h1 class="px-4 py-2 font-bold text-neutral-50">
 		{file?.name ? file.name : "md"}
 	</h1>
 </header>
 
 <main class="grid max-h-screen grow overflow-hidden sm:grid-cols-2">
 	<textarea
-		class="max-w-none resize-none appearance-none bg-teal-50 p-4 font-mono text-teal-950 transition placeholder:text-teal-500 focus:outline-none"
+		class="max-w-none resize-none appearance-none bg-neutral-50 p-4 font-mono text-neutral-950 transition placeholder:text-neutral-500 focus:outline-none"
 		placeholder="# Title"
 		bind:value={content}
 		bind:this={textArea}
 		on:input={onInput}
 	/>
 	<div
-		class="prose prose-teal hidden max-w-none overflow-y-auto p-4 text-teal-950 sm:block"
+		class="prose prose-neutral hidden max-w-none overflow-y-auto p-4 text-neutral-950 sm:block"
 	>
 		{@html mdToHtml(content)}
 	</div>
 </main>
 
-<footer class="flex flex-wrap gap-4 bg-teal-800 p-4 text-teal-50">
+<footer class="flex flex-wrap gap-4 bg-neutral-800 p-4 text-neutral-50">
 	<div>
 		{content.length}
 		{content.length === 1 ? "character" : "characters"}
@@ -259,6 +259,6 @@
 
 <style lang="postcss">
 	.btn {
-		@apply rounded-xl px-4 py-2 text-teal-50 transition hover:bg-teal-950 active:bg-teal-700;
+		@apply rounded-xl px-4 py-2 text-neutral-50 transition hover:bg-neutral-950 active:bg-neutral-700;
 	}
 </style>
