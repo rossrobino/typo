@@ -230,7 +230,7 @@
 
 <main class="grid max-h-screen grow overflow-hidden sm:grid-cols-2">
 	<textarea
-		class="max-w-none resize-none appearance-none bg-neutral-50 p-4 font-mono text-neutral-950 transition placeholder:text-neutral-500 focus:outline-none"
+		class="max-w-none resize-none appearance-none bg-neutral-800 p-4 font-mono text-neutral-50 transition placeholder:text-neutral-400 focus:outline-none"
 		placeholder="# Title"
 		bind:value={content}
 		bind:this={textArea}
