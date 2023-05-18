@@ -7,7 +7,7 @@
 </script>
 
 <div
-	class="flex h-[100dvh] flex-col bg-neutral-950 text-neutral-50 selection:bg-neutral-200 selection:text-neutral-950"
+	class="flex h-[100dvh] flex-col bg-slate-900 text-slate-100 selection:bg-slate-300 selection:text-slate-950"
 >
 	<slot />
 </div>

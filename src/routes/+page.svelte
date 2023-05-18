@@ -107,7 +107,7 @@
 <svelte:window bind:scrollY />
 
 <header
-	class="flex flex-col-reverse justify-between p-4 sm:flex-row sm:items-center bg-teal-950"
+	class="flex flex-col-reverse justify-between p-4 sm:flex-row sm:items-center bg-slate-950"
 >
 	<nav class="flex flex-wrap">
 		{#if supported}
@@ -122,7 +122,7 @@
 			<div class="group">
 				<button class="btn">H</button>
 				<div
-					class="fixed hidden flex-col rounded-xl bg-neutral-700 p-2 transition group-hover:flex"
+					class="fixed hidden flex-col rounded-xl bg-slate-700 p-2 transition group-hover:flex"
 				>
 					<button class="btn" on:click={() => addContent("# ", false)}>
 						H1
@@ -230,20 +230,20 @@
 
 <main class="grid max-h-screen grow overflow-hidden sm:grid-cols-2">
 	<textarea
-		class="max-w-none resize-none appearance-none bg-transparent p-4 font-mono transition placeholder:text-neutral-400 focus:outline-none"
+		class="max-w-none resize-none appearance-none bg-transparent p-4 font-mono transition placeholder:text-slate-400 focus:outline-none"
 		placeholder="# Title"
 		bind:value={content}
 		bind:this={textArea}
 		on:input={onInput}
 	/>
 	<div
-		class="prose prose-neutral hidden max-w-none overflow-y-auto bg-neutral-50 p-4 text-neutral-950 sm:block"
+		class="prose prose-slate hidden max-w-none overflow-y-auto bg-slate-100 p-4 text-slate-950 sm:block"
 	>
 		{@html mdToHtml(content)}
 	</div>
 </main>
 
-<footer class="flex flex-wrap gap-4 p-4 bg-teal-950">
+<footer class="flex flex-wrap gap-4 p-4 bg-slate-950">
 	<div>
 		{content.length}
 		{content.length === 1 ? "character" : "characters"}
@@ -259,6 +259,6 @@
 
 <style lang="postcss">
 	.btn {
-		@apply rounded-xl px-4 py-2 transition hover:bg-neutral-900 hover:shadow active:bg-neutral-700;
+		@apply rounded-xl px-4 py-2 transition hover:bg-slate-900 hover:shadow active:bg-slate-700;
 	}
 </style>
