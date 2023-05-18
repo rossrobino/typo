@@ -85,9 +85,31 @@
 			}
 		}
 		await onInput(); // have to await to make sure focus/selection works
+		
+		let startPos: number;
+		let endPos: number;
+
+		if (/[a-z]/i.test(s)) {
+			// if string contains letters, highlight the first word
+			for (let i = carPos; i < content.length; i++) {
+				if (content[i].match(/[a-z]/i)) {
+					if (!startPos) {
+						startPos = i;
+					} else {
+						endPos = i + 1;
+					}
+				} else if (startPos) {
+					break;
+				}
+			} 
+		} else {
+			// leave the cursor in place
+			startPos = carPos + s.length;
+			endPos = carPos + s.length;
+		}
+
 		textArea.focus();
-		const newCarPos = carPos + s.length;
-		textArea.setSelectionRange(inline ? carPos : newCarPos, newCarPos);
+		textArea.setSelectionRange(startPos, endPos);
 	};
 
 	const getWordCount = (s: string) => {
@@ -184,7 +206,7 @@
 					/>
 				</svg>
 			</button>
-			<button class="btn" on:click={() => addContent("![alt text](src)", true)}>
+			<button class="btn" on:click={() => addContent("![alt](src)", true)}>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					viewBox="0 0 20 20"
