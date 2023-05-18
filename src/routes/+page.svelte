@@ -107,7 +107,7 @@
 <svelte:window bind:scrollY />
 
 <header
-	class="flex flex-col-reverse justify-between p-4 sm:flex-row sm:items-center"
+	class="flex flex-col-reverse justify-between p-4 sm:flex-row sm:items-center bg-teal-950"
 >
 	<nav class="flex flex-wrap">
 		{#if supported}
@@ -243,7 +243,7 @@
 	</div>
 </main>
 
-<footer class="flex flex-wrap gap-4 p-4">
+<footer class="flex flex-wrap gap-4 p-4 bg-teal-950">
 	<div>
 		{content.length}
 		{content.length === 1 ? "character" : "characters"}
