@@ -268,7 +268,7 @@
 	</div>
 </main>
 
-<footer class="flex justify-between gap-4 p-4 bg-slate-950">
+<footer class="flex justify-between items-center gap-4 p-4 bg-slate-950">
 	<div class="flex flex-wrap gap-4">
 		<div>
 			{content.length}
