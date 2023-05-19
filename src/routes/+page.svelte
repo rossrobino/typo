@@ -16,7 +16,6 @@
 	import Code from "../lib/svg/Code.svelte";
 
 	let content = "";
-	const placeholder = "# Title";
 	let viewMode = false;
 	let scrollY: number;
 	let file: File;
@@ -53,35 +52,30 @@
 					text: "## ",
 					display: "block",
 					icon: "H2",
-					key: "2",
 				},
 				{
 					name: "heading 3",
 					text: "### ",
 					display: "block",
 					icon: "H3",
-					key: "3",
 				},
 				{
 					name: "heading 4",
 					text: "#### ",
 					display: "block",
 					icon: "H4",
-					key: "4",
 				},
 				{
 					name: "heading 5",
 					text: "##### ",
 					display: "block",
 					icon: "H5",
-					key: "5",
 				},
 				{
 					name: "heading 6",
 					text: "###### ",
 					display: "block",
 					icon: "H6",
-					key: "6",
 				},
 			],
 		},
@@ -90,21 +84,19 @@
 			text: "- ",
 			display: "block",
 			icon: Bullet,
-			key: "-",
 		},
 		{
 			name: "blockquote",
 			text: "> ",
 			display: "block",
 			icon: Blockquote,
-			key: ".",
 		},
 		{
 			name: "asterisk",
 			text: "*",
 			display: "wrap",
 			icon: Star,
-			key: "8",
+			key: "i",
 		},
 
 		{
@@ -119,7 +111,7 @@
 			text: "![alt](src)",
 			display: "inline",
 			icon: Image,
-			key: "1",
+			key: "]",
 		},
 		{
 			name: "table",
@@ -135,6 +127,16 @@
 			icon: Code,
 		},
 	];
+
+	let placeholder = "\n\n\n\n\n\n";
+	contentElements.forEach((el) => {
+		if (el.key) placeholder += `${el.name}: ctrl+${el.key}\n`;
+		if (el.subElements) {
+			el.subElements.forEach((subEl) => {
+				if (subEl.key) placeholder += `${subEl.name}: ctrl+${subEl.key}\n`;
+			});
+		}
+	});
 
 	const options: FilePickerOptions = {
 		types: [
@@ -186,7 +188,6 @@
 	const addContent = async (el: ContentElement) => {
 		const carSelEnd = textArea.selectionEnd;
 		const carSelStart = textArea.selectionStart;
-		console.log(carSelStart, carSelEnd);
 		if (el.display === "inline") {
 			// insert at current position
 			content = `${content.slice(0, carSelEnd)}${el.text}${content.slice(
@@ -265,7 +266,6 @@
 	const toggleView = () => (viewMode = !viewMode);
 
 	const onKeyUp = ({ ctrlKey, key }: KeyboardEvent) => {
-		save();
 		if (ctrlKey && key) {
 			let matchedEl = contentElements.find((el) => el.key === key);
 			if (!matchedEl) {
@@ -273,7 +273,6 @@
 					const currentEl = contentElements[i];
 					if (currentEl.subElements) {
 						matchedEl = currentEl.subElements.find((el) => el.key === key);
-						console.log(matchedEl);
 						if (matchedEl) break;
 					}
 				}
@@ -282,32 +281,40 @@
 				addContent(matchedEl);
 			} else if (key === "o") {
 				open();
-			} else if (key === "s") {
-				saveAs();
 			} else if (key === "e") {
 				toggleView();
 			}
-		} else {
+		} else if (textArea) {
 			textArea.focus();
 		}
+		save();
 	};
 </script>
 
-<svelte:window bind:scrollY on:keydown={onKeyUp} />
+<svelte:window bind:scrollY on:keyup={onKeyUp} />
 
 {#if !viewMode}
-	<header
-		class="flex flex-col-reverse justify-between bg-slate-950 p-4 sm:flex-row sm:items-center"
-	>
+	<header class="flex justify-between bg-slate-950 p-4">
 		<nav class="flex flex-wrap">
-			{#if supported}
-				<button class="btn" on:click={open}>Open</button>
-				<button class="btn" on:click={saveAs}>Save&nbsp;As</button>
-			{:else}
-				<a href="data:text/plain,{content}" download="Untitled.md" class="btn">
-					Download
-				</a>
-			{/if}
+			<div class="flex w-full justify-between sm:w-fit">
+				<div>
+					{#if supported}
+						<button class="btn" on:click={open}>Open</button>
+						<button class="btn" on:click={saveAs}>Save&nbsp;As</button>
+					{:else}
+						<a
+							href="data:text/plain,{content}"
+							download="Untitled.md"
+							class="btn"
+						>
+							Download
+						</a>
+					{/if}
+				</div>
+				<h1 class="block px-4 py-2 font-bold sm:hidden">
+					{file?.name ? file.name : "md"}
+				</h1>
+			</div>
 			<div class="flex flex-wrap">
 				{#each contentElements as el}
 					{#if el.subElements}
@@ -345,7 +352,7 @@
 				{/each}
 			</div>
 		</nav>
-		<h1 class="px-4 py-2 font-bold">
+		<h1 class="hidden px-4 py-2 font-bold sm:block">
 			{file?.name ? file.name : "md"}
 		</h1>
 	</header>
@@ -358,7 +365,7 @@
 >
 	{#if !viewMode}
 		<textarea
-			class="max-w-none resize-none appearance-none bg-transparent p-4 font-mono transition placeholder:text-slate-400 focus:outline-none"
+			class="placeholder: max-w-none resize-none appearance-none bg-transparent p-4 font-mono transition placeholder:text-center placeholder:text-slate-500 focus:outline-none"
 			{placeholder}
 			bind:value={content}
 			bind:this={textArea}
