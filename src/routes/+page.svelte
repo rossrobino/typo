@@ -296,7 +296,7 @@
 {#if !viewMode}
 	<header class="flex justify-between bg-slate-950 p-4">
 		<nav class="flex flex-wrap">
-			<div class="flex w-full justify-between sm:w-fit">
+			<div class="flex w-full items-center justify-between sm:w-fit">
 				<div>
 					{#if supported}
 						<button class="btn" on:click={open}>Open</button>
