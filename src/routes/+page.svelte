@@ -1,4 +1,6 @@
 <script lang="ts">
+	import type { ComponentType } from "svelte";
+
 	import { browser } from "$app/environment";
 
 	import Markdoc from "@markdoc/markdoc";
@@ -10,8 +12,11 @@
 	import Table from "../lib/svg/Table.svelte";
 	import View from "../lib/svg/View.svelte";
 	import Edit from "../lib/svg/Edit.svelte";
+	import Star from "../lib/svg/Star.svelte";
+	import Code from "../lib/svg/Code.svelte";
 
 	let content = "";
+	const placeholder = "# Title";
 	let viewMode = false;
 	let scrollY: number;
 	let file: File;
@@ -21,74 +26,113 @@
 	if (browser) supported = Boolean(window.showOpenFilePicker);
 	$: wordCount = getWordCount(content);
 
+	interface ContentElement {
+		name: string;
+		text: string;
+		display: "inline" | "block" | "wrap";
+		icon: ComponentType | string;
+		key?: string;
+		subElements?: ContentElement[];
+	}
+
 	const contentElements: ContentElement[] = [
 		{
 			name: "heading",
 			text: "parent",
-			inline: false,
+			display: "block",
 			icon: "H",
 			subElements: [
 				{
 					name: "heading 1",
 					text: "# ",
-					inline: false,
+					display: "block",
 					icon: "H1",
 				},
 				{
 					name: "heading 2",
 					text: "## ",
-					inline: false,
+					display: "block",
 					icon: "H2",
+					key: "2",
 				},
 				{
 					name: "heading 3",
 					text: "### ",
-					inline: false,
+					display: "block",
 					icon: "H3",
+					key: "3",
 				},
 				{
 					name: "heading 4",
 					text: "#### ",
-					inline: false,
+					display: "block",
 					icon: "H4",
+					key: "4",
+				},
+				{
+					name: "heading 5",
+					text: "##### ",
+					display: "block",
+					icon: "H5",
+					key: "5",
+				},
+				{
+					name: "heading 6",
+					text: "###### ",
+					display: "block",
+					icon: "H6",
+					key: "6",
 				},
 			],
 		},
 		{
 			name: "bullet",
 			text: "- ",
-			inline: false,
+			display: "block",
 			icon: Bullet,
+			key: "-",
 		},
 		{
 			name: "blockquote",
 			text: "> ",
-			inline: false,
+			display: "block",
 			icon: Blockquote,
+			key: ".",
 		},
 		{
-			name: "bold",
-			text: "**",
-			inline: false,
-			icon: "B",
+			name: "asterisk",
+			text: "*",
+			display: "wrap",
+			icon: Star,
+			key: "8",
 		},
+
 		{
 			name: "anchor",
 			text: "[text](href)",
-			inline: true,
+			display: "inline",
 			icon: Anchor,
+			key: "[",
 		},
 		{
 			name: "image",
 			text: "![alt](src)",
-			inline: true,
+			display: "inline",
 			icon: Image,
+			key: "1",
 		},
 		{
 			name: "table",
 			text: "| th | th |\n| -- | -- |\n| td | td |\n| td | td |",
-			inline: true,
+			display: "inline",
 			icon: Table,
+			key: "\\",
+		},
+		{
+			name: "code",
+			text: "`",
+			display: "wrap",
+			icon: Code,
 		},
 	];
 
@@ -140,10 +184,27 @@
 	};
 
 	const addContent = async (el: ContentElement) => {
-		const carPos = textArea.selectionEnd;
-		if (el.inline) {
+		const carSelEnd = textArea.selectionEnd;
+		const carSelStart = textArea.selectionStart;
+		console.log(carSelStart, carSelEnd);
+		if (el.display === "inline") {
 			// insert at current position
-			content = `${content.slice(0, carPos)}${el.text}${content.slice(carPos)}`;
+			content = `${content.slice(0, carSelEnd)}${el.text}${content.slice(
+				carSelEnd,
+			)}`;
+		} else if (el.display === "wrap") {
+			if (carSelStart === carSelEnd) {
+				content = `${content.slice(0, carSelEnd)}${
+					el.text + el.text
+				}${content.slice(carSelEnd)}`;
+			} else {
+				content = `${content.slice(0, carSelStart)}${el.text}${content.slice(
+					carSelStart,
+				)}`;
+				content = `${content.slice(0, carSelEnd + el.text.length)}${
+					el.text
+				}${content.slice(carSelEnd + el.text.length)}`;
+			}
 		} else {
 			const splitContent = content.split("\n");
 			let characterCount = 0;
@@ -152,7 +213,7 @@
 				characterCount++; // account for removed "\n" due to .split()
 				characterCount += splitContent[i].length;
 				// find the line that the cursor is on
-				if (characterCount > carPos) {
+				if (characterCount > carSelEnd) {
 					// add the string to the beginning of the line
 					splitContent[i] = el.text + splitContent[i];
 					content = splitContent.join("\n");
@@ -167,7 +228,7 @@
 		let endPos = 0;
 		if (/[a-z]/i.test(el.text)) {
 			// if string contains letters, highlight the first word
-			for (let i = carPos; i < content.length; i++) {
+			for (let i = carSelEnd; i < content.length; i++) {
 				if (content[i].match(/[a-z]/i)) {
 					if (!startPos) {
 						startPos = i;
@@ -180,8 +241,8 @@
 			}
 		} else {
 			// leave the cursor in place
-			startPos = carPos + el.text.length;
-			endPos = carPos + el.text.length;
+			startPos = carSelStart + el.text.length;
+			endPos = carSelEnd + el.text.length;
 		}
 
 		textArea.setSelectionRange(startPos, endPos);
@@ -200,9 +261,39 @@
 		const minutes = Math.ceil(wordCount / wordsPerMinute);
 		return `${minutes} minute${minutes !== 1 ? "s" : ""}`;
 	};
+
+	const toggleView = () => (viewMode = !viewMode);
+
+	const onKeyUp = ({ ctrlKey, key }: KeyboardEvent) => {
+		save();
+		if (ctrlKey && key) {
+			let matchedEl = contentElements.find((el) => el.key === key);
+			if (!matchedEl) {
+				for (let i = 0; i < contentElements.length; i++) {
+					const currentEl = contentElements[i];
+					if (currentEl.subElements) {
+						matchedEl = currentEl.subElements.find((el) => el.key === key);
+						console.log(matchedEl);
+						if (matchedEl) break;
+					}
+				}
+			}
+			if (matchedEl) {
+				addContent(matchedEl);
+			} else if (key === "o") {
+				open();
+			} else if (key === "s") {
+				saveAs();
+			} else if (key === "e") {
+				toggleView();
+			}
+		} else {
+			textArea.focus();
+		}
+	};
 </script>
 
-<svelte:window bind:scrollY />
+<svelte:window bind:scrollY on:keydown={onKeyUp} />
 
 {#if !viewMode}
 	<header
@@ -268,10 +359,9 @@
 	{#if !viewMode}
 		<textarea
 			class="max-w-none resize-none appearance-none bg-transparent p-4 font-mono transition placeholder:text-slate-400 focus:outline-none"
-			placeholder="# Title"
+			{placeholder}
 			bind:value={content}
 			bind:this={textArea}
-			on:input={save}
 		/>
 	{/if}
 	<div
@@ -296,7 +386,7 @@
 			{getReadingTime(wordCount)}
 		</div>
 	</div>
-	<button class="btn" on:click={() => (viewMode = !viewMode)}>
+	<button class="btn" on:click={toggleView}>
 		{#if viewMode}
 			<Edit />
 		{:else}
