@@ -1,6 +1,15 @@
 <script lang="ts">
 	import { browser } from "$app/environment";
+
 	import Markdoc from "@markdoc/markdoc";
+
+	import Bullet from "../lib/svg/Bullet.svelte";
+	import Blockquote from "../lib/svg/Blockquote.svelte";
+	import Anchor from "../lib/svg/Anchor.svelte";
+	import Image from "../lib/svg/Image.svelte";
+	import Table from "../lib/svg/Table.svelte";
+	import View from "../lib/svg/View.svelte";
+	import Edit from "../lib/svg/Edit.svelte";
 
 	let content = "";
 	let viewMode = false;
@@ -10,8 +19,78 @@
 	let textArea: HTMLTextAreaElement;
 	let supported = false;
 	if (browser) supported = Boolean(window.showOpenFilePicker);
-
 	$: wordCount = getWordCount(content);
+
+	const contentElements: ContentElement[] = [
+		{
+			name: "heading",
+			text: "parent",
+			inline: false,
+			icon: "H",
+			subElements: [
+				{
+					name: "heading 1",
+					text: "# ",
+					inline: false,
+					icon: "H1",
+				},
+				{
+					name: "heading 2",
+					text: "## ",
+					inline: false,
+					icon: "H2",
+				},
+				{
+					name: "heading 3",
+					text: "### ",
+					inline: false,
+					icon: "H3",
+				},
+				{
+					name: "heading 4",
+					text: "#### ",
+					inline: false,
+					icon: "H4",
+				},
+			],
+		},
+		{
+			name: "bullet",
+			text: "- ",
+			inline: false,
+			icon: Bullet,
+		},
+		{
+			name: "blockquote",
+			text: "> ",
+			inline: false,
+			icon: Blockquote,
+		},
+		{
+			name: "bold",
+			text: "**",
+			inline: false,
+			icon: "B",
+		},
+		{
+			name: "anchor",
+			text: "[text](href)",
+			inline: true,
+			icon: Anchor,
+		},
+		{
+			name: "image",
+			text: "![alt](src)",
+			inline: true,
+			icon: Image,
+		},
+		{
+			name: "table",
+			text: "| th | th |\n| -- | -- |\n| td | td |\n| td | td |",
+			inline: true,
+			icon: Table,
+		},
+	];
 
 	const options: FilePickerOptions = {
 		types: [
@@ -60,32 +139,33 @@
 		}
 	};
 
-	const addContent = async (s: string, inline: boolean) => {
+	const addContent = async (el: ContentElement) => {
 		const carPos = textArea.selectionEnd;
-		if (inline) {
+		if (el.inline) {
 			// insert at current position
-			content = `${content.slice(0, carPos)}${s}${content.slice(carPos)}`;
+			content = `${content.slice(0, carPos)}${el.text}${content.slice(carPos)}`;
 		} else {
 			const splitContent = content.split("\n");
 			let characterCount = 0;
 			for (let i = 0; i < splitContent.length; i++) {
+				// for each line
 				characterCount++; // account for removed "\n" due to .split()
 				characterCount += splitContent[i].length;
 				// find the line that the cursor is on
-				if (characterCount > carPos - 1) {
+				if (characterCount > carPos) {
 					// add the string to the beginning of the line
-					splitContent[i] = s + splitContent[i];
+					splitContent[i] = el.text + splitContent[i];
 					content = splitContent.join("\n");
 					break;
 				}
 			}
 		}
-		await save(); // have to await to make sure focus/selection works
-		
-		let startPos: number;
-		let endPos: number;
 
-		if (/[a-z]/i.test(s)) {
+		await save(); // await to make sure focus/selection works
+
+		let startPos = 0;
+		let endPos = 0;
+		if (/[a-z]/i.test(el.text)) {
 			// if string contains letters, highlight the first word
 			for (let i = carPos; i < content.length; i++) {
 				if (content[i].match(/[a-z]/i)) {
@@ -97,15 +177,15 @@
 				} else if (startPos) {
 					break;
 				}
-			} 
+			}
 		} else {
 			// leave the cursor in place
-			startPos = carPos + s.length;
-			endPos = carPos + s.length;
+			startPos = carPos + el.text.length;
+			endPos = carPos + el.text.length;
 		}
 
-		textArea.focus();
 		textArea.setSelectionRange(startPos, endPos);
+		textArea.focus();
 	};
 
 	const getWordCount = (s: string) => {
@@ -126,7 +206,7 @@
 
 {#if !viewMode}
 	<header
-		class="flex flex-col-reverse justify-between p-4 sm:flex-row sm:items-center bg-slate-950"
+		class="flex flex-col-reverse justify-between bg-slate-950 p-4 sm:flex-row sm:items-center"
 	>
 		<nav class="flex flex-wrap">
 			{#if supported}
@@ -138,108 +218,40 @@
 				</a>
 			{/if}
 			<div class="flex flex-wrap">
-				<div class="group">
-					<button class="btn">H</button>
-					<div
-						class="fixed hidden flex-col rounded-xl bg-slate-700 p-2 transition group-hover:flex"
-					>
-						<button class="btn" on:click={() => addContent("# ", false)}>
-							H1
+				{#each contentElements as el}
+					{#if el.subElements}
+						<div class="group">
+							<button class="btn">
+								{#if typeof el.icon !== "string"}
+									<svelte:component this={el.icon} />
+								{:else}
+									{el.icon}
+								{/if}
+							</button>
+							<div
+								class="fixed hidden flex-col rounded-xl bg-slate-700 p-2 transition group-hover:flex"
+							>
+								{#each el.subElements as subEl}
+									<button class="btn" on:click={() => addContent(subEl)}>
+										{#if typeof subEl.icon !== "string"}
+											<svelte:component this={subEl.icon} />
+										{:else}
+											{subEl.icon}
+										{/if}
+									</button>
+								{/each}
+							</div>
+						</div>
+					{:else}
+						<button class="btn" on:click={() => addContent(el)}>
+							{#if typeof el.icon !== "string"}
+								<svelte:component this={el.icon} />
+							{:else}
+								{el.icon}
+							{/if}
 						</button>
-						<button class="btn" on:click={() => addContent("## ", false)}>
-							H2
-						</button>
-						<button class="btn" on:click={() => addContent("### ", false)}>
-							H3
-						</button>
-						<button class="btn" on:click={() => addContent("#### ", false)}>
-							H4
-						</button>
-					</div>
-				</div>
-				<button class="btn" on:click={() => addContent("- ", false)}>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						viewBox="0 0 20 20"
-						fill="currentColor"
-						class="h-5 w-5"
-					>
-						<title>bullet</title>
-						<path
-							fill-rule="evenodd"
-							d="M6 4.75A.75.75 0 016.75 4h10.5a.75.75 0 010 1.5H6.75A.75.75 0 016 4.75zM6 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H6.75A.75.75 0 016 10zm0 5.25a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H6.75a.75.75 0 01-.75-.75zM1.99 4.75a1 1 0 011-1H3a1 1 0 011 1v.01a1 1 0 01-1 1h-.01a1 1 0 01-1-1v-.01zM1.99 15.25a1 1 0 011-1H3a1 1 0 011 1v.01a1 1 0 01-1 1h-.01a1 1 0 01-1-1v-.01zM1.99 10a1 1 0 011-1H3a1 1 0 011 1v.01a1 1 0 01-1 1h-.01a1 1 0 01-1-1V10z"
-							clip-rule="evenodd"
-						/>
-					</svg>
-				</button>
-				<button class="btn" on:click={() => addContent("> ", false)}>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						viewBox="0 0 20 20"
-						fill="currentColor"
-						class="h-5 w-5"
-					>
-						<title>blockquote</title>
-						<path
-							fill-rule="evenodd"
-							d="M10 3c-4.31 0-8 3.033-8 7 0 2.024.978 3.825 2.499 5.085a3.478 3.478 0 01-.522 1.756.75.75 0 00.584 1.143 5.976 5.976 0 003.936-1.108c.487.082.99.124 1.503.124 4.31 0 8-3.033 8-7s-3.69-7-8-7zm0 8a1 1 0 100-2 1 1 0 000 2zm-2-1a1 1 0 11-2 0 1 1 0 012 0zm5 1a1 1 0 100-2 1 1 0 000 2z"
-							clip-rule="evenodd"
-						/>
-					</svg>
-				</button>
-				<button class="btn" on:click={() => addContent("[text](href)", true)}>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						viewBox="0 0 20 20"
-						fill="currentColor"
-						class="h-5 w-5"
-					>
-						<title>anchor</title>
-						<path
-							d="M12.232 4.232a2.5 2.5 0 013.536 3.536l-1.225 1.224a.75.75 0 001.061 1.06l1.224-1.224a4 4 0 00-5.656-5.656l-3 3a4 4 0 00.225 5.865.75.75 0 00.977-1.138 2.5 2.5 0 01-.142-3.667l3-3z"
-						/>
-						<path
-							d="M11.603 7.963a.75.75 0 00-.977 1.138 2.5 2.5 0 01.142 3.667l-3 3a2.5 2.5 0 01-3.536-3.536l1.225-1.224a.75.75 0 00-1.061-1.06l-1.224 1.224a4 4 0 105.656 5.656l3-3a4 4 0 00-.225-5.865z"
-						/>
-					</svg>
-				</button>
-				<button class="btn" on:click={() => addContent("![alt](src)", true)}>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						viewBox="0 0 20 20"
-						fill="currentColor"
-						class="h-5 w-5"
-					>
-						<title>image</title>
-						<path
-							fill-rule="evenodd"
-							d="M1 5.25A2.25 2.25 0 013.25 3h13.5A2.25 2.25 0 0119 5.25v9.5A2.25 2.25 0 0116.75 17H3.25A2.25 2.25 0 011 14.75v-9.5zm1.5 5.81v3.69c0 .414.336.75.75.75h13.5a.75.75 0 00.75-.75v-2.69l-2.22-2.219a.75.75 0 00-1.06 0l-1.91 1.909.47.47a.75.75 0 11-1.06 1.06L6.53 8.091a.75.75 0 00-1.06 0l-2.97 2.97zM12 7a1 1 0 11-2 0 1 1 0 012 0z"
-							clip-rule="evenodd"
-						/>
-					</svg>
-				</button>
-				<button
-					class="btn"
-					on:click={() =>
-						addContent(
-							"| th | th |\n| -- | -- |\n| td | td |\n| td | td |",
-							true,
-						)}
-				>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						viewBox="0 0 20 20"
-						fill="currentColor"
-						class="h-5 w-5"
-					>
-						<title>table</title>
-						<path
-							fill-rule="evenodd"
-							d="M.99 5.24A2.25 2.25 0 013.25 3h13.5A2.25 2.25 0 0119 5.25l.01 9.5A2.25 2.25 0 0116.76 17H3.26A2.267 2.267 0 011 14.74l-.01-9.5zm8.26 9.52v-.625a.75.75 0 00-.75-.75H3.25a.75.75 0 00-.75.75v.615c0 .414.336.75.75.75h5.373a.75.75 0 00.627-.74zm1.5 0a.75.75 0 00.627.74h5.373a.75.75 0 00.75-.75v-.615a.75.75 0 00-.75-.75H11.5a.75.75 0 00-.75.75v.625zm6.75-3.63v-.625a.75.75 0 00-.75-.75H11.5a.75.75 0 00-.75.75v.625c0 .414.336.75.75.75h5.25a.75.75 0 00.75-.75zm-8.25 0v-.625a.75.75 0 00-.75-.75H3.25a.75.75 0 00-.75.75v.625c0 .414.336.75.75.75H8.5a.75.75 0 00.75-.75zM17.5 7.5v-.625a.75.75 0 00-.75-.75H11.5a.75.75 0 00-.75.75V7.5c0 .414.336.75.75.75h5.25a.75.75 0 00.75-.75zm-8.25 0v-.625a.75.75 0 00-.75-.75H3.25a.75.75 0 00-.75.75V7.5c0 .414.336.75.75.75H8.5a.75.75 0 00.75-.75z"
-							clip-rule="evenodd"
-						/>
-					</svg>
-				</button>
+					{/if}
+				{/each}
 			</div>
 		</nav>
 		<h1 class="px-4 py-2 font-bold">
@@ -248,8 +260,10 @@
 	</header>
 {/if}
 
-<main 
-	class="grid max-h-screen grow overflow-hidden {viewMode ? "" : "sm:grid-cols-2"}"
+<main
+	class="grid max-h-screen grow overflow-hidden {viewMode
+		? ''
+		: 'md:grid-cols-2'}"
 >
 	{#if !viewMode}
 		<textarea
@@ -261,14 +275,14 @@
 		/>
 	{/if}
 	<div
-		class="prose prose-slate max-w-none overflow-y-auto bg-slate-100 p-4 text-slate-950 sm:block"
+		class="prose prose-slate max-w-none overflow-y-auto bg-slate-50 p-4 text-slate-950 md:block"
 		class:hidden={!viewMode}
 	>
 		{@html mdToHtml(content)}
 	</div>
 </main>
 
-<footer class="flex justify-between items-center gap-4 p-4 bg-slate-950">
+<footer class="flex items-center justify-between gap-4 bg-slate-950 p-4">
 	<div class="flex flex-wrap gap-4">
 		<div>
 			{content.length}
@@ -282,18 +296,11 @@
 			{getReadingTime(wordCount)}
 		</div>
 	</div>
-	<button class="btn" on:click={() => viewMode = !viewMode}>
+	<button class="btn" on:click={() => (viewMode = !viewMode)}>
 		{#if viewMode}
-			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
-				<title>edit</title>
-				<path d="M2.695 14.763l-1.262 3.154a.5.5 0 00.65.65l3.155-1.262a4 4 0 001.343-.885L17.5 5.5a2.121 2.121 0 00-3-3L3.58 13.42a4 4 0 00-.885 1.343z" />
-			</svg>
+			<Edit />
 		{:else}
-			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
-				<title>view</title>
-				<path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
-				<path fill-rule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
-			</svg>
+			<View />
 		{/if}
 	</button>
 </footer>
