@@ -265,7 +265,7 @@
 
 	const toggleView = () => (viewMode = !viewMode);
 
-	const onKeyUp = ({ ctrlKey, key }: KeyboardEvent) => {
+	const onKeyDown = ({ ctrlKey, key }: KeyboardEvent) => {
 		if (ctrlKey && key) {
 			let matchedEl = contentElements.find((el) => el.key === key);
 			if (!matchedEl) {
@@ -291,7 +291,7 @@
 	};
 </script>
 
-<svelte:window bind:scrollY on:keyup={onKeyUp} />
+<svelte:window bind:scrollY on:keydown={onKeyDown} />
 
 {#if !viewMode}
 	<header class="flex justify-between bg-slate-950 p-4">
@@ -365,17 +365,19 @@
 >
 	{#if !viewMode}
 		<textarea
-			class="placeholder: max-w-none resize-none appearance-none bg-transparent p-4 font-mono transition placeholder:text-center placeholder:text-slate-500 focus:outline-none"
+			class="placeholder: max-w-none resize-none appearance-none bg-transparent p-4 font-mono text-sm transition placeholder:text-center placeholder:text-base placeholder:text-slate-500 focus:outline-none"
 			{placeholder}
 			bind:value={content}
 			bind:this={textArea}
 		/>
 	{/if}
 	<div
-		class="prose prose-slate max-w-none overflow-y-auto bg-slate-50 p-4 text-slate-950 md:block"
+		class="overflow-y-auto bg-slate-50 p-4 text-slate-950 md:block"
 		class:hidden={!viewMode}
 	>
-		{@html mdToHtml(content)}
+		<div class="prose prose-slate mx-auto">
+			{@html mdToHtml(content)}
+		</div>
 	</div>
 </main>
 
