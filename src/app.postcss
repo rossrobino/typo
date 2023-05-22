@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+	.btn {
+		@apply rounded-xl px-3 py-2 font-semibold leading-none transition hover:bg-slate-900 hover:shadow active:bg-slate-700;
+	}
+}
