@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { browser } from "$app/environment";
+	import { Editor } from "@rossrobino/components";
 
 	import Markdoc from "@markdoc/markdoc";
 
@@ -13,9 +14,6 @@
 	import View from "$lib/svg/View.svelte";
 	import Edit from "$lib/svg/Edit.svelte";
 
-	import Editor from "$lib/comp/Editor.svelte";
-	import type { ContentElement } from "$lib/comp/Editor.svelte";
-
 	let content = "";
 	let viewMode = false;
 	let file: File;
@@ -24,7 +22,7 @@
 	if (browser) supported = Boolean(window.showOpenFilePicker);
 	$: wordCount = getWordCount(content);
 
-	const contentElements: ContentElement[] = [
+	const contentElements: Editor["$$prop_def"]["contentElements"] = [
 		{
 			name: "heading",
 			text: "# ",
@@ -188,7 +186,7 @@
 	{#if !viewMode}
 		<div class="flex flex-col">
 			<Editor
-				textAreaClass="placeholder: max-w-none resize-none appearance-none bg-transparent p-4 font-mono text-sm transition placeholder:text-center placeholder:text-base placeholder:text-slate-500 focus:outline-none grow overflow-y-auto max-h-[calc(100dvh-8.75rem)]"
+				textAreaClass="max-w-none resize-none appearance-none bg-transparent p-4 font-mono text-sm transition placeholder:text-center placeholder:text-base placeholder:text-slate-500 focus:outline-none grow overflow-y-auto max-h-[calc(100dvh-8.75rem)]"
 				controlsClass="flex flex-wrap bg-slate-950 p-4"
 				buttonClass="btn"
 				{contentElements}
