@@ -87,7 +87,7 @@
 			{
 				description: "markdown",
 				accept: {
-					"text/markdown": [".md", ".mdx", ".mdoc", ".markdoc"],
+					"text/markdown": [".md", ".mdx", ".mdoc", ".markdoc", ".svx"],
 				},
 			},
 		],
@@ -148,7 +148,7 @@
 <svelte:window on:keydown={save} />
 {#if !viewMode}
 	<header
-		class="flex justify-between bg-slate-950 p-4 {viewMode ? 'md:hidden' : ''}"
+		class="flex justify-between bg-black p-4 {viewMode ? 'md:hidden' : ''}"
 	>
 		<nav class="flex flex-wrap">
 			<div class="flex w-full items-center justify-between sm:w-fit">
@@ -186,8 +186,8 @@
 	{#if !viewMode}
 		<div class="flex flex-col">
 			<Editor
-				textAreaClass="max-w-none resize-none appearance-none bg-transparent p-4 font-mono text-sm transition placeholder:text-center placeholder:text-base placeholder:text-slate-500 focus:outline-none grow overflow-y-auto max-h-[calc(100dvh-8.75rem)]"
-				controlsClass="flex flex-wrap bg-slate-950 p-4"
+				textAreaClass="max-w-none resize-none appearance-none bg-transparent p-4 font-mono text-sm transition placeholder:text-center placeholder:text-base placeholder:text-gray-500 focus:outline-none grow overflow-y-auto max-h-[calc(100dvh-8.75rem)]"
+				controlsClass="flex flex-wrap bg-black p-4"
 				buttonClass="btn"
 				{contentElements}
 				textAreaPlaceholder={placeholder}
@@ -195,37 +195,40 @@
 			/>
 		</div>
 	{/if}
-	<div class="flex-col md:flex {!viewMode ? 'hidden' : 'flex'}">
+	<div class="flex-col md:flex {viewMode ? 'flex' : 'hidden'}">
 		<div
-			class="{!viewMode
-				? 'max-h-[calc(100dvh-8.75rem)]'
-				: 'max-h-[calc(100dvh-4.2rem)]'} grow overflow-y-auto bg-slate-50 p-4 text-slate-950"
+			class="{viewMode
+				? 'max-h-[100dvh]'
+				: 'max-h-[calc(100dvh-8.75rem)]'} grow overflow-y-auto bg-gray-50 p-4 text-gray-950"
 		>
-			<div class="prose prose-slate mx-auto">
+			<div class="prose prose-gray mx-auto">
 				{@html mdToHtml(content)}
 			</div>
 		</div>
-		<div class="flex items-center justify-between gap-4 bg-slate-950 p-4">
-			<div class="flex flex-wrap gap-4">
-				<div>
-					{content.length}
-					{content.length === 1 ? "character" : "characters"}
+		{#if !viewMode}
+			<div class="flex items-center justify-between gap-4 bg-black p-4">
+				<div class="flex flex-wrap gap-4">
+					<div>
+						{content.length}
+						{content.length === 1 ? "character" : "characters"}
+					</div>
+					<div>
+						{wordCount}
+						{wordCount === 1 ? "word" : "words"}
+					</div>
+					<div>
+						{getReadingTime(wordCount)}
+					</div>
 				</div>
-				<div>
-					{wordCount}
-					{wordCount === 1 ? "word" : "words"}
-				</div>
-				<div>
-					{getReadingTime(wordCount)}
-				</div>
+				<button class="btn" on:click={toggleView}><View /></button>
 			</div>
-			<button class="btn" on:click={toggleView}>
-				{#if viewMode}
-					<Edit />
-				{:else}
-					<View />
-				{/if}
+		{:else}
+			<button
+				class="btn btn-s absolute bottom-4 right-5"
+				on:click={toggleView}
+			>
+				<Edit />
 			</button>
-		</div>
+		{/if}
 	</div>
 </main>
