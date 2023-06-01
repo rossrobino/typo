@@ -223,10 +223,7 @@
 				<button class="btn" on:click={toggleView}><View /></button>
 			</div>
 		{:else}
-			<button
-				class="btn btn-s absolute bottom-4 right-5"
-				on:click={toggleView}
-			>
+			<button class="btn btn-s absolute bottom-4 right-5" on:click={toggleView}>
 				<Edit />
 			</button>
 		{/if}

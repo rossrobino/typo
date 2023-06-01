@@ -7,7 +7,7 @@
 </script>
 
 <div
-	class="flex h-[100dvh] flex-col bg-gray-950 text-gray-50 selection:bg-gray-300 selection:text-gray-950"
+	class="flex h-[100dvh] flex-col bg-gray-900 text-gray-50 selection:bg-gray-300 selection:text-gray-950"
 >
 	<slot />
 </div>
