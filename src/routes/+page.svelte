@@ -148,7 +148,9 @@
 			viewMode = !viewMode;
 		};
 
+		// @ts-expect-error
 		if (document.startViewTransition) {
+			// @ts-expect-error
 			document.startViewTransition(() => {
 				switchView();
 			});
@@ -216,7 +218,7 @@
 				? 'max-h-[100dvh]'
 				: 'max-h-[calc(100dvh-8.75rem)]'} grow overflow-y-auto bg-white p-4 text-gray-950"
 		>
-			<div class="prose prose-gray mx-auto">
+			<div class="prose prose-gray mx-auto max-w-[70ch]">
 				{@html mdToHtml(content)}
 			</div>
 		</div>
