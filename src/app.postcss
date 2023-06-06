@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+	::view-transition-group(preview) {
+		animation-duration: 120ms;
+	}
+}
+
 @layer components {
 	.btn {
 		@apply rounded-xl px-3 py-2 font-semibold leading-none transition hover:bg-gray-900 active:bg-gray-800;

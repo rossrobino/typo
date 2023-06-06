@@ -110,6 +110,7 @@
 		[fileHandle] = await window.showOpenFilePicker(options);
 		file = await fileHandle.getFile();
 		content = await file.text();
+		toggleView();
 	};
 
 	const saveAs = async () => {
@@ -142,10 +143,23 @@
 		return `${minutes} minute${minutes !== 1 ? "s" : ""}`;
 	};
 
-	const toggleView = () => (viewMode = !viewMode);
+	const toggleView = () => {
+		const switchView = () => {
+			viewMode = !viewMode;
+		};
+
+		if (document.startViewTransition) {
+			document.startViewTransition(() => {
+				switchView();
+			});
+		} else {
+			switchView();
+		}
+	};
 </script>
 
 <svelte:window on:keydown={save} />
+
 {#if !viewMode}
 	<header
 		class="flex justify-between bg-black p-4 {viewMode ? 'md:hidden' : ''}"
@@ -197,9 +211,10 @@
 	{/if}
 	<div class="flex-col md:flex {viewMode ? 'flex' : 'hidden'}">
 		<div
+			style="view-transition-name: preview"
 			class="{viewMode
 				? 'max-h-[100dvh]'
-				: 'max-h-[calc(100dvh-8.75rem)]'} grow overflow-y-auto bg-gray-50 p-4 text-gray-950"
+				: 'max-h-[calc(100dvh-8.75rem)]'} grow overflow-y-auto bg-white p-4 text-gray-950"
 		>
 			<div class="prose prose-gray mx-auto">
 				{@html mdToHtml(content)}
