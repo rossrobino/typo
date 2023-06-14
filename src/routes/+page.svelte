@@ -23,6 +23,7 @@
 	import Copy from "$lib/svg/Copy.svelte";
 	import CopyComplete from "$lib/svg/CopyComplete.svelte";
 	import CheckCircle from "$lib/svg/CheckCircle.svelte";
+	import CodeBracket from "$lib/svg/CodeBracket.svelte";
 
 	let content = "";
 
@@ -117,7 +118,7 @@
 			name: "code",
 			text: "`",
 			display: "wrap",
-			icon: Code,
+			icon: CodeBracket,
 		},
 	];
 
