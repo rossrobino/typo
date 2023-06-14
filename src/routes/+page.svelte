@@ -9,7 +9,6 @@
 	import Anchor from "$lib/svg/Anchor.svelte";
 	import Image from "$lib/svg/Image.svelte";
 	import Table from "$lib/svg/Table.svelte";
-	import Star from "$lib/svg/Star.svelte";
 	import Code from "$lib/svg/Code.svelte";
 	import View from "$lib/svg/View.svelte";
 	import Edit from "$lib/svg/Edit.svelte";
@@ -51,10 +50,22 @@
 
 	const contentElements: Editor["$$prop_def"]["contentElements"] = [
 		{
-			name: "heading",
+			name: "heading 1",
 			text: "# ",
 			display: "block",
-			icon: "H",
+			icon: "H1",
+		},
+		{
+			name: "heading 2",
+			text: "## ",
+			display: "block",
+			icon: "H2",
+		},
+		{
+			name: "heading 3",
+			text: "### ",
+			display: "block",
+			icon: "H3",
 		},
 		{
 			name: "bullet",
@@ -69,11 +80,17 @@
 			icon: Blockquote,
 		},
 		{
-			name: "asterisk",
+			name: "italic",
 			text: "*",
 			display: "wrap",
-			icon: Star,
+			icon: "I",
 			key: "i",
+		},
+		{
+			name: "bold",
+			text: "**",
+			display: "wrap",
+			icon: "B",
 		},
 		{
 			name: "anchor",
@@ -216,7 +233,7 @@
 
 {#if !viewMode}
 	<header
-		class="flex justify-between bg-black p-4 {viewMode ? 'md:hidden' : ''}"
+		class="flex justify-between bg-black p-4 {viewMode ? 'lg:hidden' : ''}"
 	>
 		<nav class="flex flex-wrap">
 			<div class="flex w-full items-center justify-between sm:w-fit">
@@ -241,7 +258,7 @@
 						<Code />
 						<CheckCircle slot="complete" />
 					</CopyButton>
-					<button class="btn block md:hidden" on:click={toggleView}>
+					<button class="btn block lg:hidden" on:click={toggleView}>
 						{#if viewMode}
 							<Edit />
 						{:else}
@@ -257,7 +274,7 @@
 	</header>
 {/if}
 
-<main class="grid grow overflow-hidden {!viewMode ? 'md:grid-cols-2' : ''}">
+<main class="grid grow overflow-hidden {!viewMode ? 'lg:grid-cols-2' : ''}">
 	{#if !viewMode}
 		<div class="flex flex-col">
 			<Editor
@@ -272,7 +289,7 @@
 	{/if}
 	<div
 		style="view-transition-name: preview;"
-		class="flex-col md:flex {viewMode ? 'flex' : 'hidden'}"
+		class="flex-col lg:flex {viewMode ? 'flex' : 'hidden'}"
 	>
 		<div
 			class="{viewMode
@@ -296,7 +313,7 @@
 		</div>
 		<div class="flex justify-between bg-gray-50 p-2">
 			<!-- viewType controls -->
-			<div>
+			<div class="flex">
 				{#each viewTypes as type}
 					<button
 						class="btn btn-s"
@@ -311,7 +328,7 @@
 					</button>
 				{/each}
 			</div>
-			<div>
+			<div class="flex">
 				<button
 					disabled={proseSize < 1}
 					on:click={() => changeSize("decrease")}
