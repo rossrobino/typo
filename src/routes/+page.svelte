@@ -120,6 +120,12 @@
 			display: "wrap",
 			icon: CodeBracket,
 		},
+		{
+			name: "slide",
+			text: "---",
+			display: "inline",
+			icon: Slideshow,
+		},
 	];
 
 	let placeholder = "\n\n\n\n";
