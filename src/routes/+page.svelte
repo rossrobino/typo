@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { browser, dev } from "$app/environment";
+	import { browser } from "$app/environment";
 	import { Editor } from "@rossrobino/components";
 
 	import Markdoc from "@markdoc/markdoc";
@@ -102,7 +102,7 @@
 	contentElements.forEach((el) => {
 		if (el.key) placeholder += `${el.name}: ctrl+${el.key}\n`;
 	});
-	placeholder += "\ncreate new slide: ---";
+	placeholder += "\nnew slide: ---";
 
 	const options: FilePickerOptions = {
 		types: [
@@ -280,7 +280,7 @@
 				{/if}
 			</div>
 		</div>
-		<div class="flex justify-between bg-gray-300 p-2">
+		<div class="flex justify-between bg-gray-50 p-2">
 			<!-- viewType controls -->
 			<div>
 				{#each viewTypes as type}
