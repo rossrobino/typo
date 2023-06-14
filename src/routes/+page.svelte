@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { browser } from "$app/environment";
+	import { browser, dev } from "$app/environment";
 	import { Editor } from "@rossrobino/components";
 
 	import Markdoc from "@markdoc/markdoc";
@@ -13,13 +13,36 @@
 	import Code from "$lib/svg/Code.svelte";
 	import View from "$lib/svg/View.svelte";
 	import Edit from "$lib/svg/Edit.svelte";
+	import Slides from "$lib/Slides.svelte";
+	import Document from "$lib/svg/Document.svelte";
+	import Slideshow from "$lib/svg/Slideshow.svelte";
+	import ZoomOut from "$lib/svg/ZoomOut.svelte";
+	import ZoomIn from "$lib/svg/ZoomIn.svelte";
 
-	let content = "";
+	let content = dev
+		? "# Heading 1\n\n---\n\n## Heading 2\n\nParagraph\n\n---\n\n> blockquote"
+		: "";
+
 	let viewMode = false;
+
+	const viewTypes = ["document", "slideshow"] as const;
+	let viewType: (typeof viewTypes)[number] = "document";
+
 	let file: File;
 	let fileHandle: FileSystemFileHandle;
+
 	let supported = false;
 	if (browser) supported = Boolean(window.showOpenFilePicker);
+
+	const proseClasses = [
+		"prose-sm",
+		"prose-base",
+		"prose-lg",
+		"prose-xl",
+		"prose-2xl",
+	];
+	let proseSize = 1;
+
 	$: wordCount = getWordCount(content);
 
 	const contentElements: Editor["$$prop_def"]["contentElements"] = [
@@ -144,7 +167,7 @@
 	};
 
 	const toggleView = () => {
-		const switchView = () => {
+		const toggleView = () => {
 			viewMode = !viewMode;
 		};
 
@@ -152,10 +175,34 @@
 		if (document.startViewTransition) {
 			// @ts-expect-error
 			document.startViewTransition(() => {
-				switchView();
+				toggleView();
 			});
 		} else {
-			switchView();
+			toggleView();
+		}
+	};
+
+	const setViewType = (type: typeof viewType) => {
+		const setViewType = () => {
+			viewType = type;
+		};
+
+		// @ts-expect-error
+		if (document.startViewTransition) {
+			// @ts-expect-error
+			document.startViewTransition(() => {
+				setViewType();
+			});
+		} else {
+			setViewType();
+		}
+	};
+
+	const changeSize = (action: "increase" | "decrease") => {
+		if (action === "increase") {
+			if (proseSize < proseClasses.length - 1) proseSize++;
+		} else {
+			if (proseSize > 0) proseSize--;
 		}
 	};
 </script>
@@ -181,7 +228,6 @@
 							Download
 						</a>
 					{/if}
-
 					<button class="btn block md:hidden" on:click={toggleView}>
 						{#if viewMode}
 							<Edit />
@@ -211,19 +257,76 @@
 			/>
 		</div>
 	{/if}
-	<div class="flex-col md:flex {viewMode ? 'flex' : 'hidden'}">
+	<div
+		style="view-transition-name: preview;"
+		class="flex-col md:flex {viewMode ? 'flex' : 'hidden'}"
+	>
 		<div
-			style="view-transition-name: preview"
 			class="{viewMode
-				? 'max-h-[100dvh]'
-				: 'max-h-[calc(100dvh-8.75rem)]'} grow overflow-y-auto bg-white p-4 text-gray-950"
+				? 'max-h-[calc(100dvh-3.25rem)]'
+				: 'max-h-[calc(100dvh-12rem)]'} grow overflow-y-auto bg-white text-gray-950"
 		>
-			<div class="prose prose-gray mx-auto max-w-[70ch]">
-				{@html mdToHtml(content)}
+			<!-- content -->
+			<div
+				class="prose prose-gray mx-auto h-full max-w-[70ch] {proseClasses[
+					proseSize
+				]}"
+			>
+				{#if viewType === "document"}
+					<div class="p-4">
+						{@html mdToHtml(content)}
+					</div>
+				{:else if viewType === "slideshow"}
+					<Slides bind:viewMode html={mdToHtml(content)} />
+				{/if}
+			</div>
+		</div>
+		<div class="flex justify-between bg-gray-300 p-2">
+			<!-- viewType controls -->
+			<div>
+				{#each viewTypes as type}
+					<button
+						class="btn btn-s"
+						disabled={viewType === type}
+						on:click={() => setViewType(type)}
+					>
+						{#if type === "document"}
+							<Document />
+						{:else if type === "slideshow"}
+							<Slideshow />
+						{/if}
+					</button>
+				{/each}
+			</div>
+			<div>
+				<button
+					disabled={proseSize < 1}
+					on:click={() => changeSize("decrease")}
+					class="btn btn-s"
+				>
+					<ZoomOut />
+				</button>
+				<button
+					disabled={proseSize >= proseClasses.length - 1}
+					on:click={() => changeSize("increase")}
+					class="btn btn-s"
+				>
+					<ZoomIn />
+				</button>
+				<!-- viewMode toggle -->
+				<button class="btn btn-s" on:click={toggleView}>
+					{#if viewMode}
+						<Edit />
+					{:else}
+						<View />
+					{/if}
+				</button>
 			</div>
 		</div>
 		{#if !viewMode}
-			<div class="flex items-center justify-between gap-4 bg-black p-4">
+			<div
+				class="flex h-[4.25rem] items-center justify-between gap-4 bg-black p-4"
+			>
 				<div class="flex flex-wrap gap-4">
 					<div>
 						{content.length}
@@ -237,12 +340,7 @@
 						{getReadingTime(wordCount)}
 					</div>
 				</div>
-				<button class="btn" on:click={toggleView}><View /></button>
 			</div>
-		{:else}
-			<button class="btn btn-s absolute bottom-4 right-5" on:click={toggleView}>
-				<Edit />
-			</button>
 		{/if}
 	</div>
 </main>
