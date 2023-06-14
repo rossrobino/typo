@@ -19,9 +19,7 @@
 	import ZoomOut from "$lib/svg/ZoomOut.svelte";
 	import ZoomIn from "$lib/svg/ZoomIn.svelte";
 
-	let content = dev
-		? "# Heading 1\n\n---\n\n## Heading 2\n\nParagraph\n\n---\n\n> blockquote"
-		: "";
+	let content = "";
 
 	let viewMode = false;
 
@@ -104,6 +102,7 @@
 	contentElements.forEach((el) => {
 		if (el.key) placeholder += `${el.name}: ctrl+${el.key}\n`;
 	});
+	placeholder += "\ncreate new slide: ---";
 
 	const options: FilePickerOptions = {
 		types: [
