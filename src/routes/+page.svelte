@@ -18,6 +18,12 @@
 	import Slideshow from "$lib/svg/Slideshow.svelte";
 	import ZoomOut from "$lib/svg/ZoomOut.svelte";
 	import ZoomIn from "$lib/svg/ZoomIn.svelte";
+	import CopyButton from "$lib/CopyButton.svelte";
+	import Open from "$lib/svg/Open.svelte";
+	import Save from "$lib/svg/Save.svelte";
+	import Copy from "$lib/svg/Copy.svelte";
+	import CopyComplete from "$lib/svg/CopyComplete.svelte";
+	import CheckCircle from "$lib/svg/CheckCircle.svelte";
 
 	let content = "";
 
@@ -216,17 +222,25 @@
 			<div class="flex w-full items-center justify-between sm:w-fit">
 				<div class="flex">
 					{#if supported}
-						<button class="btn" on:click={open}>Open</button>
-						<button class="btn" on:click={saveAs}>Save&nbsp;As</button>
+						<button class="btn" on:click={open}><Open /></button>
+						<button class="btn" on:click={saveAs}><Save /></button>
 					{:else}
 						<a
 							href="data:text/plain,{content}"
 							download="Untitled.md"
 							class="btn"
 						>
-							Download
+							<Save />
 						</a>
 					{/if}
+					<CopyButton class="btn" {content}>
+						<Copy />
+						<CopyComplete slot="complete" />
+					</CopyButton>
+					<CopyButton class="btn" content={mdToHtml(content)}>
+						<Code />
+						<CheckCircle slot="complete" />
+					</CopyButton>
 					<button class="btn block md:hidden" on:click={toggleView}>
 						{#if viewMode}
 							<Edit />
