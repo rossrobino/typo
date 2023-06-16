@@ -4,6 +4,7 @@
 
 	import Markdoc from "@markdoc/markdoc";
 
+	// svg
 	import Bullet from "$lib/svg/Bullet.svelte";
 	import Blockquote from "$lib/svg/Blockquote.svelte";
 	import Anchor from "$lib/svg/Anchor.svelte";
@@ -24,20 +25,37 @@
 	import CopyComplete from "$lib/svg/CopyComplete.svelte";
 	import CheckCircle from "$lib/svg/CheckCircle.svelte";
 	import CodeBracket from "$lib/svg/CodeBracket.svelte";
+	import Metrics from "$lib/Metrics.svelte";
 
+	/**
+	 * raw text that the user enters into the `textarea` element
+	 */
 	let content = "";
 
+	/**
+	 *  controls the expansion of the preview area
+	 */
 	let viewMode = false;
 
 	const viewTypes = ["document", "slideshow"] as const;
+
+	/**
+	 * controls if the preview is as a document, slideshow...
+	 */
 	let viewType: (typeof viewTypes)[number] = "document";
 
 	let file: File;
 	let fileHandle: FileSystemFileHandle;
 
+	/**
+	 * `true` if the browser supports the `window.showOpenFilePicker` method
+	 */
 	let supported = false;
 	if (browser) supported = Boolean(window.showOpenFilePicker);
 
+	/**
+	 * options for prose sizes, these classes are provided by the `@tailwindcss/typography` package
+	 */
 	const proseClasses = [
 		"prose-sm",
 		"prose-base",
@@ -45,10 +63,14 @@
 		"prose-xl",
 		"prose-2xl",
 	];
+	/**
+	 * used as an index for the `proseClasses` array, defaults to `prose-base`
+	 */
 	let proseSize = 1;
 
-	$: wordCount = getWordCount(content);
-
+	/**
+	 * passed in as a prop for the `Editor.svelte` controls
+	 */
 	const contentElements: Editor["$$prop_def"]["contentElements"] = [
 		{
 			name: "heading 1",
@@ -128,6 +150,9 @@
 		},
 	];
 
+	/**
+	 * placeholder text for `Editor.svelte`
+	 */
 	let placeholder = "\n\n\n\n";
 	contentElements.forEach((el) => {
 		if (el.key) placeholder += `${el.name}: ctrl+${el.key}\n`;
@@ -147,7 +172,7 @@
 	};
 
 	/**
-	 * converts md to html using markdoc
+	 * converts md to html using `Markdoc`
 	 *
 	 * @param md - string
 	 */
@@ -175,24 +200,11 @@
 	};
 
 	const save = async () => {
-		if (fileHandle) {
+		if (fileHandle && !viewMode) {
 			const writable = await fileHandle.createWritable();
 			await writable.write(content);
 			await writable.close();
 		}
-	};
-
-	const getWordCount = (s: string) => {
-		return s
-			.trim()
-			.split(/\W+/)
-			.filter((n) => n != "").length;
-	};
-
-	const getReadingTime = (wordCount: number) => {
-		const wordsPerMinute = 200;
-		const minutes = Math.ceil(wordCount / wordsPerMinute);
-		return `${minutes} minute${minutes !== 1 ? "s" : ""}`;
 	};
 
 	const toggleView = () => {
@@ -227,7 +239,7 @@
 		}
 	};
 
-	const changeSize = (action: "increase" | "decrease") => {
+	const changeProseSize = (action: "increase" | "decrease") => {
 		if (action === "increase") {
 			if (proseSize < proseClasses.length - 1) proseSize++;
 		} else {
@@ -236,7 +248,7 @@
 	};
 </script>
 
-<svelte:window on:keydown={save} />
+<svelte:document on:keydown={save} />
 
 {#if !viewMode}
 	<header
@@ -257,11 +269,11 @@
 							<Save />
 						</a>
 					{/if}
-					<CopyButton class="btn" {content}>
+					<CopyButton {content}>
 						<Copy />
 						<CopyComplete slot="complete" />
 					</CopyButton>
-					<CopyButton class="btn" content={mdToHtml(content)}>
+					<CopyButton content={mdToHtml(content)}>
 						<Code />
 						<CheckCircle slot="complete" />
 					</CopyButton>
@@ -280,7 +292,6 @@
 		</h1>
 	</header>
 {/if}
-
 <main class="grid grow overflow-hidden {!viewMode ? 'lg:grid-cols-2' : ''}">
 	{#if !viewMode}
 		<div class="flex flex-col">
@@ -337,16 +348,16 @@
 			</div>
 			<div class="flex">
 				<button
-					disabled={proseSize < 1}
-					on:click={() => changeSize("decrease")}
 					class="btn btn-s"
+					disabled={proseSize < 1}
+					on:click={() => changeProseSize("decrease")}
 				>
 					<ZoomOut />
 				</button>
 				<button
-					disabled={proseSize >= proseClasses.length - 1}
-					on:click={() => changeSize("increase")}
 					class="btn btn-s"
+					disabled={proseSize >= proseClasses.length - 1}
+					on:click={() => changeProseSize("increase")}
 				>
 					<ZoomIn />
 				</button>
@@ -361,23 +372,7 @@
 			</div>
 		</div>
 		{#if !viewMode}
-			<div
-				class="flex h-[4.25rem] items-center justify-between gap-4 bg-black p-4"
-			>
-				<div class="flex flex-wrap gap-4">
-					<div>
-						{content.length}
-						{content.length === 1 ? "character" : "characters"}
-					</div>
-					<div>
-						{wordCount}
-						{wordCount === 1 ? "word" : "words"}
-					</div>
-					<div>
-						{getReadingTime(wordCount)}
-					</div>
-				</div>
-			</div>
+			<Metrics {content} />
 		{/if}
 	</div>
 </main>

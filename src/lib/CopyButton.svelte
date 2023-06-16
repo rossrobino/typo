@@ -1,12 +1,9 @@
 <script lang="ts">
 	export let content: string;
 
-	let className = "";
-	export { className as class };
-
 	let complete = false;
 
-	const onClick = async () => {
+	const copyText = async () => {
 		try {
 			await navigator.clipboard.writeText(content);
 			complete = true;
@@ -21,9 +18,7 @@
 				callbackFunction();
 			}
 		}
-
 		document.body.addEventListener("click", onClick);
-
 		return {
 			update(newCallbackFunction: () => void) {
 				callbackFunction = newCallbackFunction;
@@ -36,9 +31,9 @@
 </script>
 
 <button
-	class={className}
+	class="btn"
 	use:clickOutside={() => (complete = false)}
-	on:click={onClick}
+	on:click={copyText}
 >
 	{#if !complete}
 		<slot>Copy</slot>

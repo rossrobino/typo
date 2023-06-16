@@ -1,9 +1,6 @@
 <script lang="ts">
 	import Arrow from "./svg/Arrow.svelte";
 
-	let className = "";
-	export { className as class };
-
 	export let html = "";
 
 	export let currentSlide = 0;
@@ -52,7 +49,7 @@
 
 <svelte:document on:keydown={onKeydown} />
 
-<div class="flex h-full flex-col {className}">
+<div class="flex h-full flex-col">
 	<article class="flex grow flex-col justify-center p-4">
 		{#each splitHtml(html) as slide, i}
 			{#if i === currentSlide}
