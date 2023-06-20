@@ -258,8 +258,14 @@
 			<div class="flex w-full items-center justify-between sm:w-fit">
 				<div class="flex">
 					{#if supported}
-						<button class="btn" on:click={open}><Open /></button>
-						<button class="btn" on:click={saveAs}><Save /></button>
+						<button class="btn" on:click={open}>
+							<Open />
+							<span class="hidden lg:inline">Open</span>
+						</button>
+						<button class="btn" on:click={saveAs}>
+							<Save />
+							<span class="hidden lg:inline">Save</span>
+						</button>
 					{:else}
 						<a
 							href="data:text/plain,{content}"
@@ -267,15 +273,30 @@
 							class="btn"
 						>
 							<Save />
+							<span class="hidden lg:inline">Save</span>
 						</a>
 					{/if}
 					<CopyButton {content}>
 						<Copy />
-						<CopyComplete slot="complete" />
+						<span class="hidden lg:inline">Copy</span>
+						<span
+							class="flex items-center justify-center gap-1"
+							slot="complete"
+						>
+							<CopyComplete />
+							<span class="hidden lg:inline">Copy</span>
+						</span>
 					</CopyButton>
 					<CopyButton content={mdToHtml(content)}>
 						<Code />
-						<CheckCircle slot="complete" />
+						<span class="hidden lg:inline">Copy HTML</span>
+						<span
+							class="flex items-center justify-center gap-1"
+							slot="complete"
+						>
+							<CopyComplete />
+							<span class="hidden lg:inline">Copy HTML</span>
+						</span>
 					</CopyButton>
 					<button class="btn block lg:hidden" on:click={toggleView}>
 						{#if viewMode}
