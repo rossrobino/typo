@@ -372,9 +372,8 @@
 			>
 				<!-- content -->
 				<div
-					class="prose mx-auto h-full max-w-[70ch] {proseSizes[
-						saved.proseSize
-					]} {colors.prose[saved.color]}"
+					class="prose mx-auto h-full {proseSizes[saved.proseSize]} {colors
+						.prose[saved.color]}"
 					class:font-serif={saved.serif}
 				>
 					{#if saved.viewType === "document"}
