@@ -30,6 +30,27 @@
 	import CodeBracket from "$lib/svg/CodeBracket.svelte";
 	import New from "$lib/svg/New.svelte";
 
+	const viewTypes = ["document", "slideshow"] as const;
+
+	interface Saved {
+		proseSize: number;
+		proseColor: number;
+		serif: boolean;
+		viewType: (typeof viewTypes)[number];
+	}
+
+	let saved: Saved = {
+		proseSize: 1,
+		proseColor: 0,
+		serif: false,
+		viewType: "document",
+	};
+
+	export const snapshot = {
+		capture: () => saved,
+		restore: (value) => (saved = value),
+	};
+
 	/**
 	 * raw text that the user enters into the `textarea` element
 	 */
@@ -39,13 +60,6 @@
 	 *  controls the expansion of the preview area
 	 */
 	let viewMode = false;
-
-	const viewTypes = ["document", "slideshow"] as const;
-
-	/**
-	 * controls if the preview is as a document, slideshow...
-	 */
-	let viewType: (typeof viewTypes)[number] = "document";
 
 	let file: File;
 	let fileHandle: FileSystemFileHandle;
@@ -59,17 +73,16 @@
 	/**
 	 * options for prose sizes, these classes are provided by the `@tailwindcss/typography` package
 	 */
-	const proseClasses = [
+	const proseSizes = [
 		"prose-sm",
 		"prose-base",
 		"prose-lg",
 		"prose-xl",
 		"prose-2xl",
 	];
-	/**
-	 * used as an index for the `proseClasses` array, defaults to `prose-base`
-	 */
-	let proseSize = 1;
+
+	const proseColors = ["prose-gray", "prose-sky", "prose-teal", "prose-rose"];
+	const bgColors = ["bg-gray-500", "bg-sky-500", "bg-teal-500", "bg-rose-500"];
 
 	/**
 	 * passed in as a prop for the `Editor.svelte` controls
@@ -222,9 +235,9 @@
 		}
 	};
 
-	const setViewType = (type: typeof viewType) => {
+	const setViewType = (type: typeof saved.viewType) => {
 		const setViewType = () => {
-			viewType = type;
+			saved.viewType = type;
 		};
 
 		// @ts-expect-error
@@ -240,9 +253,17 @@
 
 	const changeProseSize = (action: "increase" | "decrease") => {
 		if (action === "increase") {
-			if (proseSize < proseClasses.length - 1) proseSize++;
+			if (saved.proseSize < proseSizes.length - 1) saved.proseSize++;
 		} else {
-			if (proseSize > 0) proseSize--;
+			if (saved.proseSize > 0) saved.proseSize--;
+		}
+	};
+
+	const changeProseColor = () => {
+		if (saved.proseColor < proseColors.length - 1) {
+			saved.proseColor++;
+		} else {
+			saved.proseColor = 0;
 		}
 	};
 </script>
@@ -340,15 +361,16 @@
 		>
 			<!-- content -->
 			<div
-				class="prose prose-gray mx-auto h-full max-w-[70ch] {proseClasses[
-					proseSize
-				]}"
+				class="prose mx-auto h-full max-w-[70ch] {proseSizes[
+					saved.proseSize
+				]} {proseColors[saved.proseColor]}"
+				class:font-serif={saved.serif}
 			>
-				{#if viewType === "document"}
+				{#if saved.viewType === "document"}
 					<div class="p-8">
 						{@html mdToHtml(content ? content : placeholder)}
 					</div>
-				{:else if viewType === "slideshow"}
+				{:else if saved.viewType === "slideshow"}
 					<Slides
 						bind:viewMode
 						html={mdToHtml(content ? content : placeholder)}
@@ -362,7 +384,7 @@
 				{#each viewTypes as type}
 					<button
 						class="btn btn-s"
-						disabled={viewType === type}
+						disabled={saved.viewType === type}
 						on:click={() => setViewType(type)}
 					>
 						{#if type === "document"}
@@ -374,16 +396,27 @@
 				{/each}
 			</div>
 			<div class="flex">
+				<button class="btn btn-s" on:click={changeProseColor}>
+					<div class="h-5 w-5 rounded-full {bgColors[saved.proseColor]}" />
+				</button>
 				<button
 					class="btn btn-s"
-					disabled={proseSize < 1}
+					class:font-serif={!saved.serif}
+					on:click={() => (saved.serif = !saved.serif)}
+					aria-label={saved.serif ? "sans-serif" : "serif"}
+				>
+					F
+				</button>
+				<button
+					class="btn btn-s"
+					disabled={saved.proseSize < 1}
 					on:click={() => changeProseSize("decrease")}
 				>
 					<ZoomOut />
 				</button>
 				<button
 					class="btn btn-s"
-					disabled={proseSize >= proseClasses.length - 1}
+					disabled={saved.proseSize >= proseSizes.length - 1}
 					on:click={() => changeProseSize("increase")}
 				>
 					<ZoomIn />
