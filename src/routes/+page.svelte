@@ -1,8 +1,14 @@
 <script lang="ts">
 	import { browser } from "$app/environment";
-	import { Editor } from "@rossrobino/components";
 
+	import { Editor } from "@rossrobino/components";
 	import Markdoc from "@markdoc/markdoc";
+
+	import gettingStarted from "$lib/gettingStarted.markdoc?raw";
+
+	import Slides from "$lib/components/Slides.svelte";
+	import CopyButton from "$lib/components/CopyButton.svelte";
+	import Metrics from "$lib/components/Metrics.svelte";
 
 	// svg
 	import Bullet from "$lib/svg/Bullet.svelte";
@@ -13,19 +19,16 @@
 	import Code from "$lib/svg/Code.svelte";
 	import View from "$lib/svg/View.svelte";
 	import Edit from "$lib/svg/Edit.svelte";
-	import Slides from "$lib/Slides.svelte";
 	import Document from "$lib/svg/Document.svelte";
 	import Slideshow from "$lib/svg/Slideshow.svelte";
 	import ZoomOut from "$lib/svg/ZoomOut.svelte";
 	import ZoomIn from "$lib/svg/ZoomIn.svelte";
-	import CopyButton from "$lib/CopyButton.svelte";
 	import Open from "$lib/svg/Open.svelte";
 	import Save from "$lib/svg/Save.svelte";
 	import Copy from "$lib/svg/Copy.svelte";
 	import CopyComplete from "$lib/svg/CopyComplete.svelte";
-	import CheckCircle from "$lib/svg/CheckCircle.svelte";
 	import CodeBracket from "$lib/svg/CodeBracket.svelte";
-	import Metrics from "$lib/Metrics.svelte";
+	import New from "$lib/svg/New.svelte";
 
 	/**
 	 * raw text that the user enters into the `textarea` element
@@ -150,14 +153,10 @@
 		},
 	];
 
-	/**
-	 * placeholder text for `Editor.svelte`
-	 */
-	let placeholder = "\n\n\n\n";
+	let placeholder = gettingStarted;
 	contentElements.forEach((el) => {
-		if (el.key) placeholder += `${el.name}: ctrl+${el.key}\n`;
+		if (el.key) placeholder += `\n- ${el.name}: \`ctrl+${el.key}\``;
 	});
-	placeholder += "\nnew slide: ---";
 
 	const options: FilePickerOptions = {
 		types: [
@@ -257,6 +256,10 @@
 		<nav class="flex flex-wrap">
 			<div class="flex w-full items-center justify-between sm:w-fit">
 				<div class="flex">
+					<a href="/" target="_blank" class="btn">
+						<New />
+						<span class="hidden lg:inline">New</span>
+					</a>
 					{#if supported}
 						<button class="btn" on:click={open}>
 							<Open />
@@ -308,20 +311,20 @@
 				</div>
 			</div>
 		</nav>
-		<h1 class="px-4 py-2 font-bold">
+		<div class="px-4 py-2 font-bold">
 			{file?.name ? file.name : "md"}
-		</h1>
+		</div>
 	</header>
 {/if}
 <main class="grid grow overflow-hidden {!viewMode ? 'lg:grid-cols-2' : ''}">
 	{#if !viewMode}
 		<div class="flex flex-col">
 			<Editor
-				textAreaClass="max-w-none resize-none appearance-none bg-transparent p-4 font-mono text-sm transition placeholder:text-center placeholder:text-base placeholder:text-gray-500 focus:outline-none grow overflow-y-auto max-h-[calc(100dvh-8.75rem)]"
+				textAreaClass="max-w-none resize-none appearance-none bg-transparent p-4 font-mono text-sm transition placeholder:text-gray-500 focus:outline-none grow overflow-y-auto max-h-[calc(100dvh-8.75rem)]"
 				controlsClass="flex flex-wrap bg-black p-4"
 				buttonClass="btn"
 				{contentElements}
-				textAreaPlaceholder={placeholder}
+				textAreaPlaceholder="# Title"
 				bind:textAreaValue={content}
 			/>
 		</div>
@@ -342,11 +345,14 @@
 				]}"
 			>
 				{#if viewType === "document"}
-					<div class="p-4">
-						{@html mdToHtml(content)}
+					<div class="p-8">
+						{@html mdToHtml(content ? content : placeholder)}
 					</div>
 				{:else if viewType === "slideshow"}
-					<Slides bind:viewMode html={mdToHtml(content)} />
+					<Slides
+						bind:viewMode
+						html={mdToHtml(content ? content : placeholder)}
+					/>
 				{/if}
 			</div>
 		</div>
