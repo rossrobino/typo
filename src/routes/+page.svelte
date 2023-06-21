@@ -1,7 +1,9 @@
 <script lang="ts">
-	import { browser } from "$app/environment";
+	import "../app.postcss";
+	import { dev, browser } from "$app/environment";
 
 	import { Editor } from "@rossrobino/components";
+	import { inject } from "@vercel/analytics";
 	import Markdoc from "@markdoc/markdoc";
 
 	import gettingStarted from "$lib/gettingStarted.markdoc?raw";
@@ -30,18 +32,20 @@
 	import CodeBracket from "$lib/svg/CodeBracket.svelte";
 	import New from "$lib/svg/New.svelte";
 
+	inject({ mode: dev ? "development" : "production" });
+
 	const viewTypes = ["document", "slideshow"] as const;
 
 	interface Saved {
 		proseSize: number;
-		proseColor: number;
+		color: number;
 		serif: boolean;
 		viewType: (typeof viewTypes)[number];
 	}
 
 	let saved: Saved = {
 		proseSize: 1,
-		proseColor: 0,
+		color: 0,
 		serif: false,
 		viewType: "document",
 	};
@@ -81,8 +85,11 @@
 		"prose-2xl",
 	];
 
-	const proseColors = ["prose-gray", "prose-sky", "prose-teal", "prose-rose"];
-	const bgColors = ["bg-gray-500", "bg-sky-500", "bg-teal-500", "bg-rose-500"];
+	const colors = {
+		prose: ["prose-gray", "prose-teal", "prose-sky", "prose-indigo"],
+		medium: ["bg-gray-500", "bg-teal-500", "bg-sky-500", "bg-indigo-500"],
+		dark: ["bg-gray-900", "bg-teal-950", "bg-sky-950", "bg-indigo-950"],
+	};
 
 	/**
 	 * passed in as a prop for the `Editor.svelte` controls
@@ -260,69 +267,173 @@
 	};
 
 	const changeProseColor = () => {
-		if (saved.proseColor < proseColors.length - 1) {
-			saved.proseColor++;
+		if (saved.color < colors.prose.length - 1) {
+			saved.color++;
 		} else {
-			saved.proseColor = 0;
+			saved.color = 0;
 		}
 	};
 </script>
 
 <svelte:document on:keydown={save} />
 
-{#if !viewMode}
-	<header
-		class="flex justify-between bg-black p-4 {viewMode ? 'lg:hidden' : ''}"
-	>
-		<nav class="flex flex-wrap">
-			<div class="flex w-full items-center justify-between sm:w-fit">
-				<div class="flex">
-					<a href="/" target="_blank" class="btn">
-						<New />
-						<span class="hidden lg:inline">New</span>
-					</a>
-					{#if supported}
-						<button class="btn" on:click={open}>
-							<Open />
-							<span class="hidden lg:inline">Open</span>
-						</button>
-						<button class="btn" on:click={saveAs}>
-							<Save />
-							<span class="hidden lg:inline">Save</span>
-						</button>
-					{:else}
-						<a
-							href="data:text/plain,{content}"
-							download="Untitled.md"
-							class="btn"
-						>
-							<Save />
-							<span class="hidden lg:inline">Save</span>
+<div
+	class="flex h-[100dvh] flex-col text-gray-50 selection:bg-gray-300 selection:text-gray-950 {colors
+		.dark[saved.color]}"
+>
+	{#if !viewMode}
+		<header
+			class="flex justify-between bg-black p-4 {viewMode ? 'lg:hidden' : ''}"
+		>
+			<nav class="flex flex-wrap">
+				<div class="flex w-full items-center justify-between sm:w-fit">
+					<div class="flex">
+						<a href="/" target="_blank" class="btn">
+							<New />
+							<span class="hidden lg:inline">New</span>
 						</a>
-					{/if}
-					<CopyButton {content}>
-						<Copy />
-						<span class="hidden lg:inline">Copy</span>
-						<span
-							class="flex items-center justify-center gap-1"
-							slot="complete"
-						>
-							<CopyComplete />
+						{#if supported}
+							<button class="btn" on:click={open}>
+								<Open />
+								<span class="hidden lg:inline">Open</span>
+							</button>
+							<button class="btn" on:click={saveAs}>
+								<Save />
+								<span class="hidden lg:inline">Save</span>
+							</button>
+						{:else}
+							<a
+								href="data:text/plain,{content}"
+								download="Untitled.md"
+								class="btn"
+							>
+								<Save />
+								<span class="hidden lg:inline">Save</span>
+							</a>
+						{/if}
+						<CopyButton {content}>
+							<Copy />
 							<span class="hidden lg:inline">Copy</span>
-						</span>
-					</CopyButton>
-					<CopyButton content={mdToHtml(content)}>
-						<Code />
-						<span class="hidden lg:inline">Copy HTML</span>
-						<span
-							class="flex items-center justify-center gap-1"
-							slot="complete"
-						>
-							<CopyComplete />
+							<span
+								class="flex items-center justify-center gap-1"
+								slot="complete"
+							>
+								<CopyComplete />
+								<span class="hidden lg:inline">Copy</span>
+							</span>
+						</CopyButton>
+						<CopyButton content={mdToHtml(content)}>
+							<Code />
 							<span class="hidden lg:inline">Copy HTML</span>
-						</span>
-					</CopyButton>
-					<button class="btn block lg:hidden" on:click={toggleView}>
+							<span
+								class="flex items-center justify-center gap-1"
+								slot="complete"
+							>
+								<CopyComplete />
+								<span class="hidden lg:inline">Copy HTML</span>
+							</span>
+						</CopyButton>
+						<button class="btn block lg:hidden" on:click={toggleView}>
+							{#if viewMode}
+								<Edit />
+							{:else}
+								<View />
+							{/if}
+						</button>
+					</div>
+				</div>
+			</nav>
+			<div class="px-4 py-2 font-bold">
+				{file?.name ? file.name : "md"}
+			</div>
+		</header>
+	{/if}
+	<main class="grid grow overflow-hidden {!viewMode ? 'lg:grid-cols-2' : ''}">
+		{#if !viewMode}
+			<div class="flex flex-col">
+				<Editor
+					textAreaClass="max-w-none resize-none appearance-none bg-transparent p-4 font-mono text-sm transition placeholder:text-gray-300 focus:outline-none grow overflow-y-auto max-h-[calc(100dvh-8.75rem)]"
+					controlsClass="flex flex-wrap bg-black p-4"
+					buttonClass="btn"
+					{contentElements}
+					textAreaPlaceholder="# Title"
+					bind:textAreaValue={content}
+				/>
+			</div>
+		{/if}
+		<div
+			style="view-transition-name: preview;"
+			class="flex-col lg:flex {viewMode ? 'flex' : 'hidden'}"
+		>
+			<div
+				class="{viewMode
+					? 'max-h-[calc(100dvh-3.25rem)]'
+					: 'max-h-[calc(100dvh-12rem)]'} grow overflow-y-auto bg-white text-gray-950"
+			>
+				<!-- content -->
+				<div
+					class="prose mx-auto h-full max-w-[70ch] {proseSizes[
+						saved.proseSize
+					]} {colors.prose[saved.color]}"
+					class:font-serif={saved.serif}
+				>
+					{#if saved.viewType === "document"}
+						<div class="p-8">
+							{@html mdToHtml(content ? content : placeholder)}
+						</div>
+					{:else if saved.viewType === "slideshow"}
+						<Slides
+							bind:viewMode
+							html={mdToHtml(content ? content : placeholder)}
+						/>
+					{/if}
+				</div>
+			</div>
+			<div class="flex justify-between bg-gray-50 p-2">
+				<!-- viewType controls -->
+				<div class="flex">
+					{#each viewTypes as type}
+						<button
+							class="btn btn-s"
+							disabled={saved.viewType === type}
+							on:click={() => setViewType(type)}
+						>
+							{#if type === "document"}
+								<Document />
+							{:else if type === "slideshow"}
+								<Slideshow />
+							{/if}
+						</button>
+					{/each}
+				</div>
+				<div class="flex">
+					<button class="btn btn-s" on:click={changeProseColor}>
+						<div class="h-5 w-5 rounded-full {colors.medium[saved.color]}" />
+					</button>
+					<button
+						class="btn btn-s"
+						class:font-serif={!saved.serif}
+						on:click={() => (saved.serif = !saved.serif)}
+						aria-label={saved.serif ? "sans-serif" : "serif"}
+					>
+						F
+					</button>
+					<button
+						class="btn btn-s"
+						disabled={saved.proseSize < 1}
+						on:click={() => changeProseSize("decrease")}
+					>
+						<ZoomOut />
+					</button>
+					<button
+						class="btn btn-s"
+						disabled={saved.proseSize >= proseSizes.length - 1}
+						on:click={() => changeProseSize("increase")}
+					>
+						<ZoomIn />
+					</button>
+					<!-- viewMode toggle -->
+					<button class="btn btn-s" on:click={toggleView}>
 						{#if viewMode}
 							<Edit />
 						{:else}
@@ -331,108 +442,9 @@
 					</button>
 				</div>
 			</div>
-		</nav>
-		<div class="px-4 py-2 font-bold">
-			{file?.name ? file.name : "md"}
+			{#if !viewMode}
+				<Metrics {content} />
+			{/if}
 		</div>
-	</header>
-{/if}
-<main class="grid grow overflow-hidden {!viewMode ? 'lg:grid-cols-2' : ''}">
-	{#if !viewMode}
-		<div class="flex flex-col">
-			<Editor
-				textAreaClass="max-w-none resize-none appearance-none bg-transparent p-4 font-mono text-sm transition placeholder:text-gray-500 focus:outline-none grow overflow-y-auto max-h-[calc(100dvh-8.75rem)]"
-				controlsClass="flex flex-wrap bg-black p-4"
-				buttonClass="btn"
-				{contentElements}
-				textAreaPlaceholder="# Title"
-				bind:textAreaValue={content}
-			/>
-		</div>
-	{/if}
-	<div
-		style="view-transition-name: preview;"
-		class="flex-col lg:flex {viewMode ? 'flex' : 'hidden'}"
-	>
-		<div
-			class="{viewMode
-				? 'max-h-[calc(100dvh-3.25rem)]'
-				: 'max-h-[calc(100dvh-12rem)]'} grow overflow-y-auto bg-white text-gray-950"
-		>
-			<!-- content -->
-			<div
-				class="prose mx-auto h-full max-w-[70ch] {proseSizes[
-					saved.proseSize
-				]} {proseColors[saved.proseColor]}"
-				class:font-serif={saved.serif}
-			>
-				{#if saved.viewType === "document"}
-					<div class="p-8">
-						{@html mdToHtml(content ? content : placeholder)}
-					</div>
-				{:else if saved.viewType === "slideshow"}
-					<Slides
-						bind:viewMode
-						html={mdToHtml(content ? content : placeholder)}
-					/>
-				{/if}
-			</div>
-		</div>
-		<div class="flex justify-between bg-gray-50 p-2">
-			<!-- viewType controls -->
-			<div class="flex">
-				{#each viewTypes as type}
-					<button
-						class="btn btn-s"
-						disabled={saved.viewType === type}
-						on:click={() => setViewType(type)}
-					>
-						{#if type === "document"}
-							<Document />
-						{:else if type === "slideshow"}
-							<Slideshow />
-						{/if}
-					</button>
-				{/each}
-			</div>
-			<div class="flex">
-				<button class="btn btn-s" on:click={changeProseColor}>
-					<div class="h-5 w-5 rounded-full {bgColors[saved.proseColor]}" />
-				</button>
-				<button
-					class="btn btn-s"
-					class:font-serif={!saved.serif}
-					on:click={() => (saved.serif = !saved.serif)}
-					aria-label={saved.serif ? "sans-serif" : "serif"}
-				>
-					F
-				</button>
-				<button
-					class="btn btn-s"
-					disabled={saved.proseSize < 1}
-					on:click={() => changeProseSize("decrease")}
-				>
-					<ZoomOut />
-				</button>
-				<button
-					class="btn btn-s"
-					disabled={saved.proseSize >= proseSizes.length - 1}
-					on:click={() => changeProseSize("increase")}
-				>
-					<ZoomIn />
-				</button>
-				<!-- viewMode toggle -->
-				<button class="btn btn-s" on:click={toggleView}>
-					{#if viewMode}
-						<Edit />
-					{:else}
-						<View />
-					{/if}
-				</button>
-			</div>
-		</div>
-		{#if !viewMode}
-			<Metrics {content} />
-		{/if}
-	</div>
-</main>
+	</main>
+</div>
