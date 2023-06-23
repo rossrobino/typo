@@ -333,7 +333,7 @@
 								<span class="hidden lg:inline">Copy HTML</span>
 							</span>
 						</CopyButton>
-						<button class="btn block lg:hidden" on:click={toggleView}>
+						<button class="btn lg:hidden" on:click={toggleView}>
 							{#if viewMode}
 								<Edit />
 							{:else}
