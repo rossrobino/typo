@@ -12,7 +12,7 @@
 		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"devDependencies": {
-		"@rossrobino/components": "^1.7.0",
+		"@rossrobino/components": "^1.7.1",
 		"@sveltejs/adapter-vercel": "^3.0.1",
 		"@sveltejs/kit": "^1.20.5",
 		"@tailwindcss/typography": "^0.5.9",
@@ -22,7 +22,7 @@
 		"autoprefixer": "^10.4.14",
 		"eslint": "^8.43.0",
 		"eslint-config-prettier": "^8.8.0",
-		"eslint-plugin-svelte": "^2.31.0",
+		"eslint-plugin-svelte": "^2.31.1",
 		"postcss": "^8.4.24",
 		"prettier": "^2.8.8",
 		"prettier-plugin-svelte": "^2.10.1",
