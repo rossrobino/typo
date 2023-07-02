@@ -12,8 +12,7 @@
 	$: if (currentSlide >= numberOfSlides) currentSlide = numberOfSlides - 1;
 
 	const splitHtml = (html: string) => {
-		const articleContents = html.substring(9, html.length - 10);
-		return articleContents.split("<hr>");
+		return html.split("<hr>");
 	};
 
 	const changeSlide = (direction: "previous" | "next") => {
