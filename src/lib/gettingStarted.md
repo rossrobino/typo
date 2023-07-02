@@ -2,8 +2,6 @@
 
 Write content in [markdown](https://www.markdownguide.org/cheat-sheet/#basic-syntax)!
 
-This project uses [Markdoc](https://markdoc.dev/) to transpile markdown to HTML. The entire [Markdoc syntax](https://markdoc.dev/docs/syntax) is supported. 
-
 When a file is opened or saved, all future changes are saved automatically.
 
 Content can be viewed as a **document** or **slideshow**. Separate slides with `---`.

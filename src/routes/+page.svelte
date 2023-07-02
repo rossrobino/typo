@@ -4,9 +4,9 @@
 
 	import { Editor } from "@rossrobino/components";
 	import { inject } from "@vercel/analytics";
-	import Markdoc from "@markdoc/markdoc";
+	import { marked } from "marked";
 
-	import gettingStarted from "$lib/gettingStarted.markdoc?raw";
+	import gettingStarted from "$lib/gettingStarted.md?raw";
 
 	import Slides from "$lib/components/Slides.svelte";
 	import CopyButton from "$lib/components/CopyButton.svelte";
@@ -130,7 +130,6 @@
 			text: "*",
 			display: "wrap",
 			icon: "I",
-			key: "i",
 		},
 		{
 			name: "bold",
@@ -191,15 +190,12 @@
 	};
 
 	/**
-	 * converts md to html using `Markdoc`
+	 * converts md to html
 	 *
 	 * @param md - string
 	 */
 	const mdToHtml = (md: string) => {
-		const ast = Markdoc.parse(md);
-		const mdContent = Markdoc.transform(ast);
-		const html = Markdoc.renderers.html(mdContent);
-		return html;
+		return marked.parse(md, { mangle: false, headerIds: false });
 	};
 
 	const open = async () => {
