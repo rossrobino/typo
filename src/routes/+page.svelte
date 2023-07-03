@@ -174,7 +174,7 @@
 
 	let placeholder = gettingStarted;
 	contentElements.forEach((el) => {
-		if (el.key) placeholder += `\n- ${el.name}: \`ctrl+${el.key}\``;
+		if (el.key) placeholder += `\n- ${el.name}: \`CTRL\`+\`${el.key}\``;
 	});
 
 	const options: FilePickerOptions = {
@@ -269,6 +269,16 @@
 			saved.color = 0;
 		}
 	};
+
+	const selectContents = (e: Event) => {
+		if (e.target instanceof Node) {
+			const selection = window.getSelection();
+			const range = document.createRange();
+			range.selectNodeContents(e.target);
+			selection?.removeAllRanges();
+			selection?.addRange(range);
+		}
+	};
 </script>
 
 <svelte:document on:keydown={save} />
@@ -295,7 +305,7 @@
 							</button>
 							<button class="btn" on:click={saveAs}>
 								<Save />
-								<span class="hidden lg:inline">Save</span>
+								<span class="hidden lg:inline">Save As</span>
 							</button>
 						{:else}
 							<a
@@ -304,7 +314,7 @@
 								class="btn"
 							>
 								<Save />
-								<span class="hidden lg:inline">Save</span>
+								<span class="hidden lg:inline">Download</span>
 							</a>
 						{/if}
 						<CopyButton {content}>
@@ -371,6 +381,8 @@
 					class="prose mx-auto h-full {proseSizes[saved.proseSize]} {colors
 						.prose[saved.color]}"
 					class:font-serif={saved.serif}
+					on:dblclick={selectContents}
+					role="document"
 				>
 					{#if saved.viewType === "document"}
 						<div class="p-8">
