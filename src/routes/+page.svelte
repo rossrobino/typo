@@ -69,7 +69,7 @@
 	if (browser) supported = Boolean(window.showOpenFilePicker);
 
 	/**
-	 * options for prose sizes, 
+	 * options for prose sizes,
 	 * these classes are provided by the `@tailwindcss/typography` package
 	 */
 	const proseSizes = [
@@ -81,9 +81,9 @@
 	];
 
 	const colors = {
-		prose: ["prose-gray", "prose-teal", "prose-sky", "prose-indigo"],
-		medium: ["bg-gray-500", "bg-teal-500", "bg-sky-500", "bg-indigo-500"],
-		dark: ["bg-gray-900", "bg-teal-950", "bg-sky-950", "bg-indigo-950"],
+		prose: ["prose-gray", "prose-teal", "prose-sky", "prose-rose"],
+		medium: ["bg-gray-500", "bg-teal-500", "bg-sky-500", "bg-rose-500"],
+		dark: ["bg-gray-900", "bg-teal-950", "bg-sky-950", "bg-gray-900"],
 	};
 
 	/** passed in as a prop for the `Editor.svelte` controls */
@@ -221,19 +221,7 @@
 	};
 
 	const setViewType = (type: typeof saved.viewType) => {
-		const setViewType = () => {
-			saved.viewType = type;
-		};
-
-		// @ts-expect-error
-		if (document.startViewTransition) {
-			// @ts-expect-error
-			document.startViewTransition(() => {
-				setViewType();
-			});
-		} else {
-			setViewType();
-		}
+		saved.viewType = type;
 	};
 
 	const changeProseSize = (action: "increase" | "decrease") => {
@@ -261,9 +249,14 @@
 			selection?.addRange(range);
 		}
 	};
+
+	const onKeyDown = (e: KeyboardEvent) => {
+		save();
+		if (e.key === "Escape") toggleView();
+	};
 </script>
 
-<svelte:document on:keydown={save} />
+<svelte:document on:keydown={onKeyDown} />
 
 <div
 	class="flex h-[100dvh] flex-col text-gray-50 selection:bg-gray-300 selection:text-gray-950 {colors
@@ -351,16 +344,16 @@
 		{/if}
 		<div
 			style="view-transition-name: preview;"
-			class="flex-col lg:flex {viewMode ? 'flex' : 'hidden'}"
+			class="flex-col bg-white lg:flex {viewMode ? 'flex' : 'hidden'}"
 		>
 			<div
 				class="{viewMode
 					? 'max-h-[calc(100dvh-3.25rem)]'
-					: 'max-h-[calc(100dvh-12rem)]'} grow overflow-y-auto bg-white text-gray-950"
+					: 'max-h-[calc(100dvh-12rem)]'} grow overflow-y-auto text-gray-950"
 			>
 				<!-- content -->
 				<div
-					class="prose mx-auto h-full {proseSizes[saved.proseSize]} {colors
+					class="prose mx-auto h-full max-w-[72ch] {proseSizes[saved.proseSize]} {colors
 						.prose[saved.color]}"
 					class:font-serif={saved.serif}
 					on:dblclick={selectContents}
@@ -378,12 +371,16 @@
 					{/if}
 				</div>
 			</div>
-			<div class="flex justify-between bg-gray-50 p-2">
+			<div
+				class="group flex justify-between bg-gray-50 p-2"
+				class:bg-transparent={saved.viewType === "slideshow"}
+			>
 				<!-- viewType controls -->
 				<div class="flex">
 					{#each viewTypes as type}
 						<button
-							class="btn btn-s"
+							class="btn btn-s group-hover:flex"
+							class:hidden={viewMode}
 							disabled={saved.viewType === type}
 							on:click={() => setViewType(type)}
 						>
@@ -396,11 +393,16 @@
 					{/each}
 				</div>
 				<div class="flex">
-					<button class="btn btn-s" on:click={changeProseColor}>
+					<button
+						class="btn btn-s group-hover:flex"
+						class:hidden={viewMode}
+						on:click={changeProseColor}
+					>
 						<div class="h-5 w-5 rounded-full {colors.medium[saved.color]}" />
 					</button>
 					<button
-						class="btn btn-s"
+						class="btn btn-s group-hover:flex"
+						class:hidden={viewMode}
 						class:font-serif={!saved.serif}
 						on:click={() => (saved.serif = !saved.serif)}
 						aria-label={saved.serif ? "sans-serif" : "serif"}
@@ -408,14 +410,16 @@
 						F
 					</button>
 					<button
-						class="btn btn-s"
+						class="btn btn-s group-hover:flex"
+						class:hidden={viewMode}
 						disabled={saved.proseSize < 1}
 						on:click={() => changeProseSize("decrease")}
 					>
 						<ZoomOut />
 					</button>
 					<button
-						class="btn btn-s"
+						class="btn btn-s group-hover:flex"
+						class:hidden={viewMode}
 						disabled={saved.proseSize >= proseSizes.length - 1}
 						on:click={() => changeProseSize("increase")}
 					>
