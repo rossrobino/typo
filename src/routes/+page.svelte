@@ -55,27 +55,22 @@
 		restore: (value) => (saved = value),
 	};
 
-	/**
-	 * raw text that the user enters into the `textarea` element
-	 */
+	/** raw text that the user enters into the `textarea` element */
 	let content = "";
 
-	/**
-	 *  controls the expansion of the preview area
-	 */
+	/** controls the expansion of the preview area */
 	let viewMode = false;
 
 	let file: File;
 	let fileHandle: FileSystemFileHandle;
 
-	/**
-	 * `true` if the browser supports the `window.showOpenFilePicker` method
-	 */
+	/** `true` if the browser supports the `window.showOpenFilePicker` method */
 	let supported = false;
 	if (browser) supported = Boolean(window.showOpenFilePicker);
 
 	/**
-	 * options for prose sizes, these classes are provided by the `@tailwindcss/typography` package
+	 * options for prose sizes, 
+	 * these classes are provided by the `@tailwindcss/typography` package
 	 */
 	const proseSizes = [
 		"prose-sm",
@@ -91,27 +86,13 @@
 		dark: ["bg-gray-900", "bg-teal-950", "bg-sky-950", "bg-indigo-950"],
 	};
 
-	/**
-	 * passed in as a prop for the `Editor.svelte` controls
-	 */
+	/** passed in as a prop for the `Editor.svelte` controls */
 	const contentElements: Editor["$$prop_def"]["contentElements"] = [
 		{
-			name: "heading 1",
+			name: "heading",
 			text: "# ",
 			display: "block",
-			icon: "H1",
-		},
-		{
-			name: "heading 2",
-			text: "## ",
-			display: "block",
-			icon: "H2",
-		},
-		{
-			name: "heading 3",
-			text: "### ",
-			display: "block",
-			icon: "H3",
+			icon: "H",
 		},
 		{
 			name: "bullet",
@@ -130,6 +111,7 @@
 			text: "*",
 			display: "wrap",
 			icon: "I",
+			class: "italic",
 		},
 		{
 			name: "bold",
