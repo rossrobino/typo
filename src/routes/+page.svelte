@@ -55,27 +55,22 @@
 		restore: (value) => (saved = value),
 	};
 
-	/**
-	 * raw text that the user enters into the `textarea` element
-	 */
+	/** raw text that the user enters into the `textarea` element */
 	let content = "";
 
-	/**
-	 *  controls the expansion of the preview area
-	 */
+	/** controls the expansion of the preview area */
 	let viewMode = false;
 
 	let file: File;
 	let fileHandle: FileSystemFileHandle;
 
-	/**
-	 * `true` if the browser supports the `window.showOpenFilePicker` method
-	 */
+	/** `true` if the browser supports the `window.showOpenFilePicker` method */
 	let supported = false;
 	if (browser) supported = Boolean(window.showOpenFilePicker);
 
 	/**
-	 * options for prose sizes, these classes are provided by the `@tailwindcss/typography` package
+	 * options for prose sizes, 
+	 * these classes are provided by the `@tailwindcss/typography` package
 	 */
 	const proseSizes = [
 		"prose-sm",
@@ -91,27 +86,13 @@
 		dark: ["bg-gray-900", "bg-teal-950", "bg-sky-950", "bg-indigo-950"],
 	};
 
-	/**
-	 * passed in as a prop for the `Editor.svelte` controls
-	 */
+	/** passed in as a prop for the `Editor.svelte` controls */
 	const contentElements: Editor["$$prop_def"]["contentElements"] = [
 		{
-			name: "heading 1",
+			name: "heading",
 			text: "# ",
 			display: "block",
-			icon: "H1",
-		},
-		{
-			name: "heading 2",
-			text: "## ",
-			display: "block",
-			icon: "H2",
-		},
-		{
-			name: "heading 3",
-			text: "### ",
-			display: "block",
-			icon: "H3",
+			icon: "H",
 		},
 		{
 			name: "bullet",
@@ -130,6 +111,7 @@
 			text: "*",
 			display: "wrap",
 			icon: "I",
+			class: "italic",
 		},
 		{
 			name: "bold",
@@ -174,7 +156,7 @@
 
 	let placeholder = gettingStarted;
 	contentElements.forEach((el) => {
-		if (el.key) placeholder += `\n- ${el.name}: \`ctrl+${el.key}\``;
+		if (el.key) placeholder += `\n- ${el.name}: \`CTRL\`+\`${el.key}\``;
 	});
 
 	const options: FilePickerOptions = {
@@ -269,6 +251,16 @@
 			saved.color = 0;
 		}
 	};
+
+	const selectContents = (e: Event) => {
+		if (e.target instanceof Node) {
+			const selection = window.getSelection();
+			const range = document.createRange();
+			range.selectNodeContents(e.target);
+			selection?.removeAllRanges();
+			selection?.addRange(range);
+		}
+	};
 </script>
 
 <svelte:document on:keydown={save} />
@@ -295,7 +287,7 @@
 							</button>
 							<button class="btn" on:click={saveAs}>
 								<Save />
-								<span class="hidden lg:inline">Save</span>
+								<span class="hidden lg:inline">Save As</span>
 							</button>
 						{:else}
 							<a
@@ -304,7 +296,7 @@
 								class="btn"
 							>
 								<Save />
-								<span class="hidden lg:inline">Save</span>
+								<span class="hidden lg:inline">Download</span>
 							</a>
 						{/if}
 						<CopyButton {content}>
@@ -371,6 +363,8 @@
 					class="prose mx-auto h-full {proseSizes[saved.proseSize]} {colors
 						.prose[saved.color]}"
 					class:font-serif={saved.serif}
+					on:dblclick={selectContents}
+					role="document"
 				>
 					{#if saved.viewType === "document"}
 						<div class="p-8">
