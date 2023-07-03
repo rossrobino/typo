@@ -4,7 +4,6 @@
 	fill="currentColor"
 	class="h-5 w-5"
 >
-	<title>view</title>
 	<path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
 	<path
 		fill-rule="evenodd"

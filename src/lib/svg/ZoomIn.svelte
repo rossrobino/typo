@@ -4,7 +4,6 @@
 	fill="currentColor"
 	class="h-5 w-5"
 >
-	<title>zoom in</title>
 	<path
 		d="M9 6a.75.75 0 01.75.75v1.5h1.5a.75.75 0 010 1.5h-1.5v1.5a.75.75 0 01-1.5 0v-1.5h-1.5a.75.75 0 010-1.5h1.5v-1.5A.75.75 0 019 6z"
 	/>

@@ -12,7 +12,7 @@
 		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"devDependencies": {
-		"@rossrobino/components": "^1.7.5",
+		"@rossrobino/components": "^1.7.7",
 		"@sveltejs/adapter-vercel": "^3.0.1",
 		"@sveltejs/kit": "^1.21.0",
 		"@tailwindcss/typography": "^0.5.9",

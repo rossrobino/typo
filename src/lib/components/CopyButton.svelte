@@ -1,5 +1,6 @@
 <script lang="ts">
 	export let content: string;
+	export let title = "Copy"
 
 	let complete = false;
 
@@ -32,6 +33,7 @@
 
 <button
 	class="btn"
+	{title}
 	use:clickOutside={() => (complete = false)}
 	on:click={copyText}
 >

@@ -63,6 +63,7 @@
 			class="flex items-center justify-center gap-2 rounded-xl p-1 backdrop-blur-xl"
 		>
 			<button
+				title="Previous Slide"
 				disabled={!currentSlide}
 				class="btn btn-s rotate-180"
 				on:click={() => changeSlide("previous")}
@@ -71,6 +72,7 @@
 			</button>
 			<div class="text-sm">{currentSlide + 1} / {numberOfSlides}</div>
 			<button
+				title="Next Slide"
 				disabled={currentSlide >= numberOfSlides - 1}
 				class="btn btn-s"
 				on:click={() => changeSlide("next")}

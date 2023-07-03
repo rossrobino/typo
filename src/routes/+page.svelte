@@ -89,72 +89,72 @@
 	/** passed in as a prop for the `Editor.svelte` controls */
 	const contentElements: Editor["$$prop_def"]["contentElements"] = [
 		{
-			name: "heading",
+			name: "Heading",
 			text: "# ",
 			display: "block",
 			icon: "H",
 		},
 		{
-			name: "bullet",
+			name: "Bullet",
 			text: "- ",
 			display: "block",
 			icon: Bullet,
 		},
 		{
-			name: "blockquote",
+			name: "Blockquote",
 			text: "> ",
 			display: "block",
 			icon: Blockquote,
 		},
 		{
-			name: "italic",
+			name: "Italic",
 			text: "*",
 			display: "wrap",
 			icon: "I",
 			class: "italic",
 		},
 		{
-			name: "bold",
+			name: "Bold",
 			text: "**",
 			display: "wrap",
 			icon: "B",
 		},
 		{
-			name: "strikethrough",
+			name: "Strikethrough",
 			text: "~",
 			display: "wrap",
 			icon: "S",
-			class: "line-through font-normal"
+			class: "line-through font-normal",
 		},
 		{
-			name: "anchor",
+			name: "Anchor",
 			text: "[text](href)",
 			display: "inline",
 			icon: Anchor,
 			key: "[",
 		},
 		{
-			name: "image",
+			name: "Image",
 			text: "![alt](src)",
 			display: "inline",
 			icon: Image,
 			key: "]",
 		},
 		{
-			name: "table",
+			name: "Table",
 			text: "| th | th |\n| -- | -- |\n| td | td |\n| td | td |",
 			display: "inline",
 			icon: Table,
 			key: "\\",
 		},
 		{
-			name: "code",
+			name: "Code",
 			text: "`",
 			display: "wrap",
 			icon: CodeBracket,
 		},
 		{
-			name: "slide",
+			name: "Slide",
 			text: "---",
 			display: "inline",
 			icon: Slideshow,
@@ -276,16 +276,16 @@
 			<nav class="flex flex-wrap">
 				<div class="flex w-full items-center justify-between sm:w-fit">
 					<div class="flex">
-						<a href="/" target="_blank" class="btn">
+						<a href="/" title="New" target="_blank" class="btn">
 							<New />
 							<span class="hidden lg:inline">New</span>
 						</a>
 						{#if supported}
-							<button class="btn" on:click={open}>
+							<button title="Open" class="btn" on:click={open}>
 								<Open />
 								<span class="hidden lg:inline">Open</span>
 							</button>
-							<button class="btn" on:click={saveAs}>
+							<button title="Save As" class="btn" on:click={saveAs}>
 								<Save />
 								<span class="hidden lg:inline">Save As</span>
 							</button>
@@ -293,6 +293,7 @@
 							<a
 								href="data:text/plain,{content}"
 								download="Untitled.md"
+								title="Download"
 								class="btn"
 							>
 								<Save />
@@ -310,7 +311,7 @@
 								<span class="hidden lg:inline">Copy</span>
 							</span>
 						</CopyButton>
-						<CopyButton content={mdToHtml(content)}>
+						<CopyButton title="Copy HTML" content={mdToHtml(content)}>
 							<Code />
 							<span class="hidden lg:inline">Copy HTML</span>
 							<span
@@ -321,12 +322,8 @@
 								<span class="hidden lg:inline">Copy HTML</span>
 							</span>
 						</CopyButton>
-						<button class="btn lg:hidden" on:click={toggleView}>
-							{#if viewMode}
-								<Edit />
-							{:else}
-								<View />
-							{/if}
+						<button title="View" class="btn lg:hidden" on:click={toggleView}>
+							<View />
 						</button>
 					</div>
 				</div>
@@ -360,8 +357,9 @@
 			>
 				<!-- content -->
 				<div
-					class="prose mx-auto h-full max-w-[72ch] {proseSizes[saved.proseSize]} {colors
-						.prose[saved.color]}"
+					class="prose mx-auto h-full max-w-[72ch] {proseSizes[
+						saved.proseSize
+					]} {colors.prose[saved.color]}"
 					class:font-serif={saved.serif}
 					on:dblclick={selectContents}
 					role="document"
@@ -390,6 +388,7 @@
 							class:hidden={viewMode}
 							disabled={saved.viewType === type}
 							on:click={() => setViewType(type)}
+							title={type}
 						>
 							{#if type === "document"}
 								<Document />
@@ -401,6 +400,7 @@
 				</div>
 				<div class="flex">
 					<button
+						title="Change Color"
 						class="btn btn-s group-hover:flex"
 						class:hidden={viewMode}
 						on:click={changeProseColor}
@@ -408,6 +408,7 @@
 						<div class="h-5 w-5 rounded-full {colors.medium[saved.color]}" />
 					</button>
 					<button
+						title="Change Font"
 						class="btn btn-s group-hover:flex"
 						class:hidden={viewMode}
 						class:font-serif={!saved.serif}
@@ -417,6 +418,7 @@
 						F
 					</button>
 					<button
+						title="Decrease Font Size"
 						class="btn btn-s group-hover:flex"
 						class:hidden={viewMode}
 						disabled={saved.proseSize < 1}
@@ -425,6 +427,7 @@
 						<ZoomOut />
 					</button>
 					<button
+						title="Increase Font Size"
 						class="btn btn-s group-hover:flex"
 						class:hidden={viewMode}
 						disabled={saved.proseSize >= proseSizes.length - 1}
@@ -433,7 +436,11 @@
 						<ZoomIn />
 					</button>
 					<!-- viewMode toggle -->
-					<button class="btn btn-s" on:click={toggleView}>
+					<button
+						title={viewMode ? "Edit" : "View"}
+						class="btn btn-s"
+						on:click={toggleView}
+					>
 						{#if viewMode}
 							<Edit />
 						{:else}

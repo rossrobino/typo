@@ -4,7 +4,6 @@
 	fill="currentColor"
 	class="h-5 w-5"
 >
-	<title>zoom out</title>
 	<path d="M6.75 8.25a.75.75 0 000 1.5h4.5a.75.75 0 000-1.5h-4.5z" />
 	<path
 		fill-rule="evenodd"
