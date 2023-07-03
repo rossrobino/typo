@@ -120,6 +120,13 @@
 			icon: "B",
 		},
 		{
+			name: "strikethrough",
+			text: "~",
+			display: "wrap",
+			icon: "S",
+			class: "line-through font-normal"
+		},
+		{
 			name: "anchor",
 			text: "[text](href)",
 			display: "inline",
