@@ -57,27 +57,32 @@
 		"prose-2xl",
 	];
 
+	const fontFamilies = [
+		"font-sans",
+		"font-round",
+		"font-serif",
+		"font-antique",
+	];
+
 	const colors = {
 		prose: ["prose-gray", "prose-teal", "prose-sky", "prose-rose"],
 		medium: ["bg-gray-500", "bg-teal-500", "bg-sky-500", "bg-rose-500"],
 		dark: ["bg-gray-900", "bg-teal-950", "bg-sky-950", "bg-gray-900"],
 	};
 
-	const fonts = ["font-sans", "font-round", "font-serif", "font-antique"];
-
 	const viewTypes = ["document", "slideshow"] as const;
 
 	interface Preferences {
 		fontSize: number;
+		fontFamily: number;
 		color: number;
-		font: number;
 		viewType: (typeof viewTypes)[number];
 	}
 
 	let preferences: Preferences = {
 		fontSize: 1,
+		fontFamily: 0,
 		color: 0,
-		font: 0,
 		viewType: "document",
 	};
 
@@ -259,10 +264,10 @@
 	};
 
 	const changeFontFamily = () => {
-		if (preferences.font < fonts.length - 1) {
-			preferences.font++;
+		if (preferences.fontFamily < fontFamilies.length - 1) {
+			preferences.fontFamily++;
 		} else {
-			preferences.font = 0;
+			preferences.fontFamily = 0;
 		}
 		savePreferences();
 	};
@@ -379,7 +384,9 @@
 				<div
 					class="prose mx-auto h-full max-w-[72ch] {fontSizes[
 						preferences.fontSize
-					]} {colors.prose[preferences.color]} {fonts[preferences.font]}"
+					]} {colors.prose[preferences.color]} {fontFamilies[
+						preferences.fontFamily
+					]}"
 					on:dblclick={selectContents}
 					role="document"
 				>
@@ -430,10 +437,12 @@
 					</button>
 					<button
 						title="Change Font"
-						class="btn btn-s group-hover:flex {fonts[preferences.font]}"
+						class="btn btn-s group-hover:flex {fontFamilies[
+							preferences.fontFamily
+						]}"
 						class:hidden={viewMode}
 						on:click={changeFontFamily}
-						aria-label={preferences.font ? "sans-serif" : "serif"}
+						aria-label={preferences.fontFamily ? "sans-serif" : "serif"}
 					>
 						F
 					</button>
