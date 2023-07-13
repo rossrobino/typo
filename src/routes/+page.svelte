@@ -1,6 +1,8 @@
 <script lang="ts">
 	import "../app.postcss";
+
 	import { dev, browser } from "$app/environment";
+	import { onMount } from "svelte";
 
 	import { Editor } from "@rossrobino/components";
 	import { inject } from "@vercel/analytics";
@@ -34,27 +36,6 @@
 
 	inject({ mode: dev ? "development" : "production" });
 
-	const viewTypes = ["document", "slideshow"] as const;
-
-	interface Saved {
-		proseSize: number;
-		color: number;
-		serif: boolean;
-		viewType: (typeof viewTypes)[number];
-	}
-
-	let saved: Saved = {
-		proseSize: 1,
-		color: 0,
-		serif: false,
-		viewType: "document",
-	};
-
-	export const snapshot = {
-		capture: () => saved,
-		restore: (value) => (saved = value),
-	};
-
 	/** raw text that the user enters into the `textarea` element */
 	let content = "";
 
@@ -68,11 +49,7 @@
 	let supported = false;
 	if (browser) supported = Boolean(window.showOpenFilePicker);
 
-	/**
-	 * options for prose sizes,
-	 * these classes are provided by the `@tailwindcss/typography` package
-	 */
-	const proseSizes = [
+	const fontSizes = [
 		"prose-sm",
 		"prose-base",
 		"prose-lg",
@@ -84,6 +61,37 @@
 		prose: ["prose-gray", "prose-teal", "prose-sky", "prose-rose"],
 		medium: ["bg-gray-500", "bg-teal-500", "bg-sky-500", "bg-rose-500"],
 		dark: ["bg-gray-900", "bg-teal-950", "bg-sky-950", "bg-gray-900"],
+	};
+
+	const fonts = ["font-sans", "font-round", "font-serif", "font-antique"];
+
+	const viewTypes = ["document", "slideshow"] as const;
+
+	interface Preferences {
+		fontSize: number;
+		color: number;
+		font: number;
+		viewType: (typeof viewTypes)[number];
+	}
+
+	let preferences: Preferences = {
+		fontSize: 1,
+		color: 0,
+		font: 0,
+		viewType: "document",
+	};
+
+	onMount(() => {
+		const saved = localStorage.getItem("preferences");
+		if (saved) {
+			preferences = JSON.parse(saved);
+		} else {
+			savePreferences();
+		}
+	});
+
+	const savePreferences = () => {
+		localStorage.setItem("preferences", JSON.stringify(preferences));
 	};
 
 	/** passed in as a prop for the `Editor.svelte` controls */
@@ -227,24 +235,36 @@
 		}
 	};
 
-	const setViewType = (type: typeof saved.viewType) => {
-		saved.viewType = type;
+	const changeViewType = (type: typeof preferences.viewType) => {
+		preferences.viewType = type;
+		savePreferences();
 	};
 
 	const changeProseSize = (action: "increase" | "decrease") => {
 		if (action === "increase") {
-			if (saved.proseSize < proseSizes.length - 1) saved.proseSize++;
+			if (preferences.fontSize < fontSizes.length - 1) preferences.fontSize++;
 		} else {
-			if (saved.proseSize > 0) saved.proseSize--;
+			if (preferences.fontSize > 0) preferences.fontSize--;
 		}
+		savePreferences();
 	};
 
-	const changeProseColor = () => {
-		if (saved.color < colors.prose.length - 1) {
-			saved.color++;
+	const changeColor = () => {
+		if (preferences.color < colors.prose.length - 1) {
+			preferences.color++;
 		} else {
-			saved.color = 0;
+			preferences.color = 0;
 		}
+		savePreferences();
+	};
+
+	const changeFontFamily = () => {
+		if (preferences.font < fonts.length - 1) {
+			preferences.font++;
+		} else {
+			preferences.font = 0;
+		}
+		savePreferences();
 	};
 
 	const selectContents = (e: Event) => {
@@ -267,7 +287,7 @@
 
 <div
 	class="flex h-[100dvh] flex-col text-gray-50 selection:bg-gray-300 selection:text-gray-950 {colors
-		.dark[saved.color]}"
+		.dark[preferences.color]}"
 >
 	{#if !viewMode}
 		<header
@@ -357,18 +377,17 @@
 			>
 				<!-- content -->
 				<div
-					class="prose mx-auto h-full max-w-[72ch] {proseSizes[
-						saved.proseSize
-					]} {colors.prose[saved.color]}"
-					class:font-serif={saved.serif}
+					class="prose mx-auto h-full max-w-[72ch] {fontSizes[
+						preferences.fontSize
+					]} {colors.prose[preferences.color]} {fonts[preferences.font]}"
 					on:dblclick={selectContents}
 					role="document"
 				>
-					{#if saved.viewType === "document"}
+					{#if preferences.viewType === "document"}
 						<div class="p-8">
 							{@html mdToHtml(content ? content : placeholder)}
 						</div>
-					{:else if saved.viewType === "slideshow"}
+					{:else if preferences.viewType === "slideshow"}
 						<Slides
 							bind:viewMode
 							html={mdToHtml(content ? content : placeholder)}
@@ -378,7 +397,7 @@
 			</div>
 			<div
 				class="group flex justify-between bg-gray-50 p-2"
-				class:bg-transparent={saved.viewType === "slideshow"}
+				class:bg-transparent={preferences.viewType === "slideshow"}
 			>
 				<!-- viewType controls -->
 				<div class="flex">
@@ -386,8 +405,8 @@
 						<button
 							class="btn btn-s group-hover:flex"
 							class:hidden={viewMode}
-							disabled={saved.viewType === type}
-							on:click={() => setViewType(type)}
+							disabled={preferences.viewType === type}
+							on:click={() => changeViewType(type)}
 							title={type}
 						>
 							{#if type === "document"}
@@ -403,17 +422,18 @@
 						title="Change Color"
 						class="btn btn-s group-hover:flex"
 						class:hidden={viewMode}
-						on:click={changeProseColor}
+						on:click={changeColor}
 					>
-						<div class="h-5 w-5 rounded-full {colors.medium[saved.color]}" />
+						<div
+							class="h-5 w-5 rounded-full {colors.medium[preferences.color]}"
+						/>
 					</button>
 					<button
 						title="Change Font"
-						class="btn btn-s group-hover:flex"
+						class="btn btn-s group-hover:flex {fonts[preferences.font]}"
 						class:hidden={viewMode}
-						class:font-serif={!saved.serif}
-						on:click={() => (saved.serif = !saved.serif)}
-						aria-label={saved.serif ? "sans-serif" : "serif"}
+						on:click={changeFontFamily}
+						aria-label={preferences.font ? "sans-serif" : "serif"}
 					>
 						F
 					</button>
@@ -421,7 +441,7 @@
 						title="Decrease Font Size"
 						class="btn btn-s group-hover:flex"
 						class:hidden={viewMode}
-						disabled={saved.proseSize < 1}
+						disabled={preferences.fontSize < 1}
 						on:click={() => changeProseSize("decrease")}
 					>
 						<ZoomOut />
@@ -430,7 +450,7 @@
 						title="Increase Font Size"
 						class="btn btn-s group-hover:flex"
 						class:hidden={viewMode}
-						disabled={saved.proseSize >= proseSizes.length - 1}
+						disabled={preferences.fontSize >= fontSizes.length - 1}
 						on:click={() => changeProseSize("increase")}
 					>
 						<ZoomIn />

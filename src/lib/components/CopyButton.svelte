@@ -1,6 +1,6 @@
 <script lang="ts">
 	export let content: string;
-	export let title = "Copy"
+	export let title = "Copy";
 
 	let complete = false;
 
