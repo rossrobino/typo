@@ -8,35 +8,14 @@
 		try {
 			await navigator.clipboard.writeText(content);
 			complete = true;
+			setTimeout(() => (complete = false), 800);
 		} catch (error) {
 			console.error(error);
 		}
 	};
-
-	const clickOutside = (element: HTMLElement, callbackFunction: () => void) => {
-		function onClick(event: MouseEvent) {
-			if (!element.contains(event.target as Node)) {
-				callbackFunction();
-			}
-		}
-		document.body.addEventListener("click", onClick);
-		return {
-			update(newCallbackFunction: () => void) {
-				callbackFunction = newCallbackFunction;
-			},
-			destroy() {
-				document.body.removeEventListener("click", onClick);
-			},
-		};
-	};
 </script>
 
-<button
-	class="btn"
-	{title}
-	use:clickOutside={() => (complete = false)}
-	on:click={copyText}
->
+<button class="btn" {title} on:click={copyText}>
 	{#if !complete}
 		<slot>Copy</slot>
 	{:else}

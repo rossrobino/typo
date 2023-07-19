@@ -4,10 +4,14 @@
 
 @layer base {
 	::view-transition-group(preview) {
-		animation-duration: 120ms;
+		animation-duration: 180ms;
+		animation-timing-function: ease-in-out;
 	}
 	img {
 		@apply rounded-lg;
+	}
+	pre {
+		@apply flex flex-col gap-2;
 	}
 }
 

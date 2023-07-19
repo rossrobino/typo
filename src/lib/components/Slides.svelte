@@ -1,10 +1,12 @@
 <script lang="ts">
-	import Arrow from "../svg/Arrow.svelte";
+	import { afterUpdate } from "svelte";
+
+	import { jsEval } from "$lib/utilities/jsEval";
+
+	import Arrow from "$lib/components/svg/Arrow.svelte";
 
 	export let html = "";
-
 	export let currentSlide = 0;
-
 	export let viewMode: Boolean;
 
 	$: numberOfSlides = splitHtml(html).length;
@@ -44,6 +46,10 @@
 			}
 		}
 	};
+
+	afterUpdate(() => {
+		jsEval();
+	});
 </script>
 
 <svelte:document on:keydown={onKeydown} />

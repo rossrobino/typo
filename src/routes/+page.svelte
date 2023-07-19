@@ -2,7 +2,7 @@
 	import "../app.postcss";
 
 	import { dev, browser } from "$app/environment";
-	import { onMount } from "svelte";
+	import { afterUpdate, onMount, tick } from "svelte";
 
 	import { Editor } from "@rossrobino/components";
 	import { inject } from "@vercel/analytics";
@@ -14,25 +14,27 @@
 	import CopyButton from "$lib/components/CopyButton.svelte";
 	import Metrics from "$lib/components/Metrics.svelte";
 
+	import { jsEval } from "$lib/utilities/jsEval";
+
 	// svg
-	import Bullet from "$lib/svg/Bullet.svelte";
-	import Blockquote from "$lib/svg/Blockquote.svelte";
-	import Anchor from "$lib/svg/Anchor.svelte";
-	import Image from "$lib/svg/Image.svelte";
-	import Table from "$lib/svg/Table.svelte";
-	import Code from "$lib/svg/Code.svelte";
-	import View from "$lib/svg/View.svelte";
-	import Edit from "$lib/svg/Edit.svelte";
-	import Document from "$lib/svg/Document.svelte";
-	import Slideshow from "$lib/svg/Slideshow.svelte";
-	import ZoomOut from "$lib/svg/ZoomOut.svelte";
-	import ZoomIn from "$lib/svg/ZoomIn.svelte";
-	import Open from "$lib/svg/Open.svelte";
-	import Save from "$lib/svg/Save.svelte";
-	import Copy from "$lib/svg/Copy.svelte";
-	import CopyComplete from "$lib/svg/CopyComplete.svelte";
-	import CodeBracket from "$lib/svg/CodeBracket.svelte";
-	import New from "$lib/svg/New.svelte";
+	import Bullet from "$lib/components/svg/Bullet.svelte";
+	import Blockquote from "$lib/components/svg/Blockquote.svelte";
+	import Anchor from "$lib/components/svg/Anchor.svelte";
+	import Image from "$lib/components/svg/Image.svelte";
+	import Table from "$lib/components/svg/Table.svelte";
+	import Code from "$lib/components/svg/Code.svelte";
+	import View from "$lib/components/svg/View.svelte";
+	import Edit from "$lib/components/svg/Edit.svelte";
+	import Document from "$lib/components/svg/Document.svelte";
+	import Slideshow from "$lib/components/svg/Slideshow.svelte";
+	import ZoomOut from "$lib/components/svg/ZoomOut.svelte";
+	import ZoomIn from "$lib/components/svg/ZoomIn.svelte";
+	import Open from "$lib/components/svg/Open.svelte";
+	import Save from "$lib/components/svg/Save.svelte";
+	import Copy from "$lib/components/svg/Copy.svelte";
+	import CopyComplete from "$lib/components/svg/CopyComplete.svelte";
+	import CodeBracket from "$lib/components/svg/CodeBracket.svelte";
+	import New from "$lib/components/svg/New.svelte";
 
 	inject({ mode: dev ? "development" : "production" });
 
@@ -85,15 +87,6 @@
 		color: 0,
 		viewType: "document",
 	};
-
-	onMount(() => {
-		const saved = localStorage.getItem("preferences");
-		if (saved) {
-			preferences = JSON.parse(saved);
-		} else {
-			savePreferences();
-		}
-	});
 
 	const savePreferences = () => {
 		localStorage.setItem("preferences", JSON.stringify(preferences));
@@ -272,20 +265,24 @@
 		savePreferences();
 	};
 
-	const selectContents = (e: Event) => {
-		if (e.target instanceof Node) {
-			const selection = window.getSelection();
-			const range = document.createRange();
-			range.selectNodeContents(e.target);
-			selection?.removeAllRanges();
-			selection?.addRange(range);
-		}
-	};
-
 	const onKeyDown = (e: KeyboardEvent) => {
 		save();
 		if (e.key === "Escape") toggleView();
 	};
+
+	onMount(() => {
+		const saved = localStorage.getItem("preferences");
+		if (saved) {
+			preferences = JSON.parse(saved);
+		} else {
+			savePreferences();
+		}
+	});
+
+	afterUpdate(async () => {
+		await tick();
+		jsEval();
+	});
 </script>
 
 <svelte:document on:keydown={onKeyDown} />
@@ -387,7 +384,6 @@
 					]} {colors.prose[preferences.color]} {fontFamilies[
 						preferences.fontFamily
 					]}"
-					on:dblclick={selectContents}
 					role="document"
 				>
 					{#if preferences.viewType === "document"}

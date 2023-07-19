@@ -7,6 +7,7 @@
 - All files are saved locally only
 - View content as a document or a slideshow
 - Create slides using the `<hr>` tag (`---`)
+- Execute `js` code blocks in the browser
 
 ## Use the Components
 
