@@ -6,7 +6,6 @@
 
 	import { Editor } from "@rossrobino/components";
 	import { inject } from "@vercel/analytics";
-	import { marked } from "marked";
 
 	import gettingStarted from "$lib/gettingStarted.md?raw";
 
@@ -15,6 +14,7 @@
 	import Metrics from "$lib/components/Metrics.svelte";
 
 	import { jsEval } from "$lib/utilities/jsEval";
+	import { mdToHtml } from "$lib/utilities/mdToHtml";
 
 	// svg
 	import Bullet from "$lib/components/svg/Bullet.svelte";
@@ -69,7 +69,7 @@
 	const colors = {
 		prose: ["prose-gray", "prose-teal", "prose-sky", "prose-rose"],
 		medium: ["bg-gray-500", "bg-teal-500", "bg-sky-500", "bg-rose-500"],
-		dark: ["bg-gray-900", "bg-teal-950", "bg-sky-950", "bg-gray-900"],
+		dark: ["bg-gray-900", "bg-teal-900", "bg-sky-900", "bg-gray-900"],
 	};
 
 	const viewTypes = ["document", "slideshow"] as const;
@@ -184,15 +184,6 @@
 		excludeAcceptAllOption: true,
 	};
 
-	/**
-	 * converts md to html
-	 *
-	 * @param md - string
-	 */
-	const mdToHtml = (md: string) => {
-		return marked.parse(md, { mangle: false, headerIds: false });
-	};
-
 	const open = async () => {
 		[fileHandle] = await window.showOpenFilePicker(options);
 		file = await fileHandle.getFile();
@@ -288,13 +279,11 @@
 <svelte:document on:keydown={onKeyDown} />
 
 <div
-	class="flex h-[100dvh] flex-col text-gray-50 selection:bg-gray-300 selection:text-gray-950 {colors
+	class="flex h-[100dvh] flex-col text-gray-50 selection:bg-gray-400 selection:bg-opacity-40 {colors
 		.dark[preferences.color]}"
 >
 	{#if !viewMode}
-		<header
-			class="flex justify-between bg-black p-4 {viewMode ? 'lg:hidden' : ''}"
-		>
+		<header class="flex justify-between bg-black p-4">
 			<nav class="flex flex-wrap">
 				<div class="flex w-full items-center justify-between sm:w-fit">
 					<div class="flex">
@@ -379,7 +368,7 @@
 			>
 				<!-- content -->
 				<div
-					class="prose mx-auto h-full max-w-[72ch] {fontSizes[
+					class="prose mx-auto h-full max-w-[72ch] prose-pre:bg-gray-900 {fontSizes[
 						preferences.fontSize
 					]} {colors.prose[preferences.color]} {fontFamilies[
 						preferences.fontFamily

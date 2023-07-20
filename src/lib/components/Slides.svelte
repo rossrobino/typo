@@ -18,22 +18,10 @@
 	};
 
 	const changeSlide = (direction: "previous" | "next") => {
-		const increment = () => {
-			if (direction === "next" && currentSlide < numberOfSlides - 1) {
-				currentSlide++;
-			} else if (direction === "previous" && currentSlide) {
-				currentSlide--;
-			}
-		};
-
-		// @ts-expect-error
-		if (document.startViewTransition) {
-			// @ts-expect-error
-			document.startViewTransition(() => {
-				increment();
-			});
-		} else {
-			increment();
+		if (direction === "next" && currentSlide < numberOfSlides - 1) {
+			currentSlide++;
+		} else if (direction === "previous" && currentSlide) {
+			currentSlide--;
 		}
 	};
 

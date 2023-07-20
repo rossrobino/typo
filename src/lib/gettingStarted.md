@@ -20,16 +20,17 @@ Content can be viewed as a **document** or **slideshow**. Separate slides with `
 
 ## Execute Code
 
-JavaScript code blocks (```js) can be executed in the browser by clicking the block.
+JavaScript code blocks can be executed in the browser by clicking the block.
 
-```js
-const clickMe = 5 + 5;
-clickMe;
-```
+````js
+// add a JavaScript code block (```js)
 
-```js
-error;
-```
+function click_here() {
+	return "Hello world!";
+}
+
+click_here();
+````
 
 ---
 

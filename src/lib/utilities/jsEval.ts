@@ -32,7 +32,6 @@ export const jsEval = async () => {
 							}
 						} catch (error) {
 							errorExists = true;
-							console.error(error);
 							result = String(error);
 						}
 
