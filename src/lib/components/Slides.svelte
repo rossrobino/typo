@@ -7,7 +7,7 @@
 
 	export let html = "";
 	export let currentSlide = 0;
-	export let viewMode: Boolean;
+	export let viewMode: boolean;
 
 	$: numberOfSlides = splitHtml(html).length;
 
@@ -52,27 +52,29 @@
 			{/if}
 		{/each}
 	</article>
-	<div class="sticky bottom-2 flex items-center justify-center tabular-nums">
-		<div
-			class="flex items-center justify-center gap-2 rounded-xl p-1 backdrop-blur-xl"
-		>
-			<button
-				title="Previous Slide"
-				disabled={!currentSlide}
-				class="btn btn-s rotate-180"
-				on:click={() => changeSlide("previous")}
+	{#if numberOfSlides > 1}
+		<div class="sticky bottom-2 flex items-center justify-center tabular-nums">
+			<div
+				class="flex items-center justify-center gap-2 rounded-xl p-1 backdrop-blur-xl"
 			>
-				<Arrow />
-			</button>
-			<div class="text-sm">{currentSlide + 1} / {numberOfSlides}</div>
-			<button
-				title="Next Slide"
-				disabled={currentSlide >= numberOfSlides - 1}
-				class="btn btn-s"
-				on:click={() => changeSlide("next")}
-			>
-				<Arrow />
-			</button>
+				<button
+					title="Previous Slide"
+					disabled={!currentSlide}
+					class="btn btn-s rotate-180"
+					on:click={() => changeSlide("previous")}
+				>
+					<Arrow />
+				</button>
+				<div class="text-sm">{currentSlide + 1} / {numberOfSlides}</div>
+				<button
+					title="Next Slide"
+					disabled={currentSlide >= numberOfSlides - 1}
+					class="btn btn-s"
+					on:click={() => changeSlide("next")}
+				>
+					<Arrow />
+				</button>
+			</div>
 		</div>
-	</div>
+	{/if}
 </div>

@@ -35,3 +35,6 @@ click_here();
 ---
 
 ## Keyboard Shortcuts
+
+- Focus text area: `i`
+- Toggle view mode: `ESC`

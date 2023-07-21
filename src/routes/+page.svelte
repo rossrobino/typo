@@ -44,6 +44,11 @@
 	/** controls the expansion of the preview area */
 	let viewMode = false;
 
+	/** selection start of the `textArea` inside of `Editor` */
+	let selectionStart: number;
+
+	let currentSlide: number;
+
 	let file: File;
 	let fileHandle: FileSystemFileHandle;
 
@@ -213,9 +218,9 @@
 			viewMode = !viewMode;
 		};
 
-		// @ts-expect-error
+		// @ts-expect-error - not supported by all browsers
 		if (document.startViewTransition) {
-			// @ts-expect-error
+			// @ts-expect-error - not supported by all browsers
 			document.startViewTransition(() => {
 				toggleView();
 			});
@@ -256,9 +261,23 @@
 		savePreferences();
 	};
 
-	const onKeyDown = (e: KeyboardEvent) => {
+	const onKeyUp = (e: KeyboardEvent) => {
 		save();
-		if (e.key === "Escape") toggleView();
+		if (e.key === "i") {
+			document.querySelector("textarea")?.focus();
+		}
+		if (e.key === "Escape") {
+			toggleView();
+		} else {
+			findCurrentSlide();
+		}
+	};
+
+	const findCurrentSlide = () => {
+		if (preferences.viewType === "slideshow" && !viewMode) {
+			const s = content.slice(0, selectionStart);
+			currentSlide = s.split("---").length - 1;
+		}
 	};
 
 	onMount(() => {
@@ -276,7 +295,7 @@
 	});
 </script>
 
-<svelte:document on:keydown={onKeyDown} />
+<svelte:document on:keyup={onKeyUp} />
 
 <div
 	class="flex h-[100dvh] flex-col text-gray-50 selection:bg-gray-400 selection:bg-opacity-40 {colors
@@ -354,6 +373,7 @@
 					{contentElements}
 					textAreaPlaceholder="# Title"
 					bind:textAreaValue={content}
+					bind:selectionStart
 				/>
 			</div>
 		{/if}
@@ -382,6 +402,7 @@
 					{:else if preferences.viewType === "slideshow"}
 						<Slides
 							bind:viewMode
+							bind:currentSlide
 							html={mdToHtml(content ? content : placeholder)}
 						/>
 					{/if}
