@@ -13,7 +13,7 @@
 	import CopyButton from "$lib/components/CopyButton.svelte";
 	import Metrics from "$lib/components/Metrics.svelte";
 
-	import { jsEval } from "$lib/utilities/jsEval";
+	import { codeEval } from "$lib/utilities/codeEval";
 	import { mdToHtml } from "$lib/utilities/mdToHtml";
 
 	// svg
@@ -291,7 +291,7 @@
 
 	afterUpdate(async () => {
 		await tick();
-		jsEval();
+		codeEval();
 	});
 </script>
 

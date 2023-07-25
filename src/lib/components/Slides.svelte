@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { afterUpdate } from "svelte";
 
-	import { jsEval } from "$lib/utilities/jsEval";
+	import { codeEval } from "$lib/utilities/codeEval";
 
 	import Arrow from "$lib/components/svg/Arrow.svelte";
 
@@ -36,7 +36,7 @@
 	};
 
 	afterUpdate(() => {
-		jsEval();
+		codeEval();
 	});
 </script>
 
