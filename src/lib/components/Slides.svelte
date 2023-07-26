@@ -55,7 +55,7 @@
 	{#if numberOfSlides > 1}
 		<div class="sticky bottom-2 flex items-center justify-center tabular-nums">
 			<div
-				class="flex items-center justify-center gap-2 rounded-xl p-1 backdrop-blur-xl"
+				class="flex items-center justify-center gap-2 rounded-xl bg-white/40 p-1 backdrop-blur-lg"
 			>
 				<button
 					title="Previous Slide"

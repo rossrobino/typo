@@ -74,7 +74,7 @@
 	const colors = {
 		prose: ["prose-gray", "prose-teal", "prose-sky", "prose-rose"],
 		medium: ["bg-gray-500", "bg-teal-500", "bg-sky-500", "bg-rose-500"],
-		dark: ["bg-gray-900", "bg-teal-900", "bg-sky-900", "bg-gray-900"],
+		dark: ["bg-gray-900", "bg-teal-950", "bg-sky-950", "bg-gray-800"],
 	};
 
 	const viewTypes = ["document", "slideshow"] as const;
@@ -298,77 +298,75 @@
 <svelte:document on:keyup={onKeyUp} />
 
 <div
-	class="flex h-[100dvh] flex-col text-gray-50 selection:bg-gray-400 selection:bg-opacity-40 {colors
-		.dark[preferences.color]}"
+	class="flex h-screen flex-col bg-gray-950 text-gray-50 selection:bg-gray-400 selection:bg-opacity-40"
 >
 	{#if !viewMode}
-		<header class="flex justify-between bg-black p-4">
-			<nav class="flex flex-wrap">
-				<div class="flex w-full items-center justify-between sm:w-fit">
-					<div class="flex">
-						<a href="/" title="New" target="_blank" class="btn">
-							<New />
-							<span class="hidden lg:inline">New</span>
-						</a>
-						{#if supported}
-							<button title="Open" class="btn" on:click={open}>
-								<Open />
-								<span class="hidden lg:inline">Open</span>
-							</button>
-							<button title="Save As" class="btn" on:click={saveAs}>
-								<Save />
-								<span class="hidden lg:inline">Save As</span>
-							</button>
-						{:else}
-							<a
-								href="data:text/plain,{content}"
-								download="Untitled.md"
-								title="Download"
-								class="btn"
-							>
-								<Save />
-								<span class="hidden lg:inline">Download</span>
-							</a>
-						{/if}
-						<CopyButton {content}>
-							<Copy />
-							<span class="hidden lg:inline">Copy</span>
-							<span
-								class="flex items-center justify-center gap-1"
-								slot="complete"
-							>
-								<CopyComplete />
-								<span class="hidden lg:inline">Copy</span>
-							</span>
-						</CopyButton>
-						<CopyButton title="Copy HTML" content={mdToHtml(content)}>
-							<Code />
-							<span class="hidden lg:inline">Copy HTML</span>
-							<span
-								class="flex items-center justify-center gap-1"
-								slot="complete"
-							>
-								<CopyComplete />
-								<span class="hidden lg:inline">Copy HTML</span>
-							</span>
-						</CopyButton>
-						<button title="View" class="btn lg:hidden" on:click={toggleView}>
-							<View />
+		<header class="flex justify-between p-3 text-sm">
+			<nav class="flex w-full items-center justify-between sm:w-fit">
+				<div class="flex">
+					<a href="/" title="New" target="_blank" class="btn">
+						<New />
+						<span class="hidden lg:inline">New</span>
+					</a>
+					{#if supported}
+						<button title="Open" class="btn" on:click={open}>
+							<Open />
+							<span class="hidden lg:inline">Open</span>
 						</button>
-					</div>
+						<button title="Save As" class="btn" on:click={saveAs}>
+							<Save />
+							<span class="hidden lg:inline">Save As</span>
+						</button>
+					{:else}
+						<a
+							href="data:text/plain,{content}"
+							download="Untitled.md"
+							title="Download"
+							class="btn"
+						>
+							<Save />
+							<span class="hidden lg:inline">Download</span>
+						</a>
+					{/if}
+					<CopyButton {content}>
+						<Copy />
+						<span class="hidden lg:inline">Copy</span>
+						<span
+							class="flex items-center justify-center gap-1"
+							slot="complete"
+						>
+							<CopyComplete />
+							<span class="hidden lg:inline">Copy</span>
+						</span>
+					</CopyButton>
+					<CopyButton title="Copy HTML" content={mdToHtml(content)}>
+						<Code />
+						<span class="hidden lg:inline">Copy HTML</span>
+						<span
+							class="flex items-center justify-center gap-1"
+							slot="complete"
+						>
+							<CopyComplete />
+							<span class="hidden lg:inline">Copy HTML</span>
+						</span>
+					</CopyButton>
+					<button title="View" class="btn lg:hidden" on:click={toggleView}>
+						<View />
+					</button>
 				</div>
 			</nav>
 			<div class="px-4 py-2 font-bold">
-				{file?.name ? file.name : "md"}
+				{file?.name ? file.name : ""}
 			</div>
 		</header>
 	{/if}
-	<main class="grid grow overflow-hidden {!viewMode ? 'lg:grid-cols-2' : ''}">
+	<main class="grid grow overflow-hidden {viewMode ? '' : 'lg:grid-cols-2'}">
 		{#if !viewMode}
-			<div class="flex flex-col">
+			<div class="flex h-full flex-col">
 				<Editor
-					textAreaClass="max-w-none resize-none appearance-none bg-transparent p-4 font-mono text-sm transition placeholder:text-gray-300 focus:outline-none grow overflow-y-auto max-h-[calc(100dvh-8.75rem)]"
-					controlsClass="flex flex-wrap bg-black p-4"
+					textAreaClass="grow resize-none appearance-none overflow-y-auto p-6 font-mono text-sm transition placeholder:text-gray-400 focus:outline-none {colors
+						.dark[preferences.color]}"
+					controlsClass="flex flex-wrap p-3"
 					buttonClass="btn"
 					{contentElements}
 					textAreaPlaceholder="# Title"
@@ -379,21 +377,20 @@
 		{/if}
 		<div
 			style="view-transition-name: preview;"
-			class="flex-col bg-white lg:flex {viewMode ? 'flex' : 'hidden'}"
+			class="flex-col lg:flex {viewMode ? 'flex' : 'hidden'}"
 		>
 			<div
-				class="{viewMode
-					? 'max-h-[calc(100dvh-3.25rem)]'
-					: 'max-h-[calc(100dvh-12rem)]'} grow overflow-y-auto text-gray-950"
+				class="grow overflow-y-auto bg-white text-gray-950 {viewMode
+					? 'max-h-[calc(100dvh-3.75rem)]'
+					: 'max-h-[calc(100dvh-7.5rem)]'}"
 			>
 				<!-- content -->
 				<div
-					class="prose mx-auto h-full max-w-[72ch] prose-pre:bg-gray-900 {fontSizes[
+					class="prose mx-auto h-full max-w-[72ch] break-words prose-pre:bg-gray-900 {fontSizes[
 						preferences.fontSize
 					]} {colors.prose[preferences.color]} {fontFamilies[
 						preferences.fontFamily
 					]}"
-					role="document"
 				>
 					{#if preferences.viewType === "document"}
 						<div class="p-8">
@@ -409,15 +406,17 @@
 				</div>
 			</div>
 			<div
-				class="group flex justify-between bg-gray-50 p-2"
-				class:bg-transparent={preferences.viewType === "slideshow"}
+				class="group flex justify-between p-3 text-gray-50"
+				class:bg-white={preferences.viewType === "slideshow" && viewMode}
+				class:bg-gray-50={preferences.viewType === "document" && viewMode}
+				class:text-gray-950={viewMode}
 			>
 				<!-- viewType controls -->
 				<div class="flex">
 					{#each viewTypes as type}
 						<button
-							class="btn btn-s group-hover:flex"
-							class:hidden={viewMode}
+							class="btn group-hover:opacity-100"
+							class:opacity-0={viewMode}
 							disabled={preferences.viewType === type}
 							on:click={() => changeViewType(type)}
 							title={type}
@@ -429,24 +428,32 @@
 							{/if}
 						</button>
 					{/each}
+					<div
+						class="ml-4 flex items-center transition group-hover:opacity-100"
+						class:opacity-0={viewMode}
+					>
+						<Metrics {content} />
+					</div>
 				</div>
 				<div class="flex">
 					<button
 						title="Change Color"
-						class="btn btn-s group-hover:flex"
-						class:hidden={viewMode}
+						class="btn group-hover:opacity-100"
+						class:opacity-0={viewMode}
 						on:click={changeColor}
 					>
 						<div
-							class="h-5 w-5 rounded-full {colors.medium[preferences.color]}"
+							class="h-5 w-5 rounded-full border-2 border-gray-50 {colors
+								.medium[preferences.color]}"
+							class:border-gray-950={viewMode}
 						/>
 					</button>
 					<button
 						title="Change Font"
-						class="btn btn-s group-hover:flex {fontFamilies[
+						class="btn group-hover:opacity-100 {fontFamilies[
 							preferences.fontFamily
 						]}"
-						class:hidden={viewMode}
+						class:opacity-0={viewMode}
 						on:click={changeFontFamily}
 						aria-label={preferences.fontFamily ? "sans-serif" : "serif"}
 					>
@@ -454,8 +461,8 @@
 					</button>
 					<button
 						title="Decrease Font Size"
-						class="btn btn-s group-hover:flex"
-						class:hidden={viewMode}
+						class="btn group-hover:opacity-100"
+						class:opacity-0={viewMode}
 						disabled={preferences.fontSize < 1}
 						on:click={() => changeProseSize("decrease")}
 					>
@@ -463,8 +470,8 @@
 					</button>
 					<button
 						title="Increase Font Size"
-						class="btn btn-s group-hover:flex"
-						class:hidden={viewMode}
+						class="btn group-hover:opacity-100"
+						class:opacity-0={viewMode}
 						disabled={preferences.fontSize >= fontSizes.length - 1}
 						on:click={() => changeProseSize("increase")}
 					>
@@ -473,7 +480,7 @@
 					<!-- viewMode toggle -->
 					<button
 						title={viewMode ? "Edit" : "View"}
-						class="btn btn-s"
+						class="btn"
 						on:click={toggleView}
 					>
 						{#if viewMode}
@@ -484,9 +491,6 @@
 					</button>
 				</div>
 			</div>
-			{#if !viewMode}
-				<Metrics {content} />
-			{/if}
 		</div>
 	</main>
 </div>

@@ -10,7 +10,7 @@ export const codeEval = async () => {
 				block.classList.add(
 					"cursor-pointer",
 					"transition",
-					"active:bg-gray-900",
+					"hover:bg-gray-950",
 					"group",
 				);
 
