@@ -69,6 +69,7 @@
 		"font-round",
 		"font-serif",
 		"font-antique",
+		"font-mono",
 	];
 
 	const colors = {
