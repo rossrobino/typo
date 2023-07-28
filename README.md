@@ -1,4 +1,4 @@
-# [md.robino.dev](https://md.robino.dev)
+# [Typo](https://typo.robino.dev)
 
 ## A web based markdown editor
 
