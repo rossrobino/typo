@@ -42,8 +42,8 @@
 
 <svelte:document on:keydown={onKeydown} />
 
-<div class="flex h-full flex-col p-8">
-	<article class="flex grow flex-col justify-center">
+<div class="flex h-full flex-col">
+	<article class="flex grow flex-col justify-center p-8">
 		{#each splitHtml(html) as slide, i}
 			{#if i === currentSlide}
 				<section>
@@ -54,7 +54,7 @@
 	</article>
 	{#if numberOfSlides > 1}
 		<div
-			class="sticky bottom-2 flex items-center justify-center font-sans tabular-nums"
+			class="sticky bottom-3 flex items-center justify-center font-sans tabular-nums"
 		>
 			<div
 				class="flex items-center justify-center gap-2 rounded-xl bg-white/40 p-1 backdrop-blur-lg"
