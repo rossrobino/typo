@@ -57,7 +57,7 @@
 			class="sticky bottom-3 flex items-center justify-center font-sans tabular-nums"
 		>
 			<div
-				class="flex items-center justify-center gap-2 rounded-xl bg-white/40 p-1 backdrop-blur-lg"
+				class="flex items-center justify-center gap-2 rounded-xl bg-white/40 p-1 backdrop-blur-lg dark:bg-gray-950/40"
 			>
 				<button
 					title="Previous Slide"

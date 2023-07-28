@@ -75,7 +75,7 @@
 	];
 
 	const colors = {
-		prose: ["prose-gray", "prose-teal", "prose-sky", "prose-rose"],
+		prose: ["", "prose-teal", "prose-sky", "prose-rose"],
 		medium: ["bg-gray-500", "bg-teal-500", "bg-sky-500", "bg-rose-500"],
 		dark: ["bg-gray-900", "bg-teal-950", "bg-sky-950", "bg-gray-800"],
 	};
@@ -387,13 +387,16 @@
 			class="flex-col lg:flex {viewMode ? 'flex' : 'hidden'}"
 		>
 			<div
-				class="grow overflow-y-auto bg-white text-gray-950 {viewMode
+				class="grow overflow-y-auto border-gray-100 bg-white dark:border-y dark:border-gray-900 dark:bg-gray-950 {viewMode
 					? 'max-h-[calc(100dvh-3.75rem)]'
 					: 'max-h-[calc(100dvh-7.5rem)]'}"
+				class:border-y={preferences.viewType === "document" && viewMode}
+				class:dark:border-none={preferences.viewType === "slideshow" &&
+					viewMode}
 			>
 				<!-- content -->
 				<div
-					class="prose mx-auto h-full max-w-[72ch] break-words prose-pre:bg-gray-900 {fontSizes[
+					class="prose mx-auto h-full max-w-[72ch] break-words dark:prose-invert prose-pre:bg-gray-900 {fontSizes[
 						preferences.fontSize
 					]} {colors.prose[preferences.color]} {fontFamilies[
 						preferences.fontFamily
@@ -413,10 +416,11 @@
 				</div>
 			</div>
 			<div
-				class="group flex justify-between p-3 text-gray-50"
-				class:bg-white={preferences.viewType === "slideshow" && viewMode}
-				class:bg-gray-50={preferences.viewType === "document" && viewMode}
+				class="group flex justify-between p-3"
+				class:bg-white={viewMode}
 				class:text-gray-950={viewMode}
+				class:dark:bg-gray-950={viewMode}
+				class:dark:text-gray-50={viewMode}
 			>
 				<!-- viewType controls -->
 				<div class="flex">
@@ -453,6 +457,7 @@
 							class="h-5 w-5 rounded-full border-2 border-gray-50 {colors
 								.medium[preferences.color]}"
 							class:border-gray-950={viewMode}
+							class:dark:border-gray-50={viewMode}
 						/>
 					</button>
 					<button
