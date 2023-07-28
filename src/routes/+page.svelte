@@ -363,7 +363,7 @@
 				</div>
 			</nav>
 			<div class="px-4 py-2 font-bold">
-				{file?.name ? file.name : ""}
+				{file?.name ? file.name : "Typo"}
 			</div>
 		</header>
 	{/if}
