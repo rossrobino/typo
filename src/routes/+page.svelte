@@ -49,6 +49,8 @@
 
 	let currentSlide: number;
 
+	let placeholder = "";
+
 	let file: File;
 	let fileHandle: FileSystemFileHandle;
 
@@ -173,11 +175,6 @@
 		},
 	];
 
-	let placeholder = gettingStarted;
-	contentElements.forEach((el) => {
-		if (el.key) placeholder += `\n- ${el.name}: \`CTRL\`+\`${el.key}\``;
-	});
-
 	const options: FilePickerOptions = {
 		types: [
 			{
@@ -280,6 +277,15 @@
 			currentSlide = s.split("---").length - 1;
 		}
 	};
+
+	const setPlaceholder = () => {
+		placeholder = gettingStarted;
+		contentElements.forEach((el) => {
+			if (el.key) placeholder += `\n- ${el.name}: \`CTRL\`+\`${el.key}\``;
+		});
+	};
+
+	setPlaceholder();
 
 	onMount(() => {
 		const saved = localStorage.getItem("preferences");
@@ -430,7 +436,7 @@
 						</button>
 					{/each}
 					<div
-						class="ml-4 hidden items-center transition group-hover:opacity-100 sm:flex"
+						class="transition group-hover:opacity-100"
 						class:opacity-0={viewMode}
 					>
 						<Metrics {content} />
