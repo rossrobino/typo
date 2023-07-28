@@ -53,7 +53,9 @@
 		{/each}
 	</article>
 	{#if numberOfSlides > 1}
-		<div class="sticky bottom-2 flex items-center justify-center tabular-nums">
+		<div
+			class="sticky bottom-2 flex items-center justify-center font-sans tabular-nums"
+		>
 			<div
 				class="flex items-center justify-center gap-2 rounded-xl bg-white/40 p-1 backdrop-blur-lg"
 			>
