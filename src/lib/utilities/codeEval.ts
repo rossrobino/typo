@@ -12,6 +12,9 @@ export const codeEval = async () => {
 					"transition",
 					"active:scale-[99%]",
 					"group",
+					"flex",
+					"flex-col",
+					"gap-2",
 				);
 
 				const code = input.textContent;

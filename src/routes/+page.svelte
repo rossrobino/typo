@@ -9,9 +9,10 @@
 
 	import gettingStarted from "$lib/gettingStarted.md?raw";
 
-	import Slides from "$lib/components/Slides.svelte";
 	import CopyButton from "$lib/components/CopyButton.svelte";
 	import Metrics from "$lib/components/Metrics.svelte";
+	import PrintButton from "$lib/components/PrintButton.svelte";
+	import Slides from "$lib/components/Slides.svelte";
 
 	import { codeEval } from "$lib/utilities/codeEval";
 	import { mdToHtml } from "$lib/utilities/mdToHtml";
@@ -357,12 +358,13 @@
 							<span class="hidden lg:inline">Copy HTML</span>
 						</span>
 					</CopyButton>
+					<PrintButton innerHtml={mdToHtml(content ? content : placeholder)} />
 					<button title="View" class="btn lg:hidden" on:click={toggleView}>
 						<View />
 					</button>
 				</div>
 			</nav>
-			<div class="px-4 py-2 font-bold">
+			<div class="hidden px-4 py-2 font-bold sm:block">
 				{file?.name ? file.name : "Typo"}
 			</div>
 		</header>
@@ -396,7 +398,7 @@
 			>
 				<!-- content -->
 				<div
-					class="prose mx-auto h-full max-w-[72ch] break-words dark:prose-invert prose-pre:bg-gray-900 {fontSizes[
+					class="prose mx-auto h-full max-w-[72ch] break-words dark:prose-invert prose-pre:bg-gray-900 prose-img:rounded-lg {fontSizes[
 						preferences.fontSize
 					]} {colors.prose[preferences.color]} {fontFamilies[
 						preferences.fontFamily

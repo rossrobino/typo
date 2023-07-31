@@ -1,0 +1,62 @@
+body {
+	font-family: system-ui, sans-serif;
+	color: #030712;
+	margin: 1rem;
+}
+a,
+a:visited,
+a:hover,
+a:active {
+	color: #030712;
+}
+pre {
+	font-family: monospace;
+	border-radius: 0.5rem;
+	border: 0.5px solid #e5e7eb;
+	padding: 1rem;
+}
+p code::before {
+	content: "`";
+}
+p code::after {
+	content: "`";
+}
+blockquote {
+	font-style: italic;
+	font-weight: bold;
+}
+blockquote p::before {
+	content: '"';
+}
+blockquote p::after {
+	content: '"';
+}
+img {
+	width: 100%;
+	border-radius: 1rem;
+}
+table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-bottom: 1rem;
+}
+li {
+	margin: 0.5rem 0rem 0.5rem 0rem;
+}
+th,
+td {
+	padding: 0.5rem;
+	border-bottom: 1px solid #d1d5db;
+	text-align: left;
+}
+th:first-child,
+td:first-child {
+	padding: 0.5rem 0.5rem 0.5rem 0rem;
+}
+th:last-child,
+td:last-child {
+	padding: 0.5rem 0rem 0.5rem 0.5rem;
+}
+hr {
+	border: 0.5px solid #e5e7eb;
+}
