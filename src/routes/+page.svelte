@@ -314,7 +314,7 @@
 <svelte:document on:keyup={onKeyUp} on:keydown={onKeyDown} />
 
 <div
-	class="flex h-[100dvh] flex-col bg-gray-950 text-gray-50 selection:bg-gray-400 selection:bg-opacity-40 selection:rounded-sm"
+	class="flex h-[100dvh] flex-col bg-gray-950 text-gray-50 selection:bg-gray-400 selection:bg-opacity-40"
 >
 	{#if !viewMode}
 		<header class="flex justify-between p-3 text-sm">
