@@ -41,4 +41,4 @@ click_here();
 | ---------------- | -------------------- |
 | Focus text area  | `i`                  |
 | Toggle view mode | `ESC`                |
-| Format           | `CMD` / `CTRL` + `s` |
+| Format           | `CTRL` + `s`         |

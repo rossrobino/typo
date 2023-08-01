@@ -291,7 +291,7 @@
 		placeholder = gettingStarted.trim();
 		contentElements.forEach((el) => {
 			if (el.key)
-				placeholder += `\n| ${el.name} | \`CMD\` / \`CTRL\` + \`${el.key}\` |`;
+				placeholder += `\n| ${el.name} | \`CTRL\` + \`${el.key}\` |`;
 		});
 	};
 
