@@ -10,7 +10,7 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check . && eslint .",
-		"format": "prettier --write  --plugin=prettier-plugin-svelte --plugin=prettier-plugin-tailwindcss ."
+		"format": "prettier --write . --plugin=prettier-plugin-svelte --plugin=prettier-plugin-tailwindcss"
 	},
 	"devDependencies": {
 		"@rossrobino/components": "^1.7.10",
