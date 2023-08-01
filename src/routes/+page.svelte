@@ -290,8 +290,7 @@
 	const setPlaceholder = () => {
 		placeholder = gettingStarted.trim();
 		contentElements.forEach((el) => {
-			if (el.key)
-				placeholder += `\n| ${el.name} | \`CTRL\` + \`${el.key}\` |`;
+			if (el.key) placeholder += `\n| ${el.name} | \`CTRL\` + \`${el.key}\` |`;
 		});
 	};
 
