@@ -1,18 +1,30 @@
-# [Typo](https://typo.robino.dev)
+# Typo
 
-## A web based markdown editor
+Welcome to [Typo](https://typo.robino.dev), a web-based markdown editor.
 
-- Uses the File System API if supported (otherwise a download anchor tag)
-- Auto saves changes if supported
-- All files are saved locally only
-- View content as a document or a slideshow
-- Create slides using the `<hr>` tag (`---`)
-- Execute `js` code blocks in the browser
+## Key Features :key:
 
-## Use the Components
+- **File System API:** Utilizes the file system API when available. If not, a download anchor tag is used.
+- **Auto-save:** Automatically saves changes if supported by the system.
+- **Local Storage:** All files are exclusively stored locally on your device.
+- **Content View:** Provides the option to view content either as a document or as a slideshow.
+- **Slide Creation:** Enables users to create slides using the `<hr>` tag (`---`).
+- **Code Execution:** Permits the execution of `js` code blocks directly in the browser.
+- **Formatted Printing:** Allows printing of formatted content.
+- **Markdown Formatting:** Applies Prettier for formatting markdown content.
+
+## Use the Components :wrench:
 
 - [`Editor.svelte`](https://components.robino.dev/#editor)
 
-## MIT License
+## License :balance_scale:
 
-## Open to contributions
+Typo is licensed under the MIT License.
+
+## Contribute :handshake:
+
+Contributions are welcome. Feel free to improve existing features, add new features or report issues.
+
+1. Clone repo
+2. `npm install`
+3. `npm run dev -- --open`
