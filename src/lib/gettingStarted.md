@@ -2,19 +2,20 @@
 
 Write content in [markdown](https://www.markdownguide.org/cheat-sheet/#basic-syntax)!
 
-Leave feedback or contribute to the project on [GitHub](https://github.com/rossrobino/md).
+Leave feedback or contribute to the project on [GitHub](https://github.com/rossrobino/typo).
 
 ---
 
 ## Save
 
 When a file is opened or saved, all future changes are saved automatically.
+Files are stored directly on the local computer, not in an online storage system.
 
 ---
 
 ## View
 
-Content can be viewed as a **document** or **slideshow**. Separate slides with `---`.
+Content can be viewed as a **document** or **slideshow**, separate slides with `---`.
 
 ---
 
@@ -36,5 +37,8 @@ click_here();
 
 ## Keyboard Shortcuts
 
-- Focus text area: `i`
-- Toggle view mode: `ESC`
+| Action           | Shortcut             |
+| ---------------- | -------------------- |
+| Focus text area  | `i`                  |
+| Toggle view mode | `ESC`                |
+| Format           | `CMD` / `CTRL` + `s` |

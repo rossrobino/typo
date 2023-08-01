@@ -10,11 +10,13 @@
 	import gettingStarted from "$lib/gettingStarted.md?raw";
 
 	import CopyButton from "$lib/components/CopyButton.svelte";
+	import FormatButton from "$lib/components/FormatButton.svelte";
 	import Metrics from "$lib/components/Metrics.svelte";
 	import PrintButton from "$lib/components/PrintButton.svelte";
 	import Slides from "$lib/components/Slides.svelte";
 
 	import { codeEval } from "$lib/utilities/codeEval";
+	import { formatMd } from "$lib/utilities/formatMd";
 	import { mdToHtml } from "$lib/utilities/mdToHtml";
 
 	// svg
@@ -35,7 +37,6 @@
 	import Copy from "$lib/components/svg/Copy.svelte";
 	import CopyComplete from "$lib/components/svg/CopyComplete.svelte";
 	import CodeBracket from "$lib/components/svg/CodeBracket.svelte";
-	import New from "$lib/components/svg/New.svelte";
 
 	inject({ mode: dev ? "development" : "production" });
 
@@ -157,7 +158,7 @@
 		},
 		{
 			name: "Table",
-			text: "| th | th |\n| -- | -- |\n| td | td |\n| td | td |",
+			text: "| th  | th  |\n| --- | --- |\n| td  | td  |\n| td  | td  |",
 			display: "inline",
 			icon: Table,
 			key: "\\",
@@ -272,6 +273,13 @@
 		}
 	};
 
+	const onKeyDown = async (e: KeyboardEvent) => {
+		if ((e.ctrlKey || e.metaKey) && e.key === "s") {
+			e.preventDefault();
+			content = await formatMd(content);
+		}
+	};
+
 	const findCurrentSlide = () => {
 		if (preferences.viewType === "slideshow" && !viewMode) {
 			const s = content.slice(0, selectionStart);
@@ -280,9 +288,10 @@
 	};
 
 	const setPlaceholder = () => {
-		placeholder = gettingStarted;
+		placeholder = gettingStarted.trim();
 		contentElements.forEach((el) => {
-			if (el.key) placeholder += `\n- ${el.name}: \`CTRL\`+\`${el.key}\``;
+			if (el.key)
+				placeholder += `\n| ${el.name} | \`CMD\` / \`CTRL\` + \`${el.key}\` |`;
 		});
 	};
 
@@ -303,19 +312,15 @@
 	});
 </script>
 
-<svelte:document on:keyup={onKeyUp} />
+<svelte:document on:keyup={onKeyUp} on:keydown={onKeyDown} />
 
 <div
-	class="flex h-[100dvh] flex-col bg-gray-950 text-gray-50 selection:bg-gray-400 selection:bg-opacity-40"
+	class="flex h-[100dvh] flex-col bg-gray-950 text-gray-50 selection:bg-gray-400 selection:bg-opacity-40 selection:rounded-sm"
 >
 	{#if !viewMode}
 		<header class="flex justify-between p-3 text-sm">
 			<nav class="flex w-full items-center justify-between sm:w-fit">
 				<div class="flex">
-					<a href="/" title="New" target="_blank" class="btn">
-						<New />
-						<span class="hidden lg:inline">New</span>
-					</a>
 					{#if supported}
 						<button title="Open" class="btn" on:click={open}>
 							<Open />
@@ -359,6 +364,7 @@
 						</span>
 					</CopyButton>
 					<PrintButton innerHtml={mdToHtml(content ? content : placeholder)} />
+					<FormatButton bind:text={content} />
 					<button title="View" class="btn lg:hidden" on:click={toggleView}>
 						<View />
 					</button>
