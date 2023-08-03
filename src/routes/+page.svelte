@@ -4,7 +4,7 @@
 	import { dev, browser } from "$app/environment";
 	import { afterUpdate, onMount, tick } from "svelte";
 
-	import { Editor } from "@rossrobino/components";
+	import { Editor, type ContentElement } from "@rossrobino/components";
 	import { inject } from "@vercel/analytics";
 
 	import gettingStarted from "$lib/gettingStarted.md?raw";
@@ -103,7 +103,7 @@
 	};
 
 	/** passed in as a prop for the `Editor.svelte` controls */
-	const contentElements: Editor["$$prop_def"]["contentElements"] = [
+	const contentElements: ContentElement[] = [
 		{
 			name: "Heading",
 			text: "# ",
@@ -283,7 +283,9 @@
 	const findCurrentSlide = () => {
 		if (preferences.viewType === "slideshow" && !viewMode) {
 			const s = content.slice(0, selectionStart);
-			currentSlide = s.split("---").length - 1;
+			let curr = s.split("\n\n---\n").length - 1;
+			if (s.startsWith("---\n")) curr++; // if first line === `---`, considered an <hr>
+			currentSlide = curr;
 		}
 	};
 
