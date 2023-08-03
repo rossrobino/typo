@@ -13,7 +13,7 @@
 		"format": "prettier --write . --plugin=prettier-plugin-svelte --plugin=prettier-plugin-tailwindcss"
 	},
 	"devDependencies": {
-		"@rossrobino/components": "^1.7.17",
+		"@rossrobino/components": "^1.7.18",
 		"@sveltejs/adapter-vercel": "^3.0.3",
 		"@sveltejs/kit": "^1.22.4",
 		"@tailwindcss/typography": "^0.5.9",
