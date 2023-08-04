@@ -15,7 +15,8 @@ Welcome to [Typo](https://typo.robino.dev), a web-based markdown editor.
 
 ## Use the Components :wrench:
 
-- [`Editor.svelte`](https://components.robino.dev/#editor)
+- [`Editor`](https://github.com/rossrobino/components)
+- [`CopyButton`](https://github.com/rossrobino/components)
 
 ## License :balance_scale:
 
@@ -23,7 +24,7 @@ Typo is licensed under the MIT License.
 
 ## Contribute :handshake:
 
-Contributions are welcome. Feel free to improve existing features, add new features or report issues.
+Contributions are welcome, Typo uses Svelte and SvelteKit. Feel free to improve existing features, add new features or report issues.
 
 1. Clone repo
 2. `npm install`

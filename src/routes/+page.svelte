@@ -4,12 +4,16 @@
 	import { dev, browser } from "$app/environment";
 	import { afterUpdate, onMount, tick } from "svelte";
 
-	import { Editor, type ContentElement } from "@rossrobino/components";
+	import {
+		CopyButton,
+		Editor,
+		type ContentElement,
+	} from "@rossrobino/components";
+	
 	import { inject } from "@vercel/analytics";
 
 	import gettingStarted from "$lib/gettingStarted.md?raw";
 
-	import CopyButton from "$lib/components/CopyButton.svelte";
 	import FormatButton from "$lib/components/FormatButton.svelte";
 	import Metrics from "$lib/components/Metrics.svelte";
 	import PrintButton from "$lib/components/PrintButton.svelte";
@@ -342,7 +346,7 @@
 							<span class="hidden lg:inline">Download</span>
 						</a>
 					{/if}
-					<CopyButton {content}>
+					<CopyButton class="btn" text={content}>
 						<Copy />
 						<span class="hidden lg:inline">Copy</span>
 						<span
@@ -353,7 +357,7 @@
 							<span class="hidden lg:inline">Copy</span>
 						</span>
 					</CopyButton>
-					<CopyButton title="Copy HTML" content={mdToHtml(content)}>
+					<CopyButton class="btn" title="Copy HTML" text={mdToHtml(content)}>
 						<Code />
 						<span class="hidden lg:inline">Copy HTML</span>
 						<span
