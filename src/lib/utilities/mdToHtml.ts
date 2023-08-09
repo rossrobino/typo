@@ -18,5 +18,5 @@ marked.use(
  * @param md - string
  */
 export const mdToHtml = (md: string) => {
-	return marked.parse(md, { mangle: false, headerIds: false });
+	return marked.parse(md);
 };

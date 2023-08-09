@@ -7,9 +7,9 @@
 	import {
 		CopyButton,
 		Editor,
-		type ContentElement,
+		type EditorContentElement,
 	} from "@rossrobino/components";
-	
+
 	import { inject } from "@vercel/analytics";
 
 	import gettingStarted from "$lib/gettingStarted.md?raw";
@@ -107,7 +107,7 @@
 	};
 
 	/** passed in as a prop for the `Editor.svelte` controls */
-	const contentElements: ContentElement[] = [
+	const contentElements: EditorContentElement[] = [
 		{
 			name: "Heading",
 			text: "# ",
