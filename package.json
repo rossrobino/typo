@@ -13,7 +13,6 @@
 		"format": "prettier --write . --plugin=prettier-plugin-svelte --plugin=prettier-plugin-tailwindcss"
 	},
 	"devDependencies": {
-		"@rossrobino/components": "^1.9.2",
 		"@sveltejs/adapter-vercel": "^3.0.3",
 		"@sveltejs/kit": "^1.22.4",
 		"@tailwindcss/typography": "^0.5.9",
@@ -22,6 +21,7 @@
 		"@typescript-eslint/eslint-plugin": "^6.3.0",
 		"@typescript-eslint/parser": "^6.3.0",
 		"autoprefixer": "^10.4.14",
+		"drab": "^1.10.0",
 		"eslint": "^8.46.0",
 		"eslint-config-prettier": "^9.0.0",
 		"eslint-plugin-svelte": "^2.32.4",

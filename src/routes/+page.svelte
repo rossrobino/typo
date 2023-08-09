@@ -4,11 +4,7 @@
 	import { dev, browser } from "$app/environment";
 	import { afterUpdate, onMount, tick } from "svelte";
 
-	import {
-		CopyButton,
-		Editor,
-		type EditorContentElement,
-	} from "@rossrobino/components";
+	import { CopyButton, Editor, type EditorContentElement } from "drab";
 
 	import { inject } from "@vercel/analytics";
 

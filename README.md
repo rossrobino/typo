@@ -15,8 +15,7 @@ Welcome to [Typo](https://typo.robino.dev), a web-based markdown editor.
 
 ## Use the Components :wrench:
 
-- [`Editor`](https://github.com/rossrobino/components)
-- [`CopyButton`](https://github.com/rossrobino/components)
+- [drab](https://drab.robino.dev)
 
 ## License :balance_scale:
 
