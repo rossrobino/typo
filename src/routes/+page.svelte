@@ -380,13 +380,13 @@
 		{#if !viewMode}
 			<div class="flex h-full flex-col">
 				<Editor
-					textAreaClass="grow resize-none appearance-none overflow-y-auto p-6 font-mono text-sm transition placeholder:text-gray-400 focus:outline-none {colors
+					classTextarea="grow resize-none appearance-none overflow-y-auto p-6 font-mono text-sm transition placeholder:text-gray-400 focus:outline-none {colors
 						.dark[preferences.color]}"
-					controlsClass="flex flex-wrap p-3"
-					buttonClass="btn"
+					classControls="flex flex-wrap p-3"
+					classButton="btn"
 					{contentElements}
-					textAreaPlaceholder="# Title"
-					bind:textAreaValue={content}
+					placeholderTextarea="# Title"
+					bind:valueTextarea={content}
 					bind:selectionStart
 				/>
 			</div>

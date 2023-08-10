@@ -21,7 +21,7 @@
 		"@typescript-eslint/eslint-plugin": "^6.3.0",
 		"@typescript-eslint/parser": "^6.3.0",
 		"autoprefixer": "^10.4.14",
-		"drab": "^1.10.0",
+		"drab": "^2.0.0",
 		"eslint": "^8.46.0",
 		"eslint-config-prettier": "^9.0.0",
 		"eslint-plugin-svelte": "^2.32.4",
