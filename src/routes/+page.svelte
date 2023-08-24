@@ -2,9 +2,9 @@
 	import "../app.postcss";
 
 	import { dev, browser } from "$app/environment";
-	import { afterUpdate, onMount, tick } from "svelte";
+	import { afterUpdate, onMount, tick, type ComponentProps } from "svelte";
 
-	import { CopyButton, Editor, type EditorContentElement } from "drab";
+	import { CopyButton, Editor } from "drab";
 
 	import { inject } from "@vercel/analytics";
 
@@ -47,7 +47,7 @@
 	let viewMode = false;
 
 	/** selection start of the `textArea` inside of `Editor` */
-	let selectionStart: number;
+	let selectionStartTextarea: number;
 
 	let currentSlide: number;
 
@@ -103,74 +103,74 @@
 	};
 
 	/** passed in as a prop for the `Editor.svelte` controls */
-	const contentElements: EditorContentElement[] = [
+	const contentElements: ComponentProps<Editor>["contentElements"] = [
 		{
-			name: "Heading",
+			title: "Heading",
 			text: "# ",
 			display: "block",
 			icon: "H",
 		},
 		{
-			name: "Bullet",
+			title: "Bullet",
 			text: "- ",
 			display: "block",
 			icon: Bullet,
 		},
 		{
-			name: "Blockquote",
+			title: "Blockquote",
 			text: "> ",
 			display: "block",
 			icon: Blockquote,
 		},
 		{
-			name: "Italic",
+			title: "Italic",
 			text: "*",
 			display: "wrap",
 			icon: "I",
 			class: "italic",
 		},
 		{
-			name: "Bold",
+			title: "Bold",
 			text: "**",
 			display: "wrap",
 			icon: "B",
 		},
 		{
-			name: "Strikethrough",
+			title: "Strikethrough",
 			text: "~",
 			display: "wrap",
 			icon: "S",
 			class: "line-through font-normal",
 		},
 		{
-			name: "Anchor",
+			title: "Anchor",
 			text: "[text](href)",
 			display: "inline",
 			icon: Anchor,
 			key: "[",
 		},
 		{
-			name: "Image",
+			title: "Image",
 			text: "![alt](src)",
 			display: "inline",
 			icon: Image,
 			key: "]",
 		},
 		{
-			name: "Table",
+			title: "Table",
 			text: "| th  | th  |\n| --- | --- |\n| td  | td  |\n| td  | td  |",
 			display: "inline",
 			icon: Table,
 			key: "\\",
 		},
 		{
-			name: "Code",
+			title: "Code",
 			text: "`",
 			display: "wrap",
 			icon: CodeBracket,
 		},
 		{
-			name: "Slide",
+			title: "Slide",
 			text: "---",
 			display: "inline",
 			icon: Slideshow,
@@ -282,7 +282,7 @@
 
 	const findCurrentSlide = () => {
 		if (preferences.viewType === "slideshow" && !viewMode) {
-			const s = content.slice(0, selectionStart);
+			const s = content.slice(0, selectionStartTextarea);
 			let curr = s.split("\n\n---\n").length - 1;
 			if (s.startsWith("---\n")) curr++; // if first line === `---`, considered an <hr>
 			currentSlide = curr;
@@ -292,7 +292,7 @@
 	const setPlaceholder = () => {
 		placeholder = gettingStarted.trim();
 		contentElements.forEach((el) => {
-			if (el.key) placeholder += `\n| ${el.name} | \`CTRL\` + \`${el.key}\` |`;
+			if (el.key) placeholder += `\n| ${el.title} | \`CTRL\` + \`${el.key}\` |`;
 		});
 	};
 
@@ -342,28 +342,34 @@
 							<span class="hidden lg:inline">Download</span>
 						</a>
 					{/if}
-					<CopyButton class="btn" text={content}>
-						<Copy />
-						<span class="hidden lg:inline">Copy</span>
-						<span
-							class="flex items-center justify-center gap-1"
-							slot="complete"
-						>
-							<CopyComplete />
+					{#key content}
+						<CopyButton class="btn" blobParts={[content]}>
+							<Copy />
 							<span class="hidden lg:inline">Copy</span>
-						</span>
-					</CopyButton>
-					<CopyButton class="btn" title="Copy HTML" text={mdToHtml(content)}>
-						<Code />
-						<span class="hidden lg:inline">Copy HTML</span>
-						<span
-							class="flex items-center justify-center gap-1"
-							slot="complete"
+							<span
+								class="flex items-center justify-center gap-1"
+								slot="complete"
+							>
+								<CopyComplete />
+								<span class="hidden lg:inline">Copy</span>
+							</span>
+						</CopyButton>
+						<CopyButton
+							class="btn"
+							title="Copy HTML"
+							blobParts={[mdToHtml(content)]}
 						>
-							<CopyComplete />
+							<Code />
 							<span class="hidden lg:inline">Copy HTML</span>
-						</span>
-					</CopyButton>
+							<span
+								class="flex items-center justify-center gap-1"
+								slot="complete"
+							>
+								<CopyComplete />
+								<span class="hidden lg:inline">Copy HTML</span>
+							</span>
+						</CopyButton>
+					{/key}
 					<PrintButton innerHtml={mdToHtml(content ? content : placeholder)} />
 					<FormatButton bind:text={content} />
 					<button title="View" class="btn lg:hidden" on:click={toggleView}>
@@ -387,7 +393,7 @@
 					{contentElements}
 					placeholderTextarea="# Title"
 					bind:valueTextarea={content}
-					bind:selectionStart
+					bind:selectionStartTextarea
 				/>
 			</div>
 		{/if}
