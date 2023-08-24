@@ -342,34 +342,32 @@
 							<span class="hidden lg:inline">Download</span>
 						</a>
 					{/if}
-					{#key content}
-						<CopyButton class="btn" blobParts={[content]}>
-							<Copy />
-							<span class="hidden lg:inline">Copy</span>
-							<span
-								class="flex items-center justify-center gap-1"
-								slot="complete"
-							>
-								<CopyComplete />
-								<span class="hidden lg:inline">Copy</span>
-							</span>
-						</CopyButton>
-						<CopyButton
-							class="btn"
-							title="Copy HTML"
-							blobParts={[mdToHtml(content)]}
+					<CopyButton class="btn" blobParts={[content]}>
+						<Copy />
+						<span class="hidden lg:inline">Copy</span>
+						<span
+							class="flex items-center justify-center gap-1"
+							slot="complete"
 						>
-							<Code />
+							<CopyComplete />
+							<span class="hidden lg:inline">Copy</span>
+						</span>
+					</CopyButton>
+					<CopyButton
+						class="btn"
+						title="Copy HTML"
+						blobParts={[mdToHtml(content)]}
+					>
+						<Code />
+						<span class="hidden lg:inline">Copy HTML</span>
+						<span
+							class="flex items-center justify-center gap-1"
+							slot="complete"
+						>
+							<CopyComplete />
 							<span class="hidden lg:inline">Copy HTML</span>
-							<span
-								class="flex items-center justify-center gap-1"
-								slot="complete"
-							>
-								<CopyComplete />
-								<span class="hidden lg:inline">Copy HTML</span>
-							</span>
-						</CopyButton>
-					{/key}
+						</span>
+					</CopyButton>
 					<PrintButton innerHtml={mdToHtml(content ? content : placeholder)} />
 					<FormatButton bind:text={content} />
 					<button title="View" class="btn lg:hidden" on:click={toggleView}>
