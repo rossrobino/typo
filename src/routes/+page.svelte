@@ -292,7 +292,8 @@
 	const setPlaceholder = () => {
 		placeholder = gettingStarted.trim();
 		contentElements.forEach((el) => {
-			if (el.key) placeholder += `\n| ${el.title} | \`CTRL\` + \`${el.key}\` |`;
+			if (el.key)
+				placeholder += `\n| ${el.title} | <kbd>CTRL</kbd> + <kbd>${el.key} </kbd> |`;
 		});
 	};
 
@@ -409,7 +410,7 @@
 			>
 				<!-- content -->
 				<div
-					class="prose mx-auto h-full max-w-[72ch] break-words dark:prose-invert prose-pre:bg-gray-900 prose-img:rounded-lg {fontSizes[
+					class="prose dark:prose-invert prose-pre:bg-gray-900 prose-img:rounded-lg mx-auto h-full max-w-[72ch] break-words {fontSizes[
 						preferences.fontSize
 					]} {colors.prose[preferences.color]} {fontFamilies[
 						preferences.fontFamily
