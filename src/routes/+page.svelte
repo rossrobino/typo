@@ -6,6 +6,8 @@
 
 	import { CopyButton, Editor } from "drab";
 
+	import { process } from "robino/util/md";
+
 	import { inject } from "@vercel/analytics";
 
 	import gettingStarted from "$lib/gettingStarted.md?raw";
@@ -17,7 +19,6 @@
 
 	import { codeEval } from "$lib/utilities/codeEval";
 	import { formatMd } from "$lib/utilities/formatMd";
-	import { mdToHtml } from "$lib/utilities/mdToHtml";
 
 	// svg
 	import Bullet from "$lib/components/svg/Bullet.svelte";
@@ -312,6 +313,8 @@
 		await tick();
 		codeEval();
 	});
+
+	$: html = process(content ? content : placeholder).html;
 </script>
 
 <svelte:document on:keyup={onKeyUp} on:keydown={onKeyDown} />
@@ -354,11 +357,7 @@
 							<span class="hidden lg:inline">Copy</span>
 						</span>
 					</CopyButton>
-					<CopyButton
-						class="btn"
-						title="Copy HTML"
-						blobParts={[mdToHtml(content)]}
-					>
+					<CopyButton class="btn" title="Copy HTML" blobParts={[html]}>
 						<Code />
 						<span class="hidden lg:inline">Copy HTML</span>
 						<span
@@ -369,7 +368,7 @@
 							<span class="hidden lg:inline">Copy HTML</span>
 						</span>
 					</CopyButton>
-					<PrintButton innerHtml={mdToHtml(content ? content : placeholder)} />
+					<PrintButton innerHtml={html} />
 					<FormatButton bind:text={content} />
 					<button title="View" class="btn lg:hidden" on:click={toggleView}>
 						<View />
@@ -418,14 +417,10 @@
 				>
 					{#if preferences.viewType === "document"}
 						<div class="p-8">
-							{@html mdToHtml(content ? content : placeholder)}
+							{@html html}
 						</div>
 					{:else if preferences.viewType === "slideshow"}
-						<Slides
-							bind:viewMode
-							bind:currentSlide
-							html={mdToHtml(content ? content : placeholder)}
-						/>
+						<Slides bind:viewMode bind:currentSlide {html} />
 					{/if}
 				</div>
 			</div>
