@@ -54,8 +54,8 @@
 
 	let placeholder = "";
 
-	let file: File;
-	let fileHandle: FileSystemFileHandle;
+	let file: File | null;
+	let fileHandle: FileSystemFileHandle | null;
 
 	/** `true` if the browser supports the `window.showOpenFilePicker` method */
 	let supported = false;
@@ -214,6 +214,24 @@
 		}
 	};
 
+	const dropFile = async (e: DragEvent) => {
+		const items = e.dataTransfer?.items;
+		if (items && items[0]) {
+			const item = items[0];
+			if (item.kind === "file") {
+				// @ts-ignore - not supported by all browsers
+				if (item.getAsFileSystemHandle) {
+					e.preventDefault();
+					const handle = await item.getAsFileSystemHandle();
+					// since `item.kind === "file"` it will be a `FileSystemFileHandle`
+					fileHandle = handle as FileSystemFileHandle;
+					file = await fileHandle.getFile();
+					content = await file.text();
+				}
+			}
+		}
+	};
+
 	const toggleView = () => {
 		const toggleView = () => {
 			viewMode = !viewMode;
@@ -321,13 +339,15 @@
 
 <div
 	class="flex h-[100dvh] flex-col bg-gray-950 text-gray-50 selection:bg-gray-400 selection:bg-opacity-40"
+	on:drop={dropFile}
+	role="main"
 >
 	{#if !viewMode}
 		<header class="flex justify-between p-3 text-sm">
 			<nav class="flex w-full items-center justify-between sm:w-fit">
 				<div class="flex">
 					{#if supported}
-						<button title="Open" class="btn" on:click={open}>
+						<button title="Open (or drag and drop)" class="btn" on:click={open}>
 							<Open />
 							<span class="hidden lg:inline">Open</span>
 						</button>
