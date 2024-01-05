@@ -7,7 +7,7 @@
 		const printWindow = window.open("", "_blank");
 		if (printWindow) {
 			printWindow.document.write(
-				`<html><head><title>Print</title><style>${printCss}</style></head><body>`,
+				`<html><head><title>Print</title><${""}style>${printCss}</style></head><body>`,
 			);
 			printWindow.document.write(innerHtml);
 			printWindow.document.write("</body></html>");

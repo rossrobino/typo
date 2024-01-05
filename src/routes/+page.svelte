@@ -80,7 +80,7 @@
 	const colors = {
 		prose: ["", "prose-teal", "prose-sky", "prose-rose"],
 		medium: ["bg-gray-500", "bg-teal-500", "bg-sky-500", "bg-rose-500"],
-		dark: ["bg-gray-900", "bg-teal-950", "bg-sky-950", "bg-gray-800"],
+		dark: ["bg-gray-900", "bg-teal-950", "bg-sky-950", "bg-red-950"],
 	};
 
 	const viewTypes = ["document", "slideshow"] as const;
@@ -310,10 +310,11 @@
 
 	const setPlaceholder = () => {
 		placeholder = gettingStarted.trim();
-		contentElements.forEach((el) => {
-			if (el.key)
-				placeholder += `\n| ${el.title} | <kbd>CTRL</kbd> + <kbd>${el.key} </kbd> |`;
-		});
+		if (contentElements)
+			contentElements.forEach((el) => {
+				if (el.key)
+					placeholder += `\n| ${el.title} | <kbd>CTRL</kbd> + <kbd>${el.key} </kbd> |`;
+			});
 	};
 
 	setPlaceholder();
@@ -429,7 +430,7 @@
 			>
 				<!-- content -->
 				<div
-					class="prose dark:prose-invert prose-pre:bg-gray-900 prose-img:rounded-lg mx-auto h-full max-w-[72ch] break-words {fontSizes[
+					class="prose prose-gray mx-auto h-full max-w-[72ch] break-words dark:prose-invert prose-img:rounded-lg {fontSizes[
 						preferences.fontSize
 					]} {colors.prose[preferences.color]} {fontFamilies[
 						preferences.fontFamily
