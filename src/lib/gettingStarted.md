@@ -37,8 +37,11 @@ click_here();
 
 ## Keyboard Shortcuts
 
-| Function         | Key Combination                |
-| ---------------- | ------------------------------ |
-| Focus text area  | <kbd>i</kbd>                   |
-| Toggle view mode | <kbd>ESC</kbd>                 |
-| Format           | <kbd>CTRL</kbd> + <kbd>S</kbd> |
+| Function         | Key Combination                 |
+| ---------------- | ------------------------------- |
+| Focus text area  | <kbd>i</kbd>                    |
+| Toggle view mode | <kbd>ESC</kbd>                  |
+| Format           | <kbd>CTRL</kbd> + <kbd>S</kbd>  |
+| Anchor           | <kbd>CTRL</kbd> + <kbd>\[</kbd> |
+| Image            | <kbd>CTRL</kbd> + <kbd>\]</kbd> |
+| Table            | <kbd>CTRL</kbd> + <kbd>\\</kbd> |

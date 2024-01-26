@@ -4,8 +4,6 @@
 	import { dev, browser } from "$app/environment";
 	import { afterUpdate, onMount, tick, type ComponentProps } from "svelte";
 
-	import { CopyButton, Editor } from "drab";
-
 	import { process } from "robino/util/md";
 
 	import { inject } from "@vercel/analytics";
@@ -47,12 +45,9 @@
 	/** controls the expansion of the preview area */
 	let viewMode = false;
 
-	/** selection start of the `textArea` inside of `Editor` */
-	let selectionStartTextarea: number;
+	let textArea: HTMLTextAreaElement;
 
 	let currentSlide: number;
-
-	let placeholder = "";
 
 	let file: File | null;
 	let fileHandle: FileSystemFileHandle | null;
@@ -71,7 +66,7 @@
 
 	const fontFamilies = [
 		"font-sans",
-		"font-round",
+		"font-sans-rounded",
 		"font-serif",
 		"font-antique",
 		"font-mono",
@@ -102,81 +97,6 @@
 	const savePreferences = () => {
 		localStorage.setItem("preferences", JSON.stringify(preferences));
 	};
-
-	/** passed in as a prop for the `Editor.svelte` controls */
-	const contentElements: ComponentProps<Editor>["contentElements"] = [
-		{
-			title: "Heading",
-			text: "# ",
-			display: "block",
-			icon: "H",
-		},
-		{
-			title: "Bullet",
-			text: "- ",
-			display: "block",
-			icon: Bullet,
-		},
-		{
-			title: "Blockquote",
-			text: "> ",
-			display: "block",
-			icon: Blockquote,
-		},
-		{
-			title: "Italic",
-			text: "*",
-			display: "wrap",
-			icon: "I",
-			class: "italic",
-		},
-		{
-			title: "Bold",
-			text: "**",
-			display: "wrap",
-			icon: "B",
-		},
-		{
-			title: "Strikethrough",
-			text: "~",
-			display: "wrap",
-			icon: "S",
-			class: "line-through font-normal",
-		},
-		{
-			title: "Anchor",
-			text: "[text](href)",
-			display: "inline",
-			icon: Anchor,
-			key: "[",
-		},
-		{
-			title: "Image",
-			text: "![alt](src)",
-			display: "inline",
-			icon: Image,
-			key: "]",
-		},
-		{
-			title: "Table",
-			text: "| th  | th  |\n| --- | --- |\n| td  | td  |\n| td  | td  |",
-			display: "inline",
-			icon: Table,
-			key: "\\",
-		},
-		{
-			title: "Code",
-			text: "`",
-			display: "wrap",
-			icon: CodeBracket,
-		},
-		{
-			title: "Slide",
-			text: "---",
-			display: "inline",
-			icon: Slideshow,
-		},
-	];
 
 	const options: FilePickerOptions = {
 		types: [
@@ -301,30 +221,29 @@
 
 	const findCurrentSlide = () => {
 		if (preferences.viewType === "slideshow" && !viewMode) {
-			const s = content.slice(0, selectionStartTextarea);
+			const s = content.slice(0, textArea.selectionStart);
 			let curr = s.split("\n\n---\n").length - 1;
 			if (s.startsWith("---\n")) curr++; // if first line === `---`, considered an <hr>
 			currentSlide = curr;
 		}
 	};
 
-	const setPlaceholder = () => {
-		placeholder = gettingStarted.trim();
-		if (contentElements)
-			contentElements.forEach((el) => {
-				if (el.key)
-					placeholder += `\n| ${el.title} | <kbd>CTRL</kbd> + <kbd>${el.key} </kbd> |`;
-			});
-	};
-
-	setPlaceholder();
-
-	onMount(() => {
+	onMount(async () => {
 		const saved = localStorage.getItem("preferences");
 		if (saved) {
 			preferences = JSON.parse(saved);
 		} else {
 			savePreferences();
+		}
+
+		const { Editor } = await import("drab/editor");
+		if (!customElements.get("drab-editor")) {
+			customElements.define("drab-editor", Editor);
+		}
+
+		const { Copy } = await import("drab/copy");
+		if (!customElements.get("drab-copy")) {
+			customElements.define("drab-copy", Copy);
 		}
 	});
 
@@ -333,7 +252,7 @@
 		codeEval();
 	});
 
-	$: html = process(content ? content : placeholder).html;
+	$: html = process(content ? content : gettingStarted.trim()).html;
 </script>
 
 <svelte:document on:keyup={onKeyUp} on:keydown={onKeyDown} />
@@ -367,28 +286,29 @@
 							<span class="hidden lg:inline">Download</span>
 						</a>
 					{/if}
-					<CopyButton class="btn" blobParts={[content]}>
-						<Copy />
-						<span class="hidden lg:inline">Copy</span>
-						<span
-							class="flex items-center justify-center gap-1"
-							slot="complete"
-						>
-							<CopyComplete />
+					<drab-copy value={content}>
+						<button data-trigger class="btn">
+							<span data-content>
+								<Copy />
+							</span>
+							<template data-swap>
+								<CopyComplete />
+							</template>
 							<span class="hidden lg:inline">Copy</span>
-						</span>
-					</CopyButton>
-					<CopyButton class="btn" title="Copy HTML" blobParts={[html]}>
-						<Code />
-						<span class="hidden lg:inline">Copy HTML</span>
-						<span
-							class="flex items-center justify-center gap-1"
-							slot="complete"
-						>
-							<CopyComplete />
-							<span class="hidden lg:inline">Copy HTML</span>
-						</span>
-					</CopyButton>
+						</button>
+					</drab-copy>
+
+					<drab-copy value={html}>
+						<button data-trigger title="Copy HTML" class="btn">
+							<span data-content>
+								<Code />
+							</span>
+							<template data-swap>
+								<CopyComplete />
+							</template>
+							<span class="hidden lg:inline">Copy</span>
+						</button>
+					</drab-copy>
 					<PrintButton innerHtml={html} />
 					<FormatButton bind:text={content} />
 					<button title="View" class="btn lg:hidden" on:click={toggleView}>
@@ -404,16 +324,121 @@
 	<main class="grid grow overflow-hidden {viewMode ? '' : 'lg:grid-cols-2'}">
 		{#if !viewMode}
 			<div class="flex h-full flex-col">
-				<Editor
-					classTextarea="grow resize-none appearance-none overflow-y-auto p-6 font-mono text-sm transition placeholder:text-gray-400 focus:outline-none {colors
-						.dark[preferences.color]}"
-					classControls="flex flex-wrap p-3"
-					classButton="btn"
-					{contentElements}
-					placeholderTextarea="# Title"
-					bind:valueTextarea={content}
-					bind:selectionStartTextarea
-				/>
+				<drab-editor style="display: contents">
+					<textarea
+						bind:this={textArea}
+						data-content
+						class="grow resize-none appearance-none overflow-y-auto p-6 font-mono text-sm transition placeholder:text-gray-400 focus:outline-none {colors
+							.dark[preferences.color]}"
+						placeholder="# Title"
+						bind:value={content}
+					></textarea>
+					<div class="flex flex-wrap p-3">
+						<button
+							data-trigger
+							class="btn"
+							title="Heading"
+							data-value="# "
+							data-type="block"
+						>
+							H
+						</button>
+						<button
+							data-trigger
+							class="btn"
+							title="Bullet"
+							data-value="- "
+							data-type="block"
+						>
+							<Bullet />
+						</button>
+						<button
+							data-trigger
+							class="btn"
+							title="Blockquote"
+							data-value="> "
+							data-type="block"
+						>
+							<Blockquote />
+						</button>
+						<button
+							data-trigger
+							class="btn italic"
+							title="Italic"
+							data-value="*"
+							data-type="wrap"
+						>
+							I
+						</button>
+						<button
+							data-trigger
+							class="btn"
+							title="Bold"
+							data-value="**"
+							data-type="wrap"
+						>
+							B
+						</button>
+						<button
+							data-trigger
+							class="btn font-normal line-through"
+							title="Strikethrough"
+							data-value="~"
+							data-type="wrap"
+						>
+							S
+						</button>
+						<button
+							data-trigger
+							class="btn"
+							title="Anchor"
+							data-value="[text](href)"
+							data-type="inline"
+						>
+							<span>
+								<Anchor />
+							</span>
+						</button>
+						<button
+							data-trigger
+							class="btn"
+							title="Image"
+							data-value="![alt](src)"
+							data-type="inline"
+							data-key="]"
+						>
+							<Image />
+						</button>
+						<button
+							data-trigger
+							class="btn"
+							title="Table"
+							data-value={"| th  | th  |\n| --- | --- |\n| td  | td  |\n| td  | td  |"}
+							data-type="inline"
+							data-key={"\\"}
+						>
+							<Table />
+						</button>
+						<button
+							data-trigger
+							class="btn"
+							title="Code"
+							data-value={"`"}
+							data-type="wrap"
+						>
+							<CodeBracket />
+						</button>
+						<button
+							data-trigger
+							class="btn"
+							title="Slide"
+							data-value="---"
+							data-type="inline"
+						>
+							<Slideshow />
+						</button>
+					</div>
+				</drab-editor>
 			</div>
 		{/if}
 		<div
