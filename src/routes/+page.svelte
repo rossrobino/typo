@@ -236,13 +236,13 @@
 			savePreferences();
 		}
 
-		const { Editor } = await import("drab/editor");
 		if (!customElements.get("drab-editor")) {
+			const { Editor } = await import("drab/editor");
 			customElements.define("drab-editor", Editor);
 		}
 
-		const { Copy } = await import("drab/copy");
 		if (!customElements.get("drab-copy")) {
+			const { Copy } = await import("drab/copy");
 			customElements.define("drab-copy", Copy);
 		}
 	});
@@ -252,7 +252,13 @@
 		codeEval();
 	});
 
-	$: html = process(content ? content : gettingStarted.trim()).html;
+	let html: string = "";
+
+	$: {
+		process(content ? content : gettingStarted.trim()).then((result) => {
+			html = result.html;
+		});
+	}
 </script>
 
 <svelte:document on:keyup={onKeyUp} on:keydown={onKeyDown} />
