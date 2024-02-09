@@ -15,6 +15,9 @@ pre {
 	border: 0.5px solid #e5e7eb;
 	padding: 1rem;
 }
+p {
+	line-height: 24px;
+}
 p code::before {
 	content: "`";
 }
