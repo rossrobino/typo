@@ -1,13 +1,24 @@
 body {
 	font-family: system-ui, sans-serif;
-	color: #030712;
+	color: #1f2937;
 	margin: 1rem;
+	font-size: small;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	color: #030712;
 }
 a,
 a:visited,
 a:hover,
 a:active {
-	color: #030712;
+	color: #1f2937;
+	font-weight: 600;
+	text-underline-offset: 2px;
 }
 pre {
 	font-family: monospace;
@@ -15,7 +26,8 @@ pre {
 	border: 0.5px solid #e5e7eb;
 	padding: 1rem;
 }
-p {
+p,
+li {
 	line-height: 24px;
 }
 p code::before {
@@ -42,9 +54,6 @@ table {
 	width: 100%;
 	border-collapse: collapse;
 	margin-bottom: 1rem;
-}
-li {
-	margin: 0.5rem 0rem 0.5rem 0rem;
 }
 th,
 td {
