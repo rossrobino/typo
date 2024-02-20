@@ -1,8 +1,8 @@
 # Getting Started
 
-Write content in [markdown](https://www.markdownguide.org/cheat-sheet/#basic-syntax)!
+Write content in <a href="https://www.markdownguide.org/cheat-sheet/#basic-syntax" target="_blank">markdown</a>!
 
-Leave feedback or contribute to the project on [GitHub](https://github.com/rossrobino/typo).
+Leave feedback or contribute to the project on <a href="https://github.com/rossrobino/typo" target="_blank">GitHub</a>.
 
 ---
 
@@ -32,6 +32,18 @@ function click_here() {
 
 click_here();
 ````
+
+---
+
+## Styling
+
+<a href="https://tailwindcss.com" target="_blank">Tailwind CSS</a> CDN is included, so any Tailwind class names can be utilized if more customized styling is required.
+
+---
+
+## Custom Elements
+
+**Typo** also includes all <a href="https://drab.robino.dev" target="_blank">drab</a> custom elements, utilize any of these custom elements by copy and pasting the HTML from the examples.
 
 ---
 

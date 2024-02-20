@@ -236,15 +236,7 @@
 			savePreferences();
 		}
 
-		if (!customElements.get("drab-editor")) {
-			const { Editor } = await import("drab/editor");
-			customElements.define("drab-editor", Editor);
-		}
-
-		if (!customElements.get("drab-copy")) {
-			const { Copy } = await import("drab/copy");
-			customElements.define("drab-copy", Copy);
-		}
+		await import("drab/define");
 	});
 
 	afterUpdate(async () => {
