@@ -392,6 +392,7 @@
 							title="Anchor"
 							data-value="[text](href)"
 							data-type="inline"
+							data-key="["
 						>
 							<span>
 								<Anchor />
