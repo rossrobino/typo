@@ -2,7 +2,7 @@
 	import "../app.postcss";
 
 	import { dev, browser } from "$app/environment";
-	import { afterUpdate, onMount, tick, type ComponentProps } from "svelte";
+	import { afterUpdate, onMount, tick } from "svelte";
 
 	import { process } from "robino/util/md";
 
