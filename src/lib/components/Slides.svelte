@@ -62,7 +62,7 @@
 				<button
 					title="Previous Slide"
 					disabled={!currentSlide}
-					class="btn btn-s rotate-180"
+					class="button button-s rotate-180"
 					on:click={() => changeSlide("previous")}
 				>
 					<Arrow />
@@ -71,7 +71,7 @@
 				<button
 					title="Next Slide"
 					disabled={currentSlide >= numberOfSlides - 1}
-					class="btn btn-s"
+					class="button button-s"
 					on:click={() => changeSlide("next")}
 				>
 					<Arrow />

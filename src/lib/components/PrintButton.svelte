@@ -21,7 +21,7 @@
 	};
 </script>
 
-<button title="Print" class="btn" on:click={printContent}>
+<button title="Print" class="button" on:click={printContent}>
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
 		viewBox="0 0 24 24"

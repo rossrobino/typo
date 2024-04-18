@@ -27,7 +27,7 @@
 </script>
 
 <div
-	class="ml-4 hidden h-full flex-wrap items-center gap-4 text-sm tabular-nums sm:flex"
+	class="ml-4 hidden h-full flex-wrap items-center gap-2 text-sm tabular-nums sm:flex"
 >
 	<div>
 		{content.length} char

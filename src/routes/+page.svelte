@@ -10,7 +10,6 @@
 
 	import gettingStarted from "$lib/gettingStarted.md?raw";
 
-	import FormatButton from "$lib/components/FormatButton.svelte";
 	import Metrics from "$lib/components/Metrics.svelte";
 	import PrintButton from "$lib/components/PrintButton.svelte";
 	import Slides from "$lib/components/Slides.svelte";
@@ -203,7 +202,7 @@
 	const onKeyUp = (e: KeyboardEvent) => {
 		save();
 		if (e.key === "i") {
-			document.querySelector("textarea")?.focus();
+			textArea.focus();
 		}
 		if (e.key === "Escape") {
 			toggleView();
@@ -212,10 +211,17 @@
 		}
 	};
 
-	const onKeyDown = async (e: KeyboardEvent) => {
+	const fmt = async () => {
+		const sel = textArea.selectionStart;
+		content = await formatMd(content);
+		await tick();
+		textArea.setSelectionRange(sel, sel);
+	};
+
+	const onKeyDown = (e: KeyboardEvent) => {
 		if ((e.ctrlKey || e.metaKey) && e.key === "s") {
 			e.preventDefault();
-			content = await formatMd(content);
+			fmt();
 		}
 	};
 
@@ -265,11 +271,15 @@
 			<nav class="flex w-full items-center justify-between sm:w-fit">
 				<div class="flex">
 					{#if supported}
-						<button title="Open (or drag and drop)" class="btn" on:click={open}>
+						<button
+							title="Open (or drag and drop)"
+							class="button"
+							on:click={open}
+						>
 							<Open />
 							<span class="hidden lg:inline">Open</span>
 						</button>
-						<button title="Save As" class="btn" on:click={saveAs}>
+						<button title="Save As" class="button" on:click={saveAs}>
 							<Save />
 							<span class="hidden lg:inline">Save As</span>
 						</button>
@@ -278,14 +288,14 @@
 							href="data:text/plain,{content}"
 							download="Untitled.md"
 							title="Download"
-							class="btn"
+							class="button"
 						>
 							<Save />
 							<span class="hidden lg:inline">Download</span>
 						</a>
 					{/if}
 					<drab-copy value={content} class="contents">
-						<button data-trigger class="btn">
+						<button data-trigger class="button">
 							<span data-content>
 								<Copy />
 							</span>
@@ -297,7 +307,7 @@
 					</drab-copy>
 
 					<drab-copy value={html} class="contents">
-						<button data-trigger title="Copy HTML" class="btn">
+						<button data-trigger title="Copy HTML" class="button">
 							<span data-content>
 								<Code />
 							</span>
@@ -308,8 +318,25 @@
 						</button>
 					</drab-copy>
 					<PrintButton innerHtml={html} />
-					<FormatButton bind:text={content} />
-					<button title="View" class="btn lg:hidden" on:click={toggleView}>
+					<button title="Format" on:click={fmt} class="button">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							viewBox="0 0 24 24"
+							fill="currentColor"
+							class="h-5 w-5"
+						>
+							<path
+								fill-rule="evenodd"
+								d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0016.5 9h-1.875a1.875 1.875 0 01-1.875-1.875V5.25A3.75 3.75 0 009 1.5H5.625zM7.5 15a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5A.75.75 0 017.5 15zm.75 2.25a.75.75 0 000 1.5H12a.75.75 0 000-1.5H8.25z"
+								clip-rule="evenodd"
+							/>
+							<path
+								d="M12.971 1.816A5.23 5.23 0 0114.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 013.434 1.279 9.768 9.768 0 00-6.963-6.963z"
+							/>
+						</svg>
+						<span class="hidden lg:inline">Format</span>
+					</button>
+					<button title="View" class="button lg:hidden" on:click={toggleView}>
 						<View />
 					</button>
 				</div>
@@ -334,7 +361,7 @@
 					<div class="flex flex-wrap p-3">
 						<button
 							data-trigger
-							class="btn"
+							class="button"
 							title="Heading"
 							data-value="# "
 							data-type="block"
@@ -343,7 +370,7 @@
 						</button>
 						<button
 							data-trigger
-							class="btn"
+							class="button"
 							title="Bullet"
 							data-value="- "
 							data-type="block"
@@ -352,7 +379,7 @@
 						</button>
 						<button
 							data-trigger
-							class="btn"
+							class="button"
 							title="Blockquote"
 							data-value="> "
 							data-type="block"
@@ -361,7 +388,7 @@
 						</button>
 						<button
 							data-trigger
-							class="btn italic"
+							class="button italic"
 							title="Italic"
 							data-value="*"
 							data-type="wrap"
@@ -370,7 +397,7 @@
 						</button>
 						<button
 							data-trigger
-							class="btn"
+							class="button"
 							title="Bold"
 							data-value="**"
 							data-type="wrap"
@@ -379,7 +406,7 @@
 						</button>
 						<button
 							data-trigger
-							class="btn font-normal line-through"
+							class="button font-normal line-through"
 							title="Strikethrough"
 							data-value="~"
 							data-type="wrap"
@@ -388,7 +415,7 @@
 						</button>
 						<button
 							data-trigger
-							class="btn"
+							class="button"
 							title="Anchor"
 							data-value="[text](href)"
 							data-type="inline"
@@ -400,7 +427,7 @@
 						</button>
 						<button
 							data-trigger
-							class="btn"
+							class="button"
 							title="Image"
 							data-value="![alt](src)"
 							data-type="inline"
@@ -410,7 +437,7 @@
 						</button>
 						<button
 							data-trigger
-							class="btn"
+							class="button"
 							title="Table"
 							data-value={"| th  | th  |\n| --- | --- |\n| td  | td  |\n| td  | td  |"}
 							data-type="inline"
@@ -420,7 +447,7 @@
 						</button>
 						<button
 							data-trigger
-							class="btn"
+							class="button"
 							title="Code"
 							data-value={"`"}
 							data-type="wrap"
@@ -429,7 +456,7 @@
 						</button>
 						<button
 							data-trigger
-							class="btn"
+							class="button"
 							title="Slide"
 							data-value="---"
 							data-type="inline"
@@ -480,7 +507,7 @@
 				<div class="flex">
 					{#each viewTypes as type}
 						<button
-							class="btn group-hover:opacity-100"
+							class="button group-hover:opacity-100"
 							class:opacity-0={viewMode}
 							disabled={preferences.viewType === type}
 							on:click={() => changeViewType(type)}
@@ -503,7 +530,7 @@
 				<div class="flex">
 					<button
 						title="Change Color"
-						class="btn group-hover:opacity-100"
+						class="button group-hover:opacity-100"
 						class:opacity-0={viewMode}
 						on:click={changeColor}
 					>
@@ -516,7 +543,7 @@
 					</button>
 					<button
 						title="Change Font"
-						class="btn group-hover:opacity-100 {fontFamilies[
+						class="button group-hover:opacity-100 {fontFamilies[
 							preferences.fontFamily
 						]}"
 						class:opacity-0={viewMode}
@@ -527,7 +554,7 @@
 					</button>
 					<button
 						title="Decrease Font Size"
-						class="btn group-hover:opacity-100"
+						class="button group-hover:opacity-100"
 						class:opacity-0={viewMode}
 						disabled={preferences.fontSize < 1}
 						on:click={() => changeProseSize("decrease")}
@@ -536,7 +563,7 @@
 					</button>
 					<button
 						title="Increase Font Size"
-						class="btn group-hover:opacity-100"
+						class="button group-hover:opacity-100"
 						class:opacity-0={viewMode}
 						disabled={preferences.fontSize >= fontSizes.length - 1}
 						on:click={() => changeProseSize("increase")}
@@ -548,7 +575,7 @@
 						<button
 							data-trigger
 							title="Toggle Fullscreen"
-							class="btn group-hover:opacity-100"
+							class="button group-hover:opacity-100"
 							class:opacity-0={viewMode}
 						>
 							<svg
@@ -569,7 +596,7 @@
 					<!-- viewMode toggle -->
 					<button
 						title={viewMode ? "Edit" : "View"}
-						class="btn"
+						class="button"
 						on:click={toggleView}
 					>
 						{#if viewMode}
