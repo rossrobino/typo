@@ -26,11 +26,11 @@ JavaScript code blocks can be executed in the browser by clicking the block.
 ````js
 // add a JavaScript code block (```js)
 
-function click_here() {
+function clickHere() {
 	return "Hello world!";
 }
 
-click_here();
+clickHere();
 ````
 
 ---
