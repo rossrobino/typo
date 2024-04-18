@@ -4,7 +4,7 @@
 	import { dev, browser } from "$app/environment";
 	import { afterUpdate, onMount, tick } from "svelte";
 
-	import { process } from "robino/util/md";
+	import { processMarkdown } from "robino/util/md";
 
 	import { inject } from "@vercel/analytics";
 
@@ -253,9 +253,11 @@
 	let html: string = "";
 
 	$: {
-		process(content ? content : gettingStarted.trim()).then((result) => {
-			html = result.html;
-		});
+		processMarkdown(content ? content : gettingStarted.trim()).then(
+			(result) => {
+				html = result.html;
+			},
+		);
 	}
 </script>
 
