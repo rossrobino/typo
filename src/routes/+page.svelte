@@ -483,7 +483,7 @@
 			>
 				<!-- content -->
 				<div
-					class="prose prose-gray mx-auto h-full max-w-[72ch] break-words dark:prose-invert prose-img:rounded-lg {fontSizes[
+					class="prose prose-gray mx-auto h-full max-w-[72ch] break-words transition-[font-size] dark:prose-invert prose-img:rounded-lg {fontSizes[
 						preferences.fontSize
 					]} {colors.prose[preferences.color]} {fontFamilies[
 						preferences.fontFamily

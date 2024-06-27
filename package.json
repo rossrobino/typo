@@ -10,27 +10,27 @@
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"lint": "prettier --check . && eslint .",
-		"format": "prettier --write . --plugin=prettier-plugin-svelte"
+		"format": "prettier --write .",
+		"deps": "bunx npm-check-updates@latest --interactive --format group"
 	},
 	"devDependencies": {
-		"@sveltejs/adapter-static": "^3.0.1",
-		"@sveltejs/kit": "^2.5.6",
-		"@sveltejs/vite-plugin-svelte": "^3.1.0",
-		"@tailwindcss/typography": "^0.5.12",
+		"@sveltejs/adapter-static": "^3.0.2",
+		"@sveltejs/kit": "^2.5.17",
+		"@sveltejs/vite-plugin-svelte": "^3.1.1",
+		"@tailwindcss/typography": "^0.5.13",
 		"@types/wicg-file-system-access": "^2023.10.5",
-		"@vercel/analytics": "^1.2.2",
+		"@vercel/analytics": "^1.3.1",
 		"autoprefixer": "^10.4.19",
-		"drab": "^5.4.0",
-		"prettier-plugin-svelte": "^3.2.3",
-		"prettier-plugin-tailwindcss": "^0.5.14",
+		"drab": "^5.4.2",
+		"prettier-plugin-svelte": "^3.2.5",
+		"prettier-plugin-tailwindcss": "^0.6.5",
 		"robino": "^0.2.0",
-		"svelte": "^4.2.15",
-		"svelte-check": "^3.6.9",
-		"tailwindcss": "^3.4.3",
-		"tslib": "^2.6.2",
-		"typescript": "^5.4.5",
+		"svelte": "^4.2.18",
+		"svelte-check": "^3.8.4",
+		"tailwindcss": "^3.4.4",
+		"tslib": "^2.6.3",
+		"typescript": "^5.5.2",
 		"uico": "^0.2.4",
-		"vite": "^5.2.9"
+		"vite": "^5.3.1"
 	}
 }
