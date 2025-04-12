@@ -2,7 +2,7 @@
 
 Welcome to [Typo](https://typo.robino.dev), a web-based markdown editor.
 
-## Key Features :key:
+## Key Features
 
 - **File System API:** Utilizes the file system API when available. If not, a download anchor tag is used.
 - **Auto-save:** Automatically saves changes if supported by the system.
@@ -13,15 +13,15 @@ Welcome to [Typo](https://typo.robino.dev), a web-based markdown editor.
 - **Formatted Printing:** Allows printing of formatted content.
 - **Markdown Formatting:** Applies Prettier for formatting markdown content.
 
-## Use the Components :wrench:
+## Use the Components
 
 - [drab](https://drab.robino.dev)
 
-## License :balance_scale:
+## License
 
 Typo is licensed under the MIT License.
 
-## Contribute :handshake:
+## Contribute
 
 Contributions are welcome, Typo uses Svelte and SvelteKit. Feel free to improve existing features, add new features or report issues.
 
