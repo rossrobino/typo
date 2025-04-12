@@ -1,15 +1,7 @@
-import config from "robino/config/prettier";
+import config from "@robino/prettier";
 
-/** @type {import("prettier").Config} */
-export default {
-	...config,
-	plugins: ["prettier-plugin-svelte", "prettier-plugin-tailwindcss"],
-	overrides: [
-		{
-			files: "*.svelte",
-			options: {
-				parser: "svelte",
-			},
-		},
-	],
-};
+config.plugins.push("prettier-plugin-svelte", "prettier-plugin-tailwindcss");
+
+config.overrides = [{ files: "*.svelte", options: { parser: "svelte" } }];
+
+export default config;

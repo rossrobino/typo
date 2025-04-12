@@ -1,40 +1,32 @@
 <script lang="ts">
-	import "../tailwind.css";
-
 	import { dev, browser } from "$app/environment";
-	import { afterUpdate, onMount, tick } from "svelte";
-
-	import { processMarkdown } from "robino/util/md";
-
-	import { inject } from "@vercel/analytics";
-
-	import gettingStarted from "$lib/gettingStarted.md?raw";
-
 	import Metrics from "$lib/components/Metrics.svelte";
 	import PrintButton from "$lib/components/PrintButton.svelte";
 	import Slides from "$lib/components/Slides.svelte";
-
-	import { codeEval } from "$lib/utilities/codeEval";
-	import { formatMd } from "$lib/utilities/formatMd";
-
-	// svg
-	import Bullet from "$lib/components/svg/Bullet.svelte";
-	import Blockquote from "$lib/components/svg/Blockquote.svelte";
 	import Anchor from "$lib/components/svg/Anchor.svelte";
-	import Image from "$lib/components/svg/Image.svelte";
-	import Table from "$lib/components/svg/Table.svelte";
+	import Blockquote from "$lib/components/svg/Blockquote.svelte";
+	import Bullet from "$lib/components/svg/Bullet.svelte";
 	import Code from "$lib/components/svg/Code.svelte";
-	import View from "$lib/components/svg/View.svelte";
-	import Edit from "$lib/components/svg/Edit.svelte";
-	import Document from "$lib/components/svg/Document.svelte";
-	import Slideshow from "$lib/components/svg/Slideshow.svelte";
-	import ZoomOut from "$lib/components/svg/ZoomOut.svelte";
-	import ZoomIn from "$lib/components/svg/ZoomIn.svelte";
-	import Open from "$lib/components/svg/Open.svelte";
-	import Save from "$lib/components/svg/Save.svelte";
+	import CodeBracket from "$lib/components/svg/CodeBracket.svelte";
 	import Copy from "$lib/components/svg/Copy.svelte";
 	import CopyComplete from "$lib/components/svg/CopyComplete.svelte";
-	import CodeBracket from "$lib/components/svg/CodeBracket.svelte";
+	import Document from "$lib/components/svg/Document.svelte";
+	import Edit from "$lib/components/svg/Edit.svelte";
+	import Image from "$lib/components/svg/Image.svelte";
+	import Open from "$lib/components/svg/Open.svelte";
+	import Save from "$lib/components/svg/Save.svelte";
+	import Slideshow from "$lib/components/svg/Slideshow.svelte";
+	import Table from "$lib/components/svg/Table.svelte";
+	import View from "$lib/components/svg/View.svelte";
+	import ZoomIn from "$lib/components/svg/ZoomIn.svelte";
+	import ZoomOut from "$lib/components/svg/ZoomOut.svelte";
+	import gettingStarted from "$lib/gettingStarted.md?raw";
+	import { codeEval } from "$lib/utilities/codeEval";
+	import { formatMd } from "$lib/utilities/formatMd";
+	import "../tailwind.css";
+	import { inject } from "@vercel/analytics";
+	import { processMarkdown } from "robino/util/md";
+	import { afterUpdate, onMount, tick } from "svelte";
 
 	inject({ mode: dev ? "development" : "production" });
 
@@ -458,7 +450,11 @@
 							data-trigger
 							class="button"
 							title="Slide"
-							data-value="---"
+							data-value="
+
+---
+
+"
 							data-type="inline"
 						>
 							<Slideshow />
@@ -529,8 +525,8 @@
 				</div>
 				<div class="flex">
 					<button
-						title="Change Color"
 						class="button group-hover:opacity-100"
+						aria-label="Change Color"
 						class:opacity-0={viewMode}
 						on:click={changeColor}
 					>
@@ -539,7 +535,7 @@
 								.medium[preferences.color]}"
 							class:border-gray-950={viewMode}
 							class:dark:border-gray-50={viewMode}
-						/>
+						></div>
 					</button>
 					<button
 						title="Change Font"
@@ -574,7 +570,7 @@
 					<drab-fullscreen class="contents">
 						<button
 							data-trigger
-							title="Toggle Fullscreen"
+							aria-label="Toggle Fullscreen"
 							class="button group-hover:opacity-100"
 							class:opacity-0={viewMode}
 						>

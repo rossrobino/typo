@@ -1,9 +1,7 @@
 <script lang="ts">
-	import { afterUpdate } from "svelte";
-
-	import { codeEval } from "$lib/utilities/codeEval";
-
 	import Arrow from "$lib/components/svg/Arrow.svelte";
+	import { codeEval } from "$lib/utilities/codeEval";
+	import { afterUpdate } from "svelte";
 
 	export let html = "";
 	export let currentSlide = 0;

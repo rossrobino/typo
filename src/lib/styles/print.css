@@ -1,8 +1,8 @@
 body {
-	font-family: system-ui, sans-serif;
-	color: #1f2937;
 	margin: 1rem;
+	color: #1f2937;
 	font-size: small;
+	font-family: system-ui, sans-serif;
 }
 h1,
 h2,
@@ -21,10 +21,10 @@ a:active {
 	text-underline-offset: 2px;
 }
 pre {
-	font-family: monospace;
-	border-radius: 0.5rem;
 	border: 0.5px solid #e5e7eb;
+	border-radius: 0.5rem;
 	padding: 1rem;
+	font-family: monospace;
 }
 p,
 li {
@@ -47,18 +47,18 @@ blockquote p::after {
 	content: '"';
 }
 img {
-	width: 100%;
 	border-radius: 1rem;
+	width: 100%;
 }
 table {
-	width: 100%;
-	border-collapse: collapse;
 	margin-bottom: 1rem;
+	border-collapse: collapse;
+	width: 100%;
 }
 th,
 td {
-	padding: 0.5rem;
 	border-bottom: 1px solid #d1d5db;
+	padding: 0.5rem;
 	text-align: left;
 }
 th:first-child,
