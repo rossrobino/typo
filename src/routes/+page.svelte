@@ -1,5 +1,5 @@
 <script lang="ts">
-	import "../app.postcss";
+	import "../tailwind.css";
 
 	import { dev, browser } from "$app/environment";
 	import { afterUpdate, onMount, tick } from "svelte";
@@ -156,9 +156,7 @@
 			viewMode = !viewMode;
 		};
 
-		// @ts-expect-error - not supported by all browsers
 		if (document.startViewTransition) {
-			// @ts-expect-error - not supported by all browsers
 			document.startViewTransition(() => {
 				toggleView();
 			});
