@@ -85,9 +85,8 @@
 		viewType: "document",
 	};
 
-	const savePreferences = () => {
+	const savePreferences = () =>
 		localStorage.setItem("preferences", JSON.stringify(preferences));
-	};
 
 	const options: FilePickerOptions = {
 		types: [
@@ -105,7 +104,6 @@
 		[fileHandle] = await window.showOpenFilePicker(options);
 		file = await fileHandle.getFile();
 		content = await file.text();
-		toggleView();
 	};
 
 	const saveAs = async () => {
@@ -126,35 +124,25 @@
 	};
 
 	const dropFile = async (e: DragEvent) => {
-		const items = e.dataTransfer?.items;
-		if (items && items[0]) {
-			const item = items[0];
-			if (item.kind === "file") {
-				// @ts-ignore - not supported by all browsers
-				if (item.getAsFileSystemHandle) {
-					e.preventDefault();
-					const handle = await item.getAsFileSystemHandle();
-					// since `item.kind === "file"` it will be a `FileSystemFileHandle`
-					fileHandle = handle as FileSystemFileHandle;
-					file = await fileHandle.getFile();
-					content = await file.text();
-				}
+		const item = e.dataTransfer?.items?.[0];
+		if (item?.kind === "file") {
+			e.preventDefault();
+			const handle = await item.getAsFileSystemHandle();
+			if (handle) {
+				// since `item.kind === "file"` it will be a `FileSystemFileHandle`
+				fileHandle = handle as FileSystemFileHandle;
+				file = await fileHandle.getFile();
+				content = await file.text();
 			}
 		}
 	};
 
 	const toggleView = () => {
-		const toggleView = () => {
-			viewMode = !viewMode;
-		};
+		const toggleView = () => (viewMode = !viewMode);
 
 		if (document.startViewTransition) {
-			document.startViewTransition(() => {
-				toggleView();
-			});
-		} else {
-			toggleView();
-		}
+			document.startViewTransition(() => toggleView());
+		} else toggleView();
 	};
 
 	const changeViewType = (type: typeof preferences.viewType) => {
@@ -165,9 +153,8 @@
 	const changeProseSize = (action: "increase" | "decrease") => {
 		if (action === "increase") {
 			if (preferences.fontSize < fontSizes.length - 1) preferences.fontSize++;
-		} else {
-			if (preferences.fontSize > 0) preferences.fontSize--;
-		}
+		} else if (preferences.fontSize > 0) preferences.fontSize--;
+
 		savePreferences();
 	};
 
@@ -191,9 +178,8 @@
 
 	const onKeyUp = (e: KeyboardEvent) => {
 		save();
-		if (e.key === "i") {
-			textArea.focus();
-		}
+		if (e.key === "i") textArea.focus();
+
 		if (e.key === "Escape") {
 			toggleView();
 		} else {
@@ -244,9 +230,7 @@
 
 	$: {
 		processMarkdown(content ? content : gettingStarted.trim()).then(
-			(result) => {
-				html = result.html;
-			},
+			(result) => (html = result.html),
 		);
 	}
 </script>
