@@ -226,7 +226,7 @@
 		codeEval();
 	});
 
-	let html: string = "";
+	let html = "";
 
 	$: {
 		processMarkdown(content ? content : gettingStarted.trim()).then(
