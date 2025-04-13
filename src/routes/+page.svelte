@@ -61,9 +61,8 @@
 	];
 
 	const colors = {
-		prose: ["", "prose-teal", "prose-sky", "prose-rose"],
-		medium: ["bg-gray-500", "bg-teal-500", "bg-sky-500", "bg-rose-500"],
-		dark: ["bg-gray-900", "bg-teal-950", "bg-sky-950", "bg-red-950"],
+		medium: ["bg-gray-500", "bg-teal-500", "bg-sky-500", "bg-indigo-500"],
+		dark: ["bg-gray-900", "bg-teal-950", "bg-sky-950", "bg-indigo-950"],
 	};
 
 	const viewTypes = ["document", "slideshow"] as const;
@@ -149,7 +148,7 @@
 	};
 
 	const changeColor = () => {
-		if (preferences.color < colors.prose.length - 1) {
+		if (preferences.color < colors.medium.length - 1) {
 			preferences.color++;
 		} else {
 			preferences.color = 0;
@@ -192,6 +191,14 @@
 		}
 	};
 
+	const onInput = async () => {
+		html = (await processMarkdown(content ? content : gettingStarted.trim()))
+			.html;
+
+		await tick();
+		codeEval();
+	};
+
 	const findCurrentSlide = () => {
 		if (preferences.viewType === "slideshow" && !viewMode) {
 			const s = content.slice(0, textArea.selectionStart);
@@ -211,25 +218,17 @@
 			savePreferences();
 		}
 
+		onInput();
 		await import("drab/define");
-	});
-
-	$effect(() => {
-		processMarkdown(content ? content : gettingStarted.trim()).then(
-			async (result) => {
-				html = result.html;
-				await tick();
-				codeEval();
-			},
-		);
 	});
 </script>
 
 <svelte:document onkeyup={onKeyUp} onkeydown={onKeyDown} />
 
 <div
-	class="selection:bg-opacity-40 flex h-[100dvh] flex-col bg-gray-950 text-gray-50 selection:bg-gray-400 {colors
-		.prose[preferences.color]} {fontFamilies[preferences.fontFamily]}"
+	class="selection:bg-opacity-40 flex h-[100dvh] flex-col bg-gray-950 text-gray-50 selection:bg-gray-400 {fontFamilies[
+		preferences.fontFamily
+	]}"
 	ondrop={dropFile}
 	role="main"
 >
@@ -323,6 +322,7 @@
 							.dark[preferences.color]}"
 						placeholder="# Title"
 						bind:value={content}
+						oninput={onInput}
 					></textarea>
 					<div class="flex flex-wrap p-3">
 						<button
