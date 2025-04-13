@@ -1,21 +1,90 @@
-@import url("$lib/styles/highlight.postcss");
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 @layer base {
 	::view-transition-group(*) {
 		animation-duration: 180ms;
 		animation-timing-function: ease-in-out;
 	}
+
 	h1 {
 		text-wrap: balance;
+	}
+
+	.hljs-doctag,
+	.hljs-keyword,
+	.hljs-meta .hljs-keyword,
+	.hljs-template-tag,
+	.hljs-template-variable,
+	.hljs-type,
+	.hljs-variable.language_,
+	.hljs-deletion,
+	.hljs-built_in,
+	.hljs-symbol,
+	.hljs-bullet {
+		color: var(--color-rose-400);
+	}
+
+	.hljs-title,
+	.hljs-title.class_,
+	.hljs-title.class_.inherited__,
+	.hljs-title.function_ {
+		color: var(--color-violet-300);
+	}
+
+	.hljs-attr,
+	.hljs-attribute,
+	.hljs-literal,
+	.hljs-meta,
+	.hljs-number,
+	.hljs-operator,
+	.hljs-variable,
+	.hljs-selector-attr,
+	.hljs-selector-class,
+	.hljs-selector-id {
+		color: var(--color-sky-300);
+	}
+
+	.hljs-regexp,
+	.hljs-string,
+	.hljs-meta .hljs-string {
+		color: var(--color-sky-200);
+	}
+
+	.hljs-comment,
+	.hljs-code,
+	.hljs-formula {
+		color: var(--color-gray-400);
+	}
+
+	.hljs-name,
+	.hljs-quote,
+	.hljs-selector-tag,
+	.hljs-selector-pseudo,
+	.hljs-addition {
+		color: var(--color-teal-300);
+	}
+
+	.hljs-subst {
+		color: var(--color-gray-200);
+	}
+
+	.hljs-section {
+		color: var(--color-sky-500);
+		font-weight: var(--font-weight-bold);
+	}
+
+	.hljs-emphasis {
+		font-style: italic;
+	}
+
+	.hljs-strong {
+		font-weight: var(--font-weight-bold);
 	}
 }
 
 @layer components {
 	.button {
-		@apply flex min-w-[2.5rem] items-center justify-center gap-1 rounded-lg p-2 font-semibold leading-none transition hover:scale-[103%] hover:bg-gray-500/20 active:scale-95 active:bg-gray-500/30 disabled:cursor-not-allowed disabled:text-gray-400 disabled:hover:bg-transparent;
+		@apply flex min-w-[2.5rem] items-center justify-center gap-1 rounded-lg p-2 leading-none font-semibold transition hover:scale-[103%] hover:bg-gray-500/20 active:scale-95 active:bg-gray-500/30 disabled:cursor-not-allowed disabled:text-gray-400 disabled:hover:bg-transparent;
 	}
 }

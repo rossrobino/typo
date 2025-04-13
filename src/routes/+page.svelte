@@ -22,7 +22,6 @@
 	import ZoomOut from "$lib/components/svg/ZoomOut.svelte";
 	import gettingStarted from "$lib/gettingStarted.md?raw";
 	import { codeEval } from "$lib/utilities/codeEval";
-	import { formatMd } from "$lib/utilities/formatMd";
 	import "../tailwind.css";
 	import { inject } from "@vercel/analytics";
 	import { processMarkdown } from "robino/util/md";
@@ -188,6 +187,7 @@
 	};
 
 	const fmt = async () => {
+		const { formatMd } = await import("$lib/utilities/formatMd");
 		const sel = textArea.selectionStart;
 		content = await formatMd(content);
 		await tick();
@@ -238,7 +238,7 @@
 <svelte:document on:keyup={onKeyUp} on:keydown={onKeyDown} />
 
 <div
-	class="flex h-[100dvh] flex-col bg-gray-950 text-gray-50 selection:bg-gray-400 selection:bg-opacity-40"
+	class="selection:bg-opacity-40 flex h-[100dvh] flex-col bg-gray-950 text-gray-50 selection:bg-gray-400"
 	on:drop={dropFile}
 	role="main"
 >
@@ -457,7 +457,7 @@
 			>
 				<!-- content -->
 				<div
-					class="prose prose-gray mx-auto h-full max-w-[72ch] break-words transition-[font-size] dark:prose-invert prose-img:rounded-lg {fontSizes[
+					class="prose prose-gray dark:prose-invert prose-img:rounded-lg mx-auto h-full max-w-[72ch] break-words transition-[font-size] {fontSizes[
 						preferences.fontSize
 					]} {colors.prose[preferences.color]} {fontFamilies[
 						preferences.fontFamily
