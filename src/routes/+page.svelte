@@ -228,7 +228,8 @@
 <svelte:document onkeyup={onKeyUp} onkeydown={onKeyDown} />
 
 <div
-	class="selection:bg-opacity-40 flex h-[100dvh] flex-col bg-gray-950 text-gray-50 selection:bg-gray-400"
+	class="selection:bg-opacity-40 flex h-[100dvh] flex-col bg-gray-950 text-gray-50 selection:bg-gray-400 {colors
+		.prose[preferences.color]} {fontFamilies[preferences.fontFamily]}"
 	ondrop={dropFile}
 	role="main"
 >
@@ -448,8 +449,6 @@
 				<div
 					class="prose prose-gray dark:prose-invert prose-img:rounded-lg mx-auto h-full max-w-[72ch] break-words transition-[font-size] {fontSizes[
 						preferences.fontSize
-					]} {colors.prose[preferences.color]} {fontFamilies[
-						preferences.fontFamily
 					]}"
 				>
 					{#if preferences.viewType === "document"}
