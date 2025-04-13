@@ -450,11 +450,7 @@
 							data-trigger
 							class="button"
 							title="Slide"
-							data-value="
-
----
-
-"
+							data-value="---"
 							data-type="inline"
 						>
 							<Slideshow />

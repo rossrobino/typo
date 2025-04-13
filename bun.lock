@@ -12,7 +12,7 @@
         "@types/wicg-file-system-access": "^2023.10.5",
         "@vercel/analytics": "^1.3.1",
         "autoprefixer": "^10.4.21",
-        "drab": "^6.1.1",
+        "drab": "^6.1.2",
         "prettier-plugin-svelte": "^3.3.3",
         "prettier-plugin-tailwindcss": "^0.6.11",
         "robino": "^0.2.0",
@@ -246,7 +246,7 @@
 
     "dlv": ["dlv@1.1.3", "", {}, "sha512-+HlytyjlPKnIG8XuRG8WvmBP8xs8P71y+SKKS6ZXWoEgLuePxtDoUEiH7WkdePWrQ5JBpE6aoVqfZfJUQkjXwA=="],
 
-    "drab": ["drab@6.1.1", "", {}, "sha512-cIaPkIIo2Z/LhCzcp5VmFEf2uG4XY9UDCNpLBwAIQYCWjNva2n0egygbbrBRWzDq6L+NAjl2L8gNaHBeZucx1g=="],
+    "drab": ["drab@6.1.2", "", {}, "sha512-wofngg3vA71/y0RLoCCpiS7QKbwFfgvBZasLJBmbVo5mPRm1XbV0mNeYWdK26BUoQ4rFE3v9ustrrMj8NlkXfA=="],
 
     "eastasianwidth": ["eastasianwidth@0.2.0", "", {}, "sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA=="],
 
