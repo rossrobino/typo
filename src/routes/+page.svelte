@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { dev, browser } from "$app/environment";
+	import { dev } from "$app/environment";
 	import Metrics from "$lib/components/Metrics.svelte";
 	import PrintButton from "$lib/components/PrintButton.svelte";
 	import Slides from "$lib/components/Slides.svelte";
@@ -43,8 +43,7 @@
 	let fileHandle: FileSystemFileHandle | null;
 
 	/** `true` if the browser supports the `window.showOpenFilePicker` method */
-	let supported = false;
-	if (browser) supported = Boolean(window.showOpenFilePicker);
+	const supported = Boolean(window.showOpenFilePicker);
 
 	const fontSizes = [
 		"prose-sm",
