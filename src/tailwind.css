@@ -83,6 +83,24 @@
 	}
 }
 
+@utility font-old-style {
+	font-family:
+		"Iowan Old Style", "Palatino Linotype", "URW Palladio L", P052, serif;
+}
+
+@utility font-sans-rounded {
+	font-family:
+		ui-rounded, "Hiragino Maru Gothic ProN", Quicksand, Comfortaa, Manjari,
+		"Arial Rounded MT", "Arial Rounded MT Bold", Calibri, source-sans-pro,
+		sans-serif;
+}
+
+@utility font-humanist {
+	font-family:
+		Seravek, "Gill Sans Nova", Ubuntu, Calibri, "DejaVu Sans", source-sans-pro,
+		sans-serif;
+}
+
 @layer components {
 	.button {
 		@apply flex min-w-[2.5rem] items-center justify-center gap-1 rounded-lg p-2 leading-none font-semibold transition hover:scale-[103%] hover:bg-gray-500/20 active:scale-95 active:bg-gray-500/30 disabled:cursor-not-allowed disabled:text-gray-400 disabled:hover:bg-transparent;

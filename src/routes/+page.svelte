@@ -54,9 +54,9 @@
 
 	const fontFamilies = [
 		"font-sans",
-		"font-sans-rounded",
+		"font-humanist",
 		"font-serif",
-		"font-antique",
+		"font-old-style",
 		"font-mono",
 	];
 
