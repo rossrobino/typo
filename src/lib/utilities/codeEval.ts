@@ -64,11 +64,10 @@ export const codeEval = async () => {
 };
 
 const getLang = (el: HTMLElement) => {
-	const classes = el.className.split(" ");
-	for (const className of classes) {
-		if (className.startsWith("language-")) {
+	for (const className of el.className.split(" ")) {
+		if (className.startsWith("language-"))
 			return className.substring("language-".length);
-		}
 	}
+
 	return "";
 };

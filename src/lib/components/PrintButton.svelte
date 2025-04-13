@@ -1,7 +1,7 @@
 <script lang="ts">
 	import printCss from "$lib/styles/print.css?raw";
 
-	export let innerHtml: string;
+	let { innerHtml }: { innerHtml: string } = $props();
 
 	const printContent = () => {
 		const printWindow = window.open("", "_blank");
@@ -21,7 +21,7 @@
 	};
 </script>
 
-<button title="Print" class="button" on:click={printContent}>
+<button title="Print" class="button" onclick={printContent}>
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
 		viewBox="0 0 24 24"

@@ -25,25 +25,24 @@
 	import "../tailwind.css";
 	import { inject } from "@vercel/analytics";
 	import { processMarkdown } from "robino/util/md";
-	import { afterUpdate, onMount, tick } from "svelte";
+	import { onMount, tick } from "svelte";
 
 	inject({ mode: dev ? "development" : "production" });
 
 	/** raw text that the user enters into the `textarea` element */
-	let content = "";
+	let content = $state("");
+
+	let html = $state("");
 
 	/** controls the expansion of the preview area */
-	let viewMode = false;
+	let viewMode = $state(false);
 
 	let textArea: HTMLTextAreaElement;
 
-	let currentSlide: number;
+	let currentSlide = $state(0);
 
-	let file: File | null;
+	let file: File | null = $state(null);
 	let fileHandle: FileSystemFileHandle | null;
-
-	/** `true` if the browser supports the `window.showOpenFilePicker` method */
-	const supported = Boolean(window.showOpenFilePicker);
 
 	const fontSizes = [
 		"prose-sm",
@@ -69,19 +68,12 @@
 
 	const viewTypes = ["document", "slideshow"] as const;
 
-	interface Preferences {
+	let preferences: {
 		fontSize: number;
 		fontFamily: number;
 		color: number;
 		viewType: (typeof viewTypes)[number];
-	}
-
-	let preferences: Preferences = {
-		fontSize: 1,
-		fontFamily: 0,
-		color: 0,
-		viewType: "document",
-	};
+	} = $state({ fontSize: 1, fontFamily: 0, color: 0, viewType: "document" });
 
 	const savePreferences = () =>
 		localStorage.setItem("preferences", JSON.stringify(preferences));
@@ -210,6 +202,8 @@
 	};
 
 	onMount(async () => {
+		textArea = document.querySelector("textarea")!;
+
 		const saved = localStorage.getItem("preferences");
 		if (saved) {
 			preferences = JSON.parse(saved);
@@ -220,41 +214,38 @@
 		await import("drab/define");
 	});
 
-	afterUpdate(async () => {
-		await tick();
-		codeEval();
-	});
-
-	let html = "";
-
-	$: {
+	$effect(() => {
 		processMarkdown(content ? content : gettingStarted.trim()).then(
-			(result) => (html = result.html),
+			async (result) => {
+				html = result.html;
+				await tick();
+				codeEval();
+			},
 		);
-	}
+	});
 </script>
 
-<svelte:document on:keyup={onKeyUp} on:keydown={onKeyDown} />
+<svelte:document onkeyup={onKeyUp} onkeydown={onKeyDown} />
 
 <div
 	class="selection:bg-opacity-40 flex h-[100dvh] flex-col bg-gray-950 text-gray-50 selection:bg-gray-400"
-	on:drop={dropFile}
+	ondrop={dropFile}
 	role="main"
 >
 	{#if !viewMode}
 		<header class="flex justify-between p-3 text-sm">
 			<nav class="flex w-full items-center justify-between sm:w-fit">
 				<div class="flex">
-					{#if supported}
+					{#if Boolean(window.showOpenFilePicker)}
 						<button
 							title="Open (or drag and drop)"
 							class="button"
-							on:click={open}
+							onclick={open}
 						>
 							<Open />
 							<span class="hidden lg:inline">Open</span>
 						</button>
-						<button title="Save As" class="button" on:click={saveAs}>
+						<button title="Save As" class="button" onclick={saveAs}>
 							<Save />
 							<span class="hidden lg:inline">Save As</span>
 						</button>
@@ -293,7 +284,7 @@
 						</button>
 					</drab-copy>
 					<PrintButton innerHtml={html} />
-					<button title="Format" on:click={fmt} class="button">
+					<button title="Format" onclick={fmt} class="button">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							viewBox="0 0 24 24"
@@ -311,7 +302,7 @@
 						</svg>
 						<span class="hidden lg:inline">Format</span>
 					</button>
-					<button title="View" class="button lg:hidden" on:click={toggleView}>
+					<button title="View" class="button lg:hidden" onclick={toggleView}>
 						<View />
 					</button>
 				</div>
@@ -326,7 +317,6 @@
 			<div class="flex h-full flex-col">
 				<drab-editor class="contents">
 					<textarea
-						bind:this={textArea}
 						data-content
 						class="grow resize-none appearance-none overflow-y-auto p-6 font-mono text-sm transition placeholder:text-gray-400 focus:outline-none {colors
 							.dark[preferences.color]}"
@@ -485,7 +475,7 @@
 							class="button group-hover:opacity-100"
 							class:opacity-0={viewMode}
 							disabled={preferences.viewType === type}
-							on:click={() => changeViewType(type)}
+							onclick={() => changeViewType(type)}
 							title={type}
 						>
 							{#if type === "document"}
@@ -507,7 +497,7 @@
 						class="button group-hover:opacity-100"
 						aria-label="Change Color"
 						class:opacity-0={viewMode}
-						on:click={changeColor}
+						onclick={changeColor}
 					>
 						<div
 							class="h-5 w-5 rounded-full border-2 border-gray-50 {colors
@@ -522,7 +512,7 @@
 							preferences.fontFamily
 						]}"
 						class:opacity-0={viewMode}
-						on:click={changeFontFamily}
+						onclick={changeFontFamily}
 						aria-label={preferences.fontFamily ? "sans-serif" : "serif"}
 					>
 						F
@@ -532,7 +522,7 @@
 						class="button group-hover:opacity-100"
 						class:opacity-0={viewMode}
 						disabled={preferences.fontSize < 1}
-						on:click={() => changeProseSize("decrease")}
+						onclick={() => changeProseSize("decrease")}
 					>
 						<ZoomOut />
 					</button>
@@ -541,7 +531,7 @@
 						class="button group-hover:opacity-100"
 						class:opacity-0={viewMode}
 						disabled={preferences.fontSize >= fontSizes.length - 1}
-						on:click={() => changeProseSize("increase")}
+						onclick={() => changeProseSize("increase")}
 					>
 						<ZoomIn />
 					</button>
@@ -572,7 +562,7 @@
 					<button
 						title={viewMode ? "Edit" : "View"}
 						class="button"
-						on:click={toggleView}
+						onclick={toggleView}
 					>
 						{#if viewMode}
 							<Edit />

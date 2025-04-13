@@ -1,26 +1,31 @@
 <script lang="ts">
 	import Arrow from "$lib/components/svg/Arrow.svelte";
 	import { codeEval } from "$lib/utilities/codeEval";
-	import { afterUpdate } from "svelte";
+	import { tick } from "svelte";
 
-	export let html = "";
-	export let currentSlide = 0;
-	export let viewMode: boolean;
+	let {
+		html = "",
+		currentSlide = $bindable(0),
+		viewMode = $bindable(),
+	}: { html: string; currentSlide: number; viewMode: boolean } = $props();
 
-	$: numberOfSlides = splitHtml(html).length;
+	const splitHtml = () => html.split("<hr>");
 
-	$: if (currentSlide >= numberOfSlides) currentSlide = numberOfSlides - 1;
+	let numberOfSlides = $derived(splitHtml().length);
 
-	const splitHtml = (html: string) => {
-		return html.split("<hr>");
-	};
+	$effect(() => {
+		if (currentSlide >= numberOfSlides) currentSlide = numberOfSlides - 1;
+	});
 
-	const changeSlide = (direction: "previous" | "next") => {
+	const changeSlide = async (direction: "previous" | "next") => {
 		if (direction === "next" && currentSlide < numberOfSlides - 1) {
 			currentSlide++;
 		} else if (direction === "previous" && currentSlide) {
 			currentSlide--;
 		}
+
+		await tick();
+		codeEval();
 	};
 
 	const onKeydown = ({ key }: KeyboardEvent) => {
@@ -32,17 +37,13 @@
 			}
 		}
 	};
-
-	afterUpdate(() => {
-		codeEval();
-	});
 </script>
 
-<svelte:document on:keydown={onKeydown} />
+<svelte:document onkeydown={onKeydown} />
 
 <div class="flex h-full flex-col">
 	<article class="flex grow flex-col justify-center p-8">
-		{#each splitHtml(html) as slide, i}
+		{#each splitHtml() as slide, i}
 			{#if i === currentSlide}
 				<section>
 					{@html slide}
@@ -61,7 +62,7 @@
 					title="Previous Slide"
 					disabled={!currentSlide}
 					class="button button-s rotate-180"
-					on:click={() => changeSlide("previous")}
+					onclick={() => changeSlide("previous")}
 				>
 					<Arrow />
 				</button>
@@ -70,7 +71,7 @@
 					title="Next Slide"
 					disabled={currentSlide >= numberOfSlides - 1}
 					class="button button-s"
-					on:click={() => changeSlide("next")}
+					onclick={() => changeSlide("next")}
 				>
 					<Arrow />
 				</button>
