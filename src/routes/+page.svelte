@@ -3,23 +3,7 @@
 	import Metrics from "$lib/components/Metrics.svelte";
 	import PrintButton from "$lib/components/PrintButton.svelte";
 	import Slides from "$lib/components/Slides.svelte";
-	import Anchor from "$lib/components/svg/Anchor.svelte";
-	import Blockquote from "$lib/components/svg/Blockquote.svelte";
-	import Bullet from "$lib/components/svg/Bullet.svelte";
-	import Code from "$lib/components/svg/Code.svelte";
-	import CodeBracket from "$lib/components/svg/CodeBracket.svelte";
-	import Copy from "$lib/components/svg/Copy.svelte";
-	import CopyComplete from "$lib/components/svg/CopyComplete.svelte";
-	import Document from "$lib/components/svg/Document.svelte";
-	import Edit from "$lib/components/svg/Edit.svelte";
-	import Image from "$lib/components/svg/Image.svelte";
-	import Open from "$lib/components/svg/Open.svelte";
-	import Save from "$lib/components/svg/Save.svelte";
-	import Slideshow from "$lib/components/svg/Slideshow.svelte";
-	import Table from "$lib/components/svg/Table.svelte";
-	import View from "$lib/components/svg/View.svelte";
-	import ZoomIn from "$lib/components/svg/ZoomIn.svelte";
-	import ZoomOut from "$lib/components/svg/ZoomOut.svelte";
+	import * as svg from "$lib/components/svg";
 	import gettingStarted from "$lib/content/getting-started.md?raw";
 	import { codeEval } from "$lib/util/codeEval";
 	import "../tailwind.css";
@@ -127,11 +111,10 @@
 	};
 
 	const toggleView = () => {
-		const toggleView = () => (viewMode = !viewMode);
+		const tv = () => (viewMode = !viewMode);
 
-		if (document.startViewTransition) {
-			document.startViewTransition(() => toggleView());
-		} else toggleView();
+		if (document.startViewTransition) document.startViewTransition(tv);
+		else tv();
 	};
 
 	const changeViewType = (type: typeof preferences.viewType) => {
@@ -218,8 +201,12 @@
 			savePreferences();
 		}
 
-		onInput();
-		await import("drab/define");
+		await Promise.all([
+			onInput(),
+			import("drab/editor/define"),
+			import("drab/fullscreen/define"),
+			import("drab/copy/define"),
+		]);
 	});
 </script>
 
@@ -242,11 +229,11 @@
 							class="button"
 							onclick={open}
 						>
-							<Open />
+							<svg.Open />
 							<span class="hidden lg:inline">Open</span>
 						</button>
 						<button title="Save As" class="button" onclick={saveAs}>
-							<Save />
+							<svg.Save />
 							<span class="hidden lg:inline">Save As</span>
 						</button>
 					{:else}
@@ -256,17 +243,17 @@
 							title="Download"
 							class="button"
 						>
-							<Save />
+							<svg.Save />
 							<span class="hidden lg:inline">Download</span>
 						</a>
 					{/if}
 					<drab-copy value={content} class="contents">
 						<button data-trigger class="button">
 							<span data-content>
-								<Copy />
+								<svg.Copy />
 							</span>
 							<template data-swap>
-								<CopyComplete />
+								<svg.CopyComplete />
 							</template>
 							<span class="hidden lg:inline">Copy</span>
 						</button>
@@ -275,35 +262,21 @@
 					<drab-copy value={html} class="contents">
 						<button data-trigger title="Copy HTML" class="button">
 							<span data-content>
-								<Code />
+								<svg.Code />
 							</span>
 							<template data-swap>
-								<CopyComplete />
+								<svg.CopyComplete />
 							</template>
 							<span class="hidden lg:inline">Copy</span>
 						</button>
 					</drab-copy>
 					<PrintButton innerHtml={html} />
 					<button title="Format" onclick={fmt} class="button">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							viewBox="0 0 24 24"
-							fill="currentColor"
-							class="h-5 w-5"
-						>
-							<path
-								fill-rule="evenodd"
-								d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0016.5 9h-1.875a1.875 1.875 0 01-1.875-1.875V5.25A3.75 3.75 0 009 1.5H5.625zM7.5 15a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5A.75.75 0 017.5 15zm.75 2.25a.75.75 0 000 1.5H12a.75.75 0 000-1.5H8.25z"
-								clip-rule="evenodd"
-							/>
-							<path
-								d="M12.971 1.816A5.23 5.23 0 0114.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 013.434 1.279 9.768 9.768 0 00-6.963-6.963z"
-							/>
-						</svg>
+						<svg.Document />
 						<span class="hidden lg:inline">Format</span>
 					</button>
 					<button title="View" class="button lg:hidden" onclick={toggleView}>
-						<View />
+						<svg.View />
 					</button>
 				</div>
 			</nav>
@@ -341,7 +314,7 @@
 							data-value="- "
 							data-type="block"
 						>
-							<Bullet />
+							<svg.Bullet />
 						</button>
 						<button
 							data-trigger
@@ -350,7 +323,7 @@
 							data-value="> "
 							data-type="block"
 						>
-							<Blockquote />
+							<svg.Blockquote />
 						</button>
 						<button
 							data-trigger
@@ -388,7 +361,7 @@
 							data-key="["
 						>
 							<span>
-								<Anchor />
+								<svg.Anchor />
 							</span>
 						</button>
 						<button
@@ -399,7 +372,7 @@
 							data-type="inline"
 							data-key="]"
 						>
-							<Image />
+							<svg.Image />
 						</button>
 						<button
 							data-trigger
@@ -409,7 +382,7 @@
 							data-type="inline"
 							data-key={"\\"}
 						>
-							<Table />
+							<svg.Table />
 						</button>
 						<button
 							data-trigger
@@ -418,7 +391,7 @@
 							data-value={"`"}
 							data-type="wrap"
 						>
-							<CodeBracket />
+							<svg.CodeBracket />
 						</button>
 						<button
 							data-trigger
@@ -427,7 +400,7 @@
 							data-value="---"
 							data-type="inline"
 						>
-							<Slideshow />
+							<svg.Slideshow />
 						</button>
 					</div>
 				</drab-editor>
@@ -478,9 +451,9 @@
 							title={type}
 						>
 							{#if type === "document"}
-								<Document />
+								<svg.Document />
 							{:else if type === "slideshow"}
-								<Slideshow />
+								<svg.Slideshow />
 							{/if}
 						</button>
 					{/each}
@@ -523,7 +496,7 @@
 						disabled={preferences.fontSize < 1}
 						onclick={() => changeProseSize("decrease")}
 					>
-						<ZoomOut />
+						<svg.ZoomOut />
 					</button>
 					<button
 						title="Increase Font Size"
@@ -532,9 +505,8 @@
 						disabled={preferences.fontSize >= fontSizes.length - 1}
 						onclick={() => changeProseSize("increase")}
 					>
-						<ZoomIn />
+						<svg.ZoomIn />
 					</button>
-
 					<drab-fullscreen class="contents">
 						<button
 							data-trigger
@@ -542,31 +514,18 @@
 							class="button group-hover:opacity-100"
 							class:opacity-0={viewMode}
 						>
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								viewBox="0 0 24 24"
-								fill="currentColor"
-								class="h-5 w-5"
-							>
-								<path
-									fill-rule="evenodd"
-									d="M15 3.75a.75.75 0 0 1 .75-.75h4.5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-1.5 0V5.56l-3.97 3.97a.75.75 0 1 1-1.06-1.06l3.97-3.97h-2.69a.75.75 0 0 1-.75-.75Zm-12 0A.75.75 0 0 1 3.75 3h4.5a.75.75 0 0 1 0 1.5H5.56l3.97 3.97a.75.75 0 0 1-1.06 1.06L4.5 5.56v2.69a.75.75 0 0 1-1.5 0v-4.5Zm11.47 11.78a.75.75 0 1 1 1.06-1.06l3.97 3.97v-2.69a.75.75 0 0 1 1.5 0v4.5a.75.75 0 0 1-.75.75h-4.5a.75.75 0 0 1 0-1.5h2.69l-3.97-3.97Zm-4.94-1.06a.75.75 0 0 1 0 1.06L5.56 19.5h2.69a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1-.75-.75v-4.5a.75.75 0 0 1 1.5 0v2.69l3.97-3.97a.75.75 0 0 1 1.06 0Z"
-									clip-rule="evenodd"
-								/>
-							</svg>
+							<svg.Fullscreen />
 						</button>
 					</drab-fullscreen>
-
-					<!-- viewMode toggle -->
 					<button
 						title={viewMode ? "Edit" : "View"}
 						class="button"
 						onclick={toggleView}
 					>
 						{#if viewMode}
-							<Edit />
+							<svg.Edit />
 						{:else}
-							<View />
+							<svg.View />
 						{/if}
 					</button>
 				</div>
