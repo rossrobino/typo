@@ -8,7 +8,6 @@
 	import { codeEval } from "$lib/util/codeEval";
 	import "../tailwind.css";
 	import { inject } from "@vercel/analytics";
-	import { processMarkdown } from "robino/util/md";
 	import { onMount, tick } from "svelte";
 
 	inject({ mode: dev ? "development" : "production" });
@@ -181,8 +180,8 @@
 	};
 
 	const onInput = async () => {
-		html = (await processMarkdown(content ? content : gettingStarted.trim()))
-			.html;
+		const { processor } = await import("$lib/util/md");
+		html = processor.render(content ? content : gettingStarted.trim());
 
 		await tick();
 		codeEval();
