@@ -108,6 +108,8 @@
 				content = await file.text();
 			}
 		}
+
+		onInput();
 	};
 
 	const toggleView = () => {
@@ -117,8 +119,12 @@
 		else tv();
 	};
 
-	const changeViewType = (type: typeof preferences.viewType) => {
-		preferences.viewType = type;
+	const changeViewType = () => {
+		if (preferences.viewType === "document") {
+			preferences.viewType = "slideshow";
+		} else {
+			preferences.viewType = "document";
+		}
 		savePreferences();
 	};
 
@@ -213,11 +219,10 @@
 <svelte:document onkeyup={onKeyUp} onkeydown={onKeyDown} />
 
 <div
-	class="selection:bg-opacity-40 flex h-[100dvh] flex-col bg-gray-950 text-gray-50 selection:bg-gray-400 {fontFamilies[
-		preferences.fontFamily
-	]}"
-	ondrop={dropFile}
-	role="main"
+	class={[
+		"flex h-[100dvh] flex-col bg-gray-950 text-gray-50 selection:bg-gray-400/40",
+		fontFamilies[preferences.fontFamily],
+	]}
 >
 	{#if !viewMode}
 		<header class="flex justify-between p-3 text-sm">
@@ -285,14 +290,19 @@
 			</div>
 		</header>
 	{/if}
-	<main class="grid grow overflow-hidden {viewMode ? '' : 'lg:grid-cols-2'}">
+	<main
+		class={["grid grow overflow-hidden", !viewMode && "lg:grid-cols-2"]}
+		ondrop={dropFile}
+	>
 		{#if !viewMode}
 			<div class="flex h-full flex-col">
 				<drab-editor class="contents">
 					<textarea
 						data-content
-						class="grow resize-none appearance-none overflow-y-auto p-6 font-mono text-sm transition placeholder:text-gray-400 focus:outline-none {colors
-							.dark[preferences.color]}"
+						class={[
+							"grow resize-none appearance-none overflow-y-auto p-6 font-mono text-sm transition placeholder:text-gray-400 focus:outline-none",
+							colors.dark[preferences.color],
+						]}
 						placeholder="# Title"
 						bind:value={content}
 						oninput={onInput}
@@ -408,7 +418,7 @@
 		{/if}
 		<div
 			style="view-transition-name: preview;"
-			class="flex-col lg:flex {viewMode ? 'flex' : 'hidden'}"
+			class={["flex-col lg:flex", viewMode ? "flex" : "hidden"]}
 		>
 			<div
 				class="grow overflow-y-auto border-gray-100 bg-white dark:border-y dark:border-gray-900 dark:bg-gray-950 {viewMode
@@ -420,9 +430,10 @@
 			>
 				<!-- content -->
 				<div
-					class="prose prose-gray dark:prose-invert prose-img:rounded-lg mx-auto h-full max-w-[72ch] break-words transition-[font-size] {fontSizes[
-						preferences.fontSize
-					]}"
+					class={[
+						"prose dark:prose-invert prose-img:rounded-lg mx-auto h-full max-w-[72ch] break-words transition-[font-size]",
+						fontSizes[preferences.fontSize],
+					]}
 				>
 					{#if preferences.viewType === "document"}
 						<div class="p-8">
@@ -434,29 +445,28 @@
 				</div>
 			</div>
 			<div
-				class="group flex justify-between p-3"
-				class:bg-white={viewMode}
-				class:text-gray-950={viewMode}
-				class:dark:bg-gray-950={viewMode}
-				class:dark:text-gray-50={viewMode}
+				class={[
+					"group flex justify-between p-3",
+					viewMode &&
+						"bg-white text-gray-950 dark:bg-gray-950 dark:text-gray-50",
+				]}
 			>
 				<!-- viewType controls -->
 				<div class="flex">
-					{#each viewTypes as type}
-						<button
-							class="button group-hover:opacity-100"
-							class:opacity-0={viewMode}
-							disabled={preferences.viewType === type}
-							onclick={() => changeViewType(type)}
-							title={type}
-						>
-							{#if type === "document"}
-								<svg.Document />
-							{:else if type === "slideshow"}
-								<svg.Slideshow />
-							{/if}
-						</button>
-					{/each}
+					<button
+						class="button group-hover:opacity-100"
+						class:opacity-0={viewMode}
+						onclick={() => changeViewType()}
+						title="Change to {preferences.viewType === 'document'
+							? 'slideshow'
+							: 'document'} view"
+					>
+						{#if preferences.viewType === "slideshow"}
+							<svg.Document />
+						{:else}
+							<svg.Slideshow />
+						{/if}
+					</button>
 					<div
 						class="transition group-hover:opacity-100"
 						class:opacity-0={viewMode}

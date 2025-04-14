@@ -1,6 +1,8 @@
 <script lang="ts">
 	let { content }: { content: string } = $props();
 
+	const { format } = Intl.NumberFormat();
+
 	let wordCount = $derived(
 		content
 			.trim()
@@ -19,12 +21,12 @@
 	class="ml-4 hidden h-full flex-wrap items-center gap-2 text-sm tabular-nums sm:flex"
 >
 	<div>
-		{content.length} char
+		{format(content.length)} char
 	</div>
 	<div>
-		{wordCount} word
+		{format(wordCount)} word
 	</div>
 	<div>
-		{readingTime} min
+		{format(readingTime)} min
 	</div>
 </div>
