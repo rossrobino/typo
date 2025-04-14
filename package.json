@@ -18,12 +18,12 @@
 		"@sveltejs/kit": "^2.20.5",
 		"@sveltejs/vite-plugin-svelte": "^5.0.3",
 		"@tailwindcss/typography": "^0.5.16",
-		"@tailwindcss/vite": "^4.1.3",
+		"@tailwindcss/vite": "^4.1.4",
 		"@types/wicg-file-system-access": "^2023.10.6",
 		"prettier-plugin-svelte": "^3.3.3",
 		"prettier-plugin-tailwindcss": "^0.6.11",
 		"svelte-check": "^4.1.6",
-		"tailwindcss": "^4.1.3",
+		"tailwindcss": "^4.1.4",
 		"typescript": "^5.8.3",
 		"vite": "^6.2.6"
 	},
@@ -32,6 +32,6 @@
 		"@vercel/analytics": "^1.5.0",
 		"drab": "^6.1.3",
 		"prettier": "^3.5.3",
-		"svelte": "^5.26.2"
+		"svelte": "^5.26.3"
 	}
 }

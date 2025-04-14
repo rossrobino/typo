@@ -12,7 +12,6 @@
 	}
 
 	:root {
-		/* syntax highlighting */
 		--shiki-foreground: var(--color-gray-200);
 		--shiki-background: var(--color-gray-900);
 		--shiki-token-constant: var(--color-gray-50);
