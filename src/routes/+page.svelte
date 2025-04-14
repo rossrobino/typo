@@ -20,8 +20,8 @@
 	import View from "$lib/components/svg/View.svelte";
 	import ZoomIn from "$lib/components/svg/ZoomIn.svelte";
 	import ZoomOut from "$lib/components/svg/ZoomOut.svelte";
-	import gettingStarted from "$lib/gettingStarted.md?raw";
-	import { codeEval } from "$lib/utilities/codeEval";
+	import gettingStarted from "$lib/content/getting-started.md?raw";
+	import { codeEval } from "$lib/util/codeEval";
 	import "../tailwind.css";
 	import { inject } from "@vercel/analytics";
 	import { processMarkdown } from "robino/util/md";
@@ -177,7 +177,7 @@
 	};
 
 	const fmt = async () => {
-		const { formatMd } = await import("$lib/utilities/formatMd");
+		const { formatMd } = await import("$lib/util/formatMd");
 		const sel = textArea.selectionStart;
 		content = await formatMd(content);
 		await tick();

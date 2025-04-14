@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Arrow from "$lib/components/svg/Arrow.svelte";
-	import { codeEval } from "$lib/utilities/codeEval";
+	import { codeEval } from "$lib/util/codeEval";
 	import { tick } from "svelte";
 
 	let {
