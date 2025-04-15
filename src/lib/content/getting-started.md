@@ -21,12 +21,12 @@ Content can be viewed as a **document** or **slideshow**, separate slides with `
 
 ## Execute Code
 
-JavaScript code blocks can be executed in the browser by clicking the block.
+JavaScript and TypeScript code blocks can be executed in the browser by clicking the block.
 
-````js
-// add a JavaScript code block (```js)
+````ts
+// add a TypeScript code block (```ts)
 
-function clickHere() {
+function clickHere(): string {
 	return "Hello world!";
 }
 

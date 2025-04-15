@@ -1,4 +1,4 @@
-export const codeEval = async () => {
+export const codeEval = () => {
 	const codeblocks = document.querySelectorAll<HTMLPreElement>("pre");
 
 	for (const block of codeblocks) {
@@ -6,7 +6,8 @@ export const codeEval = async () => {
 
 		if (input instanceof HTMLElement) {
 			const lang = getLang(input);
-			if (lang === "js") {
+
+			if (lang === "js" || lang === "ts") {
 				block.classList.add(
 					"cursor-pointer",
 					"transition",
@@ -17,10 +18,16 @@ export const codeEval = async () => {
 					"gap-2",
 				);
 
-				const code = input.textContent;
+				let code = input.textContent ?? "";
 
-				const onClick = (e: Event) => {
+				const onClick = async (e: Event) => {
 					e.stopImmediatePropagation();
+
+					if (lang === "ts") {
+						// only load if lang is ts and clicked
+						const { default: tsBlankSpace } = await import("ts-blank-space");
+						code = tsBlankSpace(code);
+					}
 
 					const output = block.lastChild;
 
@@ -29,7 +36,6 @@ export const codeEval = async () => {
 						block.removeChild(output);
 					} else {
 						let result = "";
-
 						let errorExists = false;
 
 						try {
@@ -56,6 +62,7 @@ export const codeEval = async () => {
 						block.appendChild(newOutput);
 					}
 				};
+
 				block.removeEventListener("click", onClick);
 				block.addEventListener("click", onClick);
 			}

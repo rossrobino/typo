@@ -32,6 +32,7 @@
 		"@vercel/analytics": "^1.5.0",
 		"drab": "^6.2.0",
 		"prettier": "^3.5.3",
-		"svelte": "^5.27.0"
+		"svelte": "^5.27.0",
+		"ts-blank-space": "^0.6.1"
 	}
 }
