@@ -166,9 +166,15 @@
 
 	const fmt = async () => {
 		const { formatMd } = await import("$lib/util/formatMd");
-		const sel = textArea.selectionStart;
+
+		let sel = textArea.selectionStart - content.trim().length;
+
 		content = await formatMd(content);
-		await tick();
+
+		sel += content.trim().length;
+
+		await onInput();
+
 		textArea.setSelectionRange(sel, sel);
 	};
 
