@@ -118,13 +118,16 @@
 		else tv();
 	};
 
-	const changeViewType = () => {
+	const changeViewType = async () => {
 		if (preferences.viewType === "document") {
 			preferences.viewType = "slideshow";
 		} else {
 			preferences.viewType = "document";
 		}
 		savePreferences();
+
+		await tick();
+		codeEval();
 	};
 
 	const changeProseSize = (action: "increase" | "decrease") => {
