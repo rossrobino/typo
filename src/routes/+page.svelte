@@ -212,12 +212,12 @@
 			savePreferences();
 		}
 
-		await Promise.all([
-			onInput(),
-			import("drab/editor/define"),
-			import("drab/fullscreen/define"),
-			import("drab/copy/define"),
-		]);
+		onInput(),
+			await Promise.all([
+				import("drab/editor/define"),
+				import("drab/fullscreen/define"),
+				import("drab/copy/define"),
+			]);
 	});
 </script>
 
@@ -230,7 +230,7 @@
 	]}
 >
 	{#if !viewMode}
-		<header class="flex justify-between p-3 text-sm">
+		<header class="flex justify-between border-b border-gray-800 p-2 text-sm">
 			<nav class="flex w-full items-center justify-between sm:w-fit">
 				<div class="flex">
 					{#if Boolean(window.showOpenFilePicker)}
@@ -305,14 +305,14 @@
 					<textarea
 						data-content
 						class={[
-							"grow resize-none appearance-none overflow-y-auto p-6 font-mono text-sm transition placeholder:text-gray-400 focus:outline-none",
+							"grow resize-none appearance-none overflow-y-auto p-5 font-mono text-sm transition placeholder:text-gray-400 focus:outline-none",
 							colors.dark[preferences.color],
 						]}
 						placeholder="# Title"
 						bind:value={content}
 						oninput={onInput}
 					></textarea>
-					<div class="flex flex-wrap p-3">
+					<div class="flex flex-wrap p-2">
 						<button
 							data-trigger
 							class="button"
@@ -344,7 +344,7 @@
 							data-trigger
 							class="button italic"
 							title="Italic"
-							data-value="*"
+							data-value="_"
 							data-type="wrap"
 						>
 							I
@@ -427,8 +427,8 @@
 		>
 			<div
 				class="grow overflow-y-auto border-gray-100 bg-white dark:border-y dark:border-gray-900 dark:bg-gray-950 {viewMode
-					? 'max-h-[calc(100dvh-3.75rem)]'
-					: 'max-h-[calc(100dvh-7.5rem)]'}"
+					? 'max-h-[calc(100dvh-3.25rem)]'
+					: 'max-h-[calc(100dvh-6.5rem)]'}"
 				class:border-y={preferences.viewType === "document" && viewMode}
 				class:dark:border-none={preferences.viewType === "slideshow" &&
 					viewMode}
@@ -451,7 +451,7 @@
 			</div>
 			<div
 				class={[
-					"group flex justify-between p-3",
+					"group flex justify-between p-2",
 					viewMode &&
 						"bg-white text-gray-950 dark:bg-gray-950 dark:text-gray-50",
 				]}
