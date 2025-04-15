@@ -1,14 +1,20 @@
 # Getting Started
 
-Write content in <a href="https://www.markdownguide.org/cheat-sheet/#basic-syntax" target="_blank">markdown</a>!
+Write content in [markdown](https://www.markdownguide.org/cheat-sheet/#basic-syntax)!
 
-Leave feedback or contribute to the project on <a href="https://github.com/rossrobino/typo" target="_blank">GitHub</a>.
+Typo is open source and distributed under the MIT License. Leave feedback, contribute, or fork the project on [GitHub](https://github.com/rossrobino/typo).
 
 ---
 
 ## View
 
 Content can be viewed as a **document** or **slideshow**, separate slides with an `<hr>` tag (`---`).
+
+---
+
+## Formatting
+
+Automatically format content with [Prettier](https://prettier.io) using the format button or <kbd>CTRL + S</kbd>.
 
 ---
 
