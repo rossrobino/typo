@@ -15,7 +15,7 @@
 	"devDependencies": {
 		"@robino/prettier": "^2.0.0",
 		"@sveltejs/adapter-vercel": "^5.7.0",
-		"@sveltejs/kit": "^2.20.5",
+		"@sveltejs/kit": "^2.20.7",
 		"@sveltejs/vite-plugin-svelte": "^5.0.3",
 		"@tailwindcss/typography": "^0.5.16",
 		"@tailwindcss/vite": "^4.1.4",
@@ -30,8 +30,8 @@
 	"dependencies": {
 		"@robino/md": "^3.2.3",
 		"@vercel/analytics": "^1.5.0",
-		"drab": "^6.1.3",
+		"drab": "^6.2.0",
 		"prettier": "^3.5.3",
-		"svelte": "^5.26.3"
+		"svelte": "^5.27.0"
 	}
 }

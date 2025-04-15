@@ -26,5 +26,5 @@ Typo is licensed under the MIT License.
 Contributions are welcome, Typo uses Svelte and SvelteKit. Feel free to improve existing features, add new features or report issues.
 
 1. Clone repo
-2. `bun install`
-3. `bun dev -- --open`
+2. `npm install`
+3. `npm run dev -- --open`
