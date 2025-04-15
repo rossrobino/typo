@@ -9,9 +9,12 @@ export const codeEval = () => {
 
 			if (lang === "js" || lang === "ts") {
 				block.classList.add(
-					"cursor-pointer",
+					"cursor-default",
+					"hover:shadow-md",
+					"hover:scale-[100.2%]",
 					"transition",
-					"active:scale-[99%]",
+					"active:scale-[99.8%]",
+					"active:shadow-none",
 					"group",
 					"flex",
 					"flex-col",
