@@ -15,7 +15,7 @@ Files are stored directly on the local computer, not in an online storage system
 
 ## View
 
-Content can be viewed as a **document** or **slideshow**, separate slides with `---`.
+Content can be viewed as a **document** or **slideshow**, separate slides with an `<hr>` tag (`---`).
 
 ---
 
