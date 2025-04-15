@@ -10,11 +10,15 @@ Typo is open source and distributed under the MIT License. Leave feedback, contr
 
 Content can be viewed as a **document** or **slideshow**, separate slides with an `<hr>` tag (`---`).
 
----
-
-## Formatting
+## Format
 
 Automatically format content with [Prettier](https://prettier.io) using the format button or <kbd>CTRL + S</kbd>.
+
+## Save
+
+When a file is opened or saved, all future changes are saved automatically.
+
+Files are stored directly on the local computer, not in an online storage system.
 
 ---
 
@@ -31,14 +35,6 @@ function clickHere(): string {
 
 clickHere();
 ````
-
----
-
-## Save
-
-When a file is opened or saved, all future changes are saved automatically.
-
-Files are stored directly on the local computer, not in an online storage system.
 
 ---
 
