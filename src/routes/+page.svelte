@@ -230,7 +230,7 @@
 	]}
 >
 	{#if !viewMode}
-		<header class="flex justify-between border-b border-gray-800 p-2 text-sm">
+		<header class="flex justify-between p-2 text-sm">
 			<nav class="flex w-full items-center justify-between sm:w-fit">
 				<div class="flex">
 					{#if Boolean(window.showOpenFilePicker)}
