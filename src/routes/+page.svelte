@@ -158,6 +158,7 @@
 
 	const onKeyUp = (e: KeyboardEvent) => {
 		save();
+
 		if (e.key === "i") textArea.focus();
 
 		if (e.key === "Escape") {
