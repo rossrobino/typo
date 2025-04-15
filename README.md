@@ -9,7 +9,7 @@ Welcome to [Typo](https://typo.robino.dev), a web-based markdown editor.
 - **Local Storage:** All files are exclusively stored locally on your device.
 - **Content View:** Provides the option to view content either as a document or as a slideshow.
 - **Slide Creation:** Enables users to create slides using the `<hr>` tag (`---`).
-- **Code Execution:** Permits the execution of `js` code blocks directly in the browser.
+- **Code Execution:** Permits the execution of `js` and `ts` code blocks directly in the browser.
 - **Formatted Printing:** Allows printing of formatted content.
 - **Markdown Formatting:** Applies Prettier for formatting markdown content.
 
