@@ -11,6 +11,11 @@
 		text-wrap: balance;
 	}
 
+	p,
+	li {
+		text-wrap: pretty;
+	}
+
 	:root {
 		--shiki-foreground: var(--color-gray-200);
 		--shiki-background: var(--color-gray-900);

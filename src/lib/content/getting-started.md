@@ -6,13 +6,6 @@ Leave feedback or contribute to the project on <a href="https://github.com/rossr
 
 ---
 
-## Save
-
-When a file is opened or saved, all future changes are saved automatically.
-Files are stored directly on the local computer, not in an online storage system.
-
----
-
 ## View
 
 Content can be viewed as a **document** or **slideshow**, separate slides with an `<hr>` tag (`---`).
@@ -32,6 +25,14 @@ function clickHere(): string {
 
 clickHere();
 ````
+
+---
+
+## Save
+
+When a file is opened or saved, all future changes are saved automatically.
+
+Files are stored directly on the local computer, not in an online storage system.
 
 ---
 
