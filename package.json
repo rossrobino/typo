@@ -25,14 +25,14 @@
 		"svelte-check": "^4.1.6",
 		"tailwindcss": "^4.1.4",
 		"typescript": "^5.8.3",
-		"vite": "^6.2.6"
+		"vite": "^6.3.2"
 	},
 	"dependencies": {
-		"@robino/md": "^3.2.3",
+		"@robino/md": "^3.2.5",
 		"@vercel/analytics": "^1.5.0",
 		"drab": "^6.2.1",
 		"prettier": "^3.5.3",
-		"svelte": "^5.27.0",
+		"svelte": "^5.28.1",
 		"ts-blank-space": "^0.6.1"
 	}
 }

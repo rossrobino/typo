@@ -206,7 +206,7 @@
 		}
 	};
 
-	onMount(async () => {
+	onMount(() => {
 		textArea = document.querySelector("textarea")!;
 
 		const saved = localStorage.getItem("preferences");
@@ -216,12 +216,11 @@
 			savePreferences();
 		}
 
-		onInput(),
-			await Promise.all([
-				import("drab/editor/define"),
-				import("drab/fullscreen/define"),
-				import("drab/copy/define"),
-			]);
+		onInput();
+
+		import("drab/editor/define");
+		import("drab/fullscreen/define");
+		import("drab/copy/define");
 	});
 </script>
 
