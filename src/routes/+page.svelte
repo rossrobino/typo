@@ -220,7 +220,7 @@
 
 		import("drab/editor/define");
 		import("drab/fullscreen/define");
-		import("drab/copy/define");
+		import("drab/share/define");
 	});
 </script>
 
@@ -260,7 +260,7 @@
 							<span class="hidden lg:inline">Download</span>
 						</a>
 					{/if}
-					<drab-copy value={content} class="contents">
+					<drab-share text={content} class="contents">
 						<button data-trigger class="button">
 							<span data-content>
 								<svg.Copy />
@@ -270,9 +270,9 @@
 							</template>
 							<span class="hidden lg:inline">Copy</span>
 						</button>
-					</drab-copy>
+					</drab-share>
 
-					<drab-copy value={html} class="contents">
+					<drab-share text={html} class="contents">
 						<button data-trigger title="Copy HTML" class="button">
 							<span data-content>
 								<svg.Code />
@@ -282,7 +282,7 @@
 							</template>
 							<span class="hidden lg:inline">Copy</span>
 						</button>
-					</drab-copy>
+					</drab-share>
 					<PrintButton innerHtml={html} />
 					<button title="Format" onclick={fmt} class="button">
 						<svg.Document />
@@ -360,15 +360,6 @@
 							data-type="wrap"
 						>
 							B
-						</button>
-						<button
-							data-trigger
-							class="button font-normal line-through"
-							title="Strikethrough"
-							data-value="~"
-							data-type="wrap"
-						>
-							S
 						</button>
 						<button
 							data-trigger
