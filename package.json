@@ -13,26 +13,26 @@
 		"format": "prettier --write ."
 	},
 	"devDependencies": {
-		"@robino/prettier": "^2.0.0",
-		"@sveltejs/adapter-vercel": "^5.7.1",
-		"@sveltejs/kit": "^2.20.8",
-		"@sveltejs/vite-plugin-svelte": "^5.0.3",
-		"@tailwindcss/typography": "^0.5.16",
-		"@tailwindcss/vite": "^4.1.5",
+		"@robino/prettier": "^2.0.2",
+		"@sveltejs/adapter-vercel": "^5.10.2",
+		"@sveltejs/kit": "^2.43.4",
+		"@sveltejs/vite-plugin-svelte": "^6.2.1",
+		"@tailwindcss/typography": "^0.5.19",
+		"@tailwindcss/vite": "^4.1.13",
 		"@types/wicg-file-system-access": "^2023.10.6",
-		"prettier-plugin-svelte": "^3.3.3",
-		"prettier-plugin-tailwindcss": "^0.6.11",
-		"svelte-check": "^4.1.6",
-		"tailwindcss": "^4.1.5",
-		"typescript": "^5.8.3",
-		"vite": "^6.3.4"
+		"prettier-plugin-svelte": "^3.4.0",
+		"prettier-plugin-tailwindcss": "^0.6.14",
+		"svelte-check": "^4.3.2",
+		"tailwindcss": "^4.1.13",
+		"typescript": "^5.9.2",
+		"vite": "^7.1.7"
 	},
 	"dependencies": {
-		"@robino/md": "^3.2.6",
+		"@robino/md": "^4.0.3",
 		"@vercel/analytics": "^1.5.0",
-		"drab": "^7.0.0",
-		"prettier": "^3.5.3",
-		"svelte": "^5.28.2",
-		"ts-blank-space": "^0.6.1"
+		"drab": "^7.0.3",
+		"prettier": "^3.6.2",
+		"svelte": "^5.39.5",
+		"ts-blank-space": "^0.6.2"
 	}
 }
